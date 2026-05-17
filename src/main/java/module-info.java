@@ -9,7 +9,10 @@ module jueguito.juegopracticafinal {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires annotations;
 
-    opens jueguito.juegopracticafinal to javafx.fxml;
-    exports jueguito.juegopracticafinal;
+
+    exports jueguito.juegopracticafinal.main;
+    opens jueguito.juegopracticafinal.main to javafx.fxml;
+
 }

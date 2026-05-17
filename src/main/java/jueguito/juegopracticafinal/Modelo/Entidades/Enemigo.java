@@ -1,4 +1,4 @@
 package jueguito.juegopracticafinal.Modelo.Entidades;
 
-public class Enemigo {
+public class Enemigo extends Entidad{
 }

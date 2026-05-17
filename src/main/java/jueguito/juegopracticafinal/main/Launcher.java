@@ -1,4 +1,4 @@
-package jueguito.juegopracticafinal;
+package jueguito.juegopracticafinal.main;
 
 import javafx.application.Application;
 

@@ -1,4 +1,4 @@
 package jueguito.juegopracticafinal.Modelo.Entidades;
 
-public class Objeto {
+public class Gato extends Entidad{
 }
