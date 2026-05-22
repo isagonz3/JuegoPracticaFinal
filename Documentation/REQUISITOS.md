@@ -3,9 +3,9 @@
 ## REQUISITOS FUNCIONALES
 
 ### RF1: Sistema de habitaciones:
-+ 14 zonas creadas por matrices de diferentes dimensiones
++ Zonas creadas por matrices de diferentes dimensiones
 + Cada zona se encuentra conectada a otra
-+ El jugador comienza la partida desde la Casa
++ El jugador comienza la partida desde el interior de la casa del jugador
 + La salida se encuentra en el Interior del Castillo (fin del juego)
 
 ### RF2: Jugador:
@@ -82,7 +82,7 @@
 
 ### RNF1: Rendimiento
 + BFS en matriz
-+ BFS en grafo (14 nodos)
++ BFS en grafo 
 
 ### RNF2: Estructuras de datos propias
 + Implementar: Lista enlazada, Pila, Cola, Lista circular, Árbol, Grafo, Matriz
