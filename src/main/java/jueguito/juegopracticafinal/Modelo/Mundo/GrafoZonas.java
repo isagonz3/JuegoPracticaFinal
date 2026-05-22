@@ -6,7 +6,7 @@ import jueguito.juegopracticafinal.TADs.Lista;
 
 public class GrafoZonas {
 
-    private static final int MAX_ZONAS = 15;
+    private static final int MAX_ZONAS = 12;
     private Zona[] zonas;
     private boolean[][] ady;
     private int numZonas;
@@ -135,18 +135,22 @@ public class GrafoZonas {
 
         grafo.addZona(0, "InteriorCasa", 15,15);
         grafo.addZona(1, "ExteriorCasa", 20,15);
-        grafo.addZona(2, "BosqueOeste", 10,10);
-        grafo.addZona(3, "Aldea", 10,10);
-        grafo.addZona(4, "ExteriorTienda", 10,10);
-        grafo.addZona(5, "InteriorTienda", 10,10);
+        grafo.addZona(2, "BosqueOeste", 30,20);
+        grafo.addZona(3, "Aldea", 35,25);
+        grafo.addZona(4, "ExteriorTienda", 20,20);
+        grafo.addZona(5, "InteriorTienda", 15,12);
+        /*
         grafo.addZona(6, "BosqueNorte", 10,10);
-        grafo.addZona(7, "Lago", 10,10);
+         */
+        grafo.addZona(7, "Lago", 15,15);
+        /*
         grafo.addZona(8, "BosqueSur", 10,10);
         grafo.addZona(9, "ExteriorCueva", 10,10);
         grafo.addZona(10, "InteriorCueva", 10,10);
-        grafo.addZona(11, "BosqueEste", 10,10);
-        grafo.addZona(12, "ExteriorCastillo", 10,10);
-        grafo.addZona(13, "InteriorCastillo", 10,10);
+        */
+        grafo.addZona(11, "BosqueEste", 20,20);
+        grafo.addZona(12, "ExteriorCastillo", 63,42);
+        grafo.addZona(13, "InteriorCastillo", 17,35);
 
         grafo.conectarZona(0,1);
         grafo.conectarZona(1,2);
