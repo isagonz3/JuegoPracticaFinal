@@ -1,0 +1,90 @@
+[
+  {
+    "habitacionOrigen": 0,
+    "habitacionDestino": 1,
+    "xOrigen": 7,
+    "yOrigen": 13,
+    "xDestino": 10,
+    "yDestino": 3
+  },
+  {
+    "habitacionOrigen": 1,
+    "habitacionDestino": 0,
+    "xOrigen": 10,
+    "yOrigen": 3,
+    "xDestino": 7,
+    "yDestino": 13
+  },
+  {
+    "habitacionOrigen": 1,
+    "habitacionDestino": 0,
+    "xOrigen": 9,
+    "yOrigen": 3,
+    "xDestino": 7,
+    "yDestino": 13
+  },
+  {
+    "habitacionOrigen": 1,
+    "habitacionDestino": 2,
+    "xOrigen": 9,
+    "yOrigen": 14,
+    "xDestino": 5,
+    "yDestino": 0
+  },
+  {
+    "habitacionOrigen": 1,
+    "habitacionDestino": 2,
+    "xOrigen": 10,
+    "yOrigen": 14,
+    "xDestino": 6,
+    "yDestino": 0
+  },
+  {
+    "habitacionOrigen": 2,
+    "habitacionDestino": 1,
+    "xOrigen": 5,
+    "yOrigen": 0,
+    "xDestino": 9,
+    "yDestino": 14
+  },
+  {
+    "habitacionOrigen": 2,
+    "habitacionDestino": 1,
+    "xOrigen": 6,
+    "yOrigen": 0,
+    "xDestino": 10,
+    "yDestino": 14
+  },
+  {
+    "habitacionOrigen": 2,
+    "habitacionDestino": 3,
+    "xOrigen": 29,
+    "yOrigen": 8,
+    "xDestino": 0,
+    "yDestino": 12
+  },
+  {
+    "habitacionOrigen": 2,
+    "habitacionDestino": 3,
+    "xOrigen": 29,
+    "yOrigen": 9,
+    "xDestino": 0,
+    "yDestino": 13
+  },
+  {
+    "habitacionOrigen": 3,
+    "habitacionDestino": 2,
+    "xOrigen": 0,
+    "yOrigen": 12,
+    "xDestino": 29,
+    "yDestino": 8
+  },
+  {
+    "habitacionOrigen": 3,
+    "habitacionDestino": 2,
+    "xOrigen": 0,
+    "yOrigen": 13,
+    "xDestino": 29,
+    "yDestino": 9
+  }
+]
