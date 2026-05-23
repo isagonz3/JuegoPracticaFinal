@@ -54,6 +54,9 @@ public class Partida {
             zonaInicial.setSpawnJugador(spawn);
         }
 
+        this.idZonaActual = 0;
+        this.zonaActual = zonaInicial;
+
         Estadisticas statsJugador = new Estadisticas(20,5,2,8);
         this.jugador = new Jugador("Klin",statsJugador,spawn);
         zonaActual.getCelda(spawn.getRow(),spawn.getCol()).setEntidad(jugador);
@@ -70,8 +73,6 @@ public class Partida {
             grafo.getZona(zonaGato).getCelda(spawnGato.getRow(),spawnGato.getCol()).setEntidad(gato);
         }
 
-        this.idZonaActual = 0;
-        this.zonaActual = zonaInicial;
         this.turnoActual = 0;
         log.registrar("INICIANDO PARTIDA");
         log.registrar("Bienvenido. Estas en el Interior de tu casa");
@@ -646,6 +647,10 @@ public class Partida {
         return jugador;
     }
 
+    public void setGato(Gato gato){
+        this.gato = gato;
+    }
+
     public Gato getGato(){
         return gato;
     }
@@ -658,12 +663,29 @@ public class Partida {
         return zonaActual;
     }
 
+    public void setIdZonaActual(int idZonaActual){
+        this.idZonaActual = idZonaActual;
+        this.zonaActual = grafo.getZona(idZonaActual);
+    }
+
+    public int getIdZonaActual(){
+        return idZonaActual;
+    }
+
+    public void setEstadoActual(EstadoJuego estadoActual){
+        this.estadoActual = estadoActual;
+    }
+
     public EstadoJuego getEstadoActual(){
         return estadoActual;
     }
 
     public LogSistema getLog(){
         return log;
+    }
+
+    public void setTurnoActual(int turnoActual){
+        this.turnoActual = turnoActual;
     }
 
     public int getTurnoActual(){

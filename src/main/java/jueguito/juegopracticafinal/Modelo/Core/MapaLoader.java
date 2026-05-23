@@ -3,7 +3,7 @@ package jueguito.juegopracticafinal.Modelo.Core;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.TADs.GsonUtil;
 import jueguito.juegopracticafinal.TADs.Lista;
-import jueguito.juegopracticafinal.TADs.ListaIndex;
+
 
 public class MapaLoader {
     private static final char PARED = '#';
@@ -25,12 +25,12 @@ public class MapaLoader {
         return zonas;
     }
 
-    public static ListaIndex<Puerta> cargarPuertas(){
-        PuertaData[] datos = GsonUtil.cargarArray("src/DATOS/puertas.json",PuertaData[].class);
-        ListaIndex<Puerta> puertas = new ListaIndex<>();
+    public static Lista<Puerta> cargarPuertas(){
+        PuertaData[] datos = GsonUtil.cargarArray("src/main/resources/mapasJSON/puertas.json",PuertaData[].class);
+        Lista<Puerta> puertas = new Lista<>();
         if(datos!=null){
             for(PuertaData d:datos){
-                puertas.addLast(new Puerta(d.zonaOrigen,d.zonaDestino,d.xOrigen,d.yOrigen,d.xDestino,d.yDestino));
+                puertas.add(new Puerta(d.zonaOrigen,d.zonaDestino,d.xOrigen,d.yOrigen,d.xDestino,d.yDestino));
             }
         }
         return puertas;
@@ -54,5 +54,42 @@ public class MapaLoader {
             }
         }
         return new Zona(celdas);
+    }
+
+    public static void conectarPuertas(GrafoZonas grafo, Lista<Puerta> puertas){
+        if(puertas == null){
+            return;
+        }
+        for(int i = 0; i < puertas.getSize(); i++) {
+            Puerta puerta = puertas.get(i);
+            if(puerta == null){
+                continue;
+            }
+
+            int zonaOrigen = puerta.getZonaOrigen();
+            int zonaDestino = puerta.getZonaDestino();
+            int xOrigen = puerta.getXOrigen();
+            int yOrigen = puerta.getYOrigen();
+            int xDestino = puerta.getXDestino();
+            int yDestino = puerta.getYDestino();
+
+            Zona origen = grafo.getZona(zonaOrigen);
+            if(origen != null && origen.esValida(yOrigen, xOrigen)){
+                Celda celdaOrigen = origen.getCelda(yOrigen,xOrigen);
+                celdaOrigen.setTipoCelda(TipoCelda.PUERTA);
+                celdaOrigen.setPuerta(puerta);
+                origen.addPuerta(celdaOrigen);
+            }
+
+            Zona destino = grafo.getZona(zonaDestino);
+            if(destino != null && destino.esValida(yDestino, xDestino)){
+                Celda celdaDestino  = destino.getCelda(yDestino,xDestino);
+                celdaDestino.setTipoCelda(TipoCelda.PUERTA);
+                celdaDestino.setPuerta(puerta);
+                destino.addPuerta(celdaDestino);
+            }
+
+            grafo.conectar(zonaOrigen,zonaDestino);
+        }
     }
 }
