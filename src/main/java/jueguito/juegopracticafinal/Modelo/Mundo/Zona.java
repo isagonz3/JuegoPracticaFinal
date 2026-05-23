@@ -5,10 +5,11 @@ import jueguito.juegopracticafinal.TADs.Lista;
 import jueguito.juegopracticafinal.TADs.Matrix;
 
 public class Zona {
-
+   private Celda[][] celdas;
    private Matrix<Celda> matrix;
    private String nombreZona;
    private int idZona;
+   private Posicion spawnJugador;
    private Lista<Posicion> spawnEnemigos;
    private Lista<Posicion> spawnObjects;
    private Lista<Posicion> spawnNPCs;
@@ -22,6 +23,7 @@ public class Zona {
       this.idZona = idZona;
       this.countTurnos = 0;
       this.visitada = false;
+      this.spawnJugador = null;
       this.spawnEnemigos = new Lista<>();
       this.spawnObjects = new Lista<>();
       this.spawnNPCs = new Lista<>();
@@ -29,17 +31,53 @@ public class Zona {
       this.matrix = new Matrix<>(rows, cols);
    }
 
+   public Zona(Celda[][] celdas) {
+      this.celdas = celdas;
+      int rows = celdas.length;
+      int cols = celdas[0].length;
+
+      this.matrix = new Matrix<>(rows, cols);
+      for (int i = 0; i < rows; i++) {
+         for (int j = 0; j < cols; j++) {
+            Celda celda = celdas[i][j];
+            celda.setRow(i);
+            celda.setCol(j);
+            matrix.set(i, j, celda);
+         }
+      }
+
+      this.spawnJugador = null;
+      this.spawnEnemigos = new Lista<>();
+      this.spawnObjects = new Lista<>();
+      this.spawnNPCs = new Lista<>();
+      this.puertas = new Lista<>();
+      this.countTurnos = 0;
+      this.visitada = false;
+      this.nombreZona = " ";
+      this.idZona = -1;
+   }
+
    public int getIdZona() {
       return idZona;
+   }
+   public void setIdZona(int idZona) {
+      this.idZona = idZona;
    }
 
    public String getNombreZona() {
       return nombreZona;
    }
+   public void setNombreZona(String nombreZona) {
+      this.nombreZona = nombreZona;
+   }
 
    public Matrix<Celda> getMatrix() {
       return matrix;
    }
+   public void setMatrix(Matrix<Celda> matrix) {
+      this.matrix = matrix;
+   }
+
 
    public int getRows(){
       return matrix.getNumRows();
@@ -52,7 +90,6 @@ public class Zona {
    public int getCountTurnos(){
       return countTurnos;
    }
-
    public void setCountTurnos(int countTurnos){
       this.countTurnos = countTurnos;
    }
@@ -60,16 +97,23 @@ public class Zona {
    public boolean isVisitada() {
       return visitada;
    }
-
    public void setVisitada(boolean visitada) {
       this.visitada = visitada;
    }
+
+   public void setSpawnJugador(Posicion posicion) {
+      this.spawnJugador = posicion;
+   }
+   public Posicion getSpawnJugador() {
+      return spawnJugador;
+   }
+
 
    public Lista<Posicion> getSpawnEnemigos() {
       return spawnEnemigos;
    }
 
-   public Lista<Posicion> getSpawnObjects() {
+   public Lista<Posicion> getSpawnObjetos() {
       return spawnObjects;
    }
 
@@ -165,4 +209,16 @@ public class Zona {
       }
       return num;
    }
+
+   public void addPuerta(Celda celda){
+      puertas.add(celda);
+   }
+
+   public Celda findCelda(int row, int col){
+      if(!esValida(row,col)){
+         return null;
+      }
+      return matrix.get(row, col);
+   }
+
 }

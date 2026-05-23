@@ -3,26 +3,46 @@ package jueguito.juegopracticafinal.Modelo.Mundo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Entidad;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.NPC.NPC;
-import org.jetbrains.annotations.NotNull;
 
-import static jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda.PUERTA;
-import static jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda.VACIA;
-
-public class Celda implements Comparable<Celda> {
+public class Celda {
     private int row;
     private int col;
-    private boolean isTransitable;
-
+    private int gidRaw;
     private TipoCelda tipoCelda;
+    private Puerta puerta;
     private Entidad entidad;
     private Objeto objeto;
     private NPC npc;
-    private boolean vacia;
-    private boolean ilum;
 
-    public Celda(TipoCelda tipoCelda, Entidad entidad) {
+    public Celda(TipoCelda tipoCelda, int gidRaw, int fila, int columna) {
         this.tipoCelda = tipoCelda;
-        this.entidad = entidad;
+        this.gidRaw = gidRaw;
+        this.row = fila;
+        this.col = columna;
+    }
+
+    public Celda(TipoCelda tipo) {
+        this.tipoCelda = tipo;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public int getGidRaw() {
+        return gidRaw;
     }
 
     public TipoCelda getTipoCelda() {
@@ -33,12 +53,36 @@ public class Celda implements Comparable<Celda> {
         this.tipoCelda = tipoCelda;
     }
 
+    public boolean isTransitable() {
+        return tipoCelda == TipoCelda.SUELO || tipoCelda == TipoCelda.PUERTA || tipoCelda == TipoCelda.AGUA;
+    }
+
+    public Puerta getPuerta() {
+        return puerta;
+    }
+
+    public void setPuerta(Puerta puerta) {
+        this.puerta = puerta;
+    }
+
+    public boolean tienePuerta() {
+        return puerta != null;
+    }
+
     public Entidad getEntidad() {
         return entidad;
     }
 
     public void setEntidad(Entidad entidad) {
         this.entidad = entidad;
+    }
+
+    public boolean isOcupada() {
+        return entidad != null;
+    }
+
+    public boolean tieneEntidad() {
+        return entidad != null;
     }
 
     public Objeto getObjeto() {
@@ -49,46 +93,38 @@ public class Celda implements Comparable<Celda> {
         this.objeto = objeto;
     }
 
-    public InfoPuerta getInfoPuerta() {
-        return new InfoPuerta();
+    public boolean tieneObjeto() {
+        return objeto != null;
     }
 
-    public boolean isTransitable() {
-        return tipoCelda != TipoCelda.PARED;
+    public NPC getNpc() {
+        return npc;
     }
 
-    public boolean isOcupada(){
-        return this.entidad != null;
+    public void setNpc(NPC npc) {
+        this.npc = npc;
     }
 
-    public boolean tieneEntidad(){
-        return this.entidad != null;
+    public boolean tieneNPC() {
+        return npc != null;
     }
 
-    public boolean tieneObjeto(){
-        return this.objeto != null;
+    public boolean esAdyacente(Celda otra) {
+        if (otra == null) return false;
+        return Math.abs(this.row - otra.row) + Math.abs(this.col - otra.col) == 1;
     }
 
-    public boolean tieneNPC(){
-        return this.npc != null;
+    public int getDistancia(Celda otra) {
+        if (otra == null) return Integer.MAX_VALUE;
+        return Math.abs(this.row - otra.row) + Math.abs(this.col - otra.col);
     }
 
-    public boolean esAdyacente(Celda celda) {
-        if(celda == null){
-            return false;
-        }
-        return Math.abs(this.row-celda.row) + Math.abs(this.col-celda.col) == 1;
-    }
-
-    public int getDistancia(Celda celda) {
-        if(celda == null){
-            return Integer.MAX_VALUE;
-        }
-        return Math.abs(this.row-celda.row) + Math.abs(this.col-celda.col);
-    }
-
-    @Override
-    public int compareTo(@NotNull Celda o) {
-        return 0;
+    public void clear(){
+        this.entidad = null;
+        this.objeto = null;
+        this.npc = null;
+        this.puerta = null;
     }
 }
+
+

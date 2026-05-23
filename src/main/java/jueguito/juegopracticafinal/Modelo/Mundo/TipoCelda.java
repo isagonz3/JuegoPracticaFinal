@@ -1,5 +1,5 @@
 package jueguito.juegopracticafinal.Modelo.Mundo;
 
 public enum TipoCelda {
-    VACIA, PARED, PUERTA, OBJETO, ENEMIGO, NPC, SALIDA, GATO
+    SUELO, PARED, PUERTA, AGUA, OBJETO, ENEMIGO, NPC, SALIDA, GATO, VACIO, INTERACTUABLE
 }

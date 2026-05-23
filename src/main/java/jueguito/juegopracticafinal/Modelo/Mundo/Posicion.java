@@ -5,7 +5,7 @@ public class Posicion {
     private int row;
     private int col;
 
-    public Posicion(int idZona, int row, int col) {
+    public Posicion(int idZona, int row) {
         this.idZona = idZona;
         this.row = row;
         this.col = col;

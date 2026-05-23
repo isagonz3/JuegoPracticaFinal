@@ -21,7 +21,7 @@ public class Tradeo {
     }
 
     public boolean ofertaValida(Jugador jugador){
-        return jugador.getInventario().containsObjeto(objetoOfrecido.getNombre());
+        return jugador.getInventario().containsObjeto(objetoPedido.getNombre());
     }
 
     public boolean tradear(Jugador jugador){

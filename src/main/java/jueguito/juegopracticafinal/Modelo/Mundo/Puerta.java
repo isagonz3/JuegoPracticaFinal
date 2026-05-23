@@ -1,7 +1,5 @@
 package jueguito.juegopracticafinal.Modelo.Mundo;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Puerta implements Comparable<Puerta> {
     private int xOrigen;
     private int yOrigen;
@@ -44,7 +42,7 @@ public class Puerta implements Comparable<Puerta> {
     }
 
     @Override
-    public int compareTo(@NotNull Puerta o) {
+    public int compareTo(Puerta o) {
         int cmp1 = Integer.compare(this.zonaOrigen, o.zonaOrigen);
         if(cmp1!=0) return cmp1;
         int cmp2 = Integer.compare(this.zonaDestino, o.zonaDestino);

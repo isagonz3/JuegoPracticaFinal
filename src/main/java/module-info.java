@@ -10,7 +10,8 @@ module jueguito.juegopracticafinal {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires annotations;
-
+    requires com.google.gson;
+    requires ch.qos.logback.classic;
 
     exports jueguito.juegopracticafinal.main;
     opens jueguito.juegopracticafinal.main to javafx.fxml;
