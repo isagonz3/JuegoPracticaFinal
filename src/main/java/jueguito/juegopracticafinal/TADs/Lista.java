@@ -58,10 +58,11 @@ public class Lista<T> {
         if (index < 0 || index >= size){
             return;
         }
-        Lista<T> lista = new Lista<>();
+        ElementoDobleEnlazada<T> aux = first;
         for (int i = 0; i < index; i++){
-            lista.add(elemento);
+            aux = aux.next;
         }
+        aux.elemento = elemento;
     }
 
     public T delete(T elemento) {

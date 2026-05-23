@@ -5,7 +5,7 @@ public class Grafo {
 
     private Nodo[] nodos;
     private int numNodos;
-    private static final int MAX_ZONAS = 15;
+    private static final int MAX_ZONAS = 11;
 
 
     public Grafo() {
@@ -52,7 +52,7 @@ public class Grafo {
         while(!cola.isEmpty()) {
             int actual = cola.dequeue();
             if(actual == destino) {
-                return buildCamino(raiz, origen, destino);
+                return buildCamino(raiz, destino);
             }
 
             Lista<Integer> adyacentes = nodos[actual].getAdyacentes();
@@ -68,7 +68,7 @@ public class Grafo {
         return null;
     }
 
-    private Lista<Integer> buildCamino(int[] raiz, int origen, int destino) {
+    private Lista<Integer> buildCamino(int[] raiz, int destino) {
         Lista<Integer> camino = new Lista<>();
         int actual = destino;
         while(actual != -1) {
