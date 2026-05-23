@@ -391,6 +391,24 @@ public class Partida {
         }
     }
 
+    public boolean atacarDireccion(int row, int col){
+        if(estadoActual != EstadoJuego.EN_CURSO){
+            return false;
+        }
+
+        Posicion posicion = jugador.getPosicion();
+        int enemigoRow = posicion.getRow() + row;
+        int enemigoCol = posicion.getCol() + col;
+
+        Celda celdaEnemigo = zonaActual.getCelda(enemigoRow, enemigoCol);
+        if(celdaEnemigo == null || !celdaEnemigo.tieneEntidad() || !(celdaEnemigo.getEntidad() instanceof Enemigo)){
+            log.registrar("No hay enemigos por aquí");
+            return false;
+        }
+        atacarEnemigo((Enemigo) celdaEnemigo.getEntidad());
+        return true;
+    }
+
     private void getMovimientoGato(){
         if(gatoEncontrado){
             Posicion posJug = jugador.getPosicion();

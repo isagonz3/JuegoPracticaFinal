@@ -33,6 +33,7 @@ public class JueguitoFX extends Application {
             Scene scene = new Scene(loader.load());
             JuegoController ctrl = loader.getController();
             ctrl.inicializar(partida, this);
+            scene.setOnKeyPressed(ctrl::manejarTecla);
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
