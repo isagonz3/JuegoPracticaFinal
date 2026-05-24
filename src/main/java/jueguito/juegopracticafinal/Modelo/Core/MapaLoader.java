@@ -17,7 +17,7 @@ public class MapaLoader {
 
 
     public static Lista<Zona> cargarZonas(){
-        ZonaData[] datos= GsonUtil.cargarArray("src/main/resources/mapasJSON/habitaciones.json", ZonaData[].class);
+        ZonaData[] datos= GsonUtil.cargarArray("src/main/resources/datosJSON/habitaciones.json", ZonaData[].class);
         Lista<Zona> zonas=new Lista<>();
         if(datos!=null){
             for(ZonaData d:datos){
@@ -28,7 +28,7 @@ public class MapaLoader {
     }
 
     public static Lista<Puerta> cargarPuertas(){
-        PuertaData[] datos = GsonUtil.cargarArray("src/main/resources/mapasJSON/puertas.json",PuertaData[].class);
+        PuertaData[] datos = GsonUtil.cargarArray("src/main/resources/datosJSON/puertas.json",PuertaData[].class);
         Lista<Puerta> puertas = new Lista<>();
         if(datos!=null){
             for(PuertaData d:datos){

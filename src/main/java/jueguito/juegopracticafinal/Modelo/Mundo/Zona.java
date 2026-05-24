@@ -219,4 +219,65 @@ public class Zona {
       return matrix.get(row, col);
    }
 
+   public Lista<Celda> getCaminoMinimo(int origenRow, int origenCol,int destinoRow, int destinoCol){
+      if(!esValida(origenRow,origenCol) || !esValida(destinoRow,destinoCol)){
+         return new Lista<>();
+      }
+
+      int rows = matrix.getNumRows();
+      int cols = matrix.getNumCols();
+
+      boolean[][] visitadas = new boolean[rows][cols];
+      int[][] raizRow = new int[rows][cols];
+      int[][] raizCol = new int[rows][cols];
+
+      Cola<int[]> cola = new Cola<>();
+
+      for(int i = 0; i < rows; i++){
+         for(int j = 0; j < cols; j++){
+            raizRow[i][j] = raizCol[i][j] = -1;
+         }
+      }
+
+      cola.enqueue(new int[] {origenRow, origenCol});
+      visitadas[origenRow][origenCol] = true;
+      int[][] coordenadas = {{-1,0}, {1,0}, {0,-1}, {0,1}}; //Norte, Sur, Oeste, Este
+
+      while(!cola.isEmpty()){
+         int[] actual = cola.dequeue();
+         int row = actual[0];
+         int col = actual[1];
+
+         if(row == destinoRow && col == destinoCol){
+            Lista<Celda> camino = new Lista<>();
+            int newRow = destinoRow;
+            int newCol = destinoCol;
+
+            while(newRow != -1){
+               camino.addFirst(matrix.get(newRow,newCol));
+               int r = raizRow[newRow][newCol];
+               int c = raizCol[newRow][newCol];
+               newRow = r;
+               newCol = c;
+            }
+            return camino;
+         }
+         for(int[] dir : coordenadas){
+            int newRow = row + dir[0];
+            int newCol = col + dir[1];
+
+            if(esValida(newRow,newCol) && !visitadas[newRow][newCol]){
+               Celda celda = matrix.get(newRow, newCol);
+               if(celda != null && celda.isTransitable()){
+                  visitadas[newRow][newCol] = true;
+                  raizRow[newRow][newCol] = newRow;
+                  raizCol[newRow][newCol] = newCol;
+                  cola.enqueue(new int[]{newRow, newCol});
+               }
+            }
+         }
+      }
+      return new Lista<>();
+   }
+
 }

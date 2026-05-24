@@ -40,6 +40,11 @@ public class ZonaManager {
             return;
         }
 
+        if(nuevaZona.getCountTurnos() == 0){
+            partida.getEnemigoManager().poblarZona(nuevaZona);
+            partida.getObjetoManager().ponerObjetos(nuevaZona);
+        }
+
         if(nuevaIdZona == 9 && !partida.isGatoEncontrado()){
             partida.getLog().registrar("DETENGAN AL INTRUSO!: Has entrado al castillo sin el gato y la guardia real te ha mandado al calabozo");
             partida.setEstadoActual(EstadoJuego.DERROTA);

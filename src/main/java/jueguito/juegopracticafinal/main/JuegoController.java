@@ -1,10 +1,7 @@
 package jueguito.juegopracticafinal.main;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -14,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import jueguito.juegopracticafinal.Modelo.Core.LoadJSON;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
@@ -21,10 +19,13 @@ import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Entidad;
 import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
+import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
+import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
+import jueguito.juegopracticafinal.TADs.Lista;
 
 import java.io.File;
 
@@ -36,6 +37,8 @@ public class JuegoController {
     @FXML private TextArea logArea;
     @FXML private GridPane mapaGrid;
     @FXML private Button terminarTurnoBtn, guardarBtn;
+    @FXML private ListView<String> inventarioList;
+    @FXML private Button usarBtn, equiparBtn;
 
     private Partida partida;
     private JueguitoFX app;
@@ -44,6 +47,8 @@ public class JuegoController {
     private Image imgEnemigo1;
     private int baseRow = 1;
     private int baseCol = 0;
+    private Lista<Celda> celdasAccesibles = null;
+    private Objeto objetoSeleccionado;
 
     private static final int TILE_SIZE = 16;
 
@@ -137,6 +142,17 @@ public class JuegoController {
                     celdaPane.getChildren().add(new Circle(TILE_SIZE*0.35, Color.RED));
                 }
 
+                if(celdasAccesibles != null){
+                    for(int c = 0; c < celdasAccesibles.getSize(); c++){
+                        Celda access = celdasAccesibles.get(c);
+                        if(access.getRow() == i && access.getCol() == j){
+                            Rectangle ilum = new Rectangle(TILE_SIZE, TILE_SIZE, Color.rgb(0, 200, 0, 0.3));
+                            celdaPane.getChildren().add(ilum);
+                            break;
+                        }
+                    }
+                }
+
                 int row = i;
                 int col = j;
                 celdaPane.setOnMouseClicked((e) -> manejarClickCelda(row,col));
@@ -146,6 +162,7 @@ public class JuegoController {
     }
 
     private void manejarClickCelda(int i, int j){
+        
         if(partida.getEstadoActual() != EstadoJuego.EN_CURSO){
             return;
         }
@@ -168,6 +185,7 @@ public class JuegoController {
         }
 
         if(partida.moverJugador(i,j)){
+            Lista<Celda> caminoMinimo = partida.getCaminoMinimo(i, j);
             renderMapa();
             actualizarUI();
             partida.findGato();
@@ -214,11 +232,50 @@ public class JuegoController {
         if(!lastLog.isEmpty()){
             logArea.appendText(lastLog + "\n");
         }
+
+        if (partida.getEstadoActual() == EstadoJuego.EN_CURSO) {
+            celdasAccesibles = partida.getCeldasAccesibles();
+        }
+
+        else {
+            celdasAccesibles = null;
+        }
+        inventarioList.getItems().clear();
+        Jugador jug = partida.getJugador();
+        for (int i = 0; i < jug.getInventario().size(); i++) {
+            inventarioList.getItems().add(jug.getInventario().getObjeto(i).toString());
+        }
     }
 
     private void configEventos(){
         terminarTurnoBtn.setOnAction(e -> terminaTurno());
         guardarBtn.setOnAction(e -> guardaPartida());
+        inventarioList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) { objetoSeleccionado = null; return; }
+            objetoSeleccionado = partida.getJugador().getInventario().findObjeto(newVal);
+        });
+
+        usarBtn.setOnAction(e -> {
+            if (objetoSeleccionado == null) return;
+            if (partida.usarObjeto(objetoSeleccionado)) {
+                renderMapa();
+                actualizarUI();
+            }
+        });
+
+        equiparBtn.setOnAction(e -> {
+            if (objetoSeleccionado == null) return;
+            SlotEquipable slot = objetoSeleccionado.getSlot();
+            if (slot == null) {
+                partida.getLog().registrar("Este objeto no es equipable");
+                actualizarUI();
+                return;
+            }
+            if (partida.equiparObjeto(objetoSeleccionado, slot)) {
+                renderMapa();
+                actualizarUI();
+            }
+        });
     }
 
     private void terminaTurno() {

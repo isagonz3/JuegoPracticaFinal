@@ -1,10 +1,12 @@
 package jueguito.juegopracticafinal.Modelo.Turno;
 
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
+import jueguito.juegopracticafinal.Modelo.Data.EnemigosData;
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Estadisticas;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
+import jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.TADs.Lista;
 
@@ -77,22 +79,45 @@ public class EnemigoManager {
     }
 
     public void poblarZona(Zona zona){
-        if(zona.getIdZona() == 0 || zona.getIdZona() == 5){
+        if(zona.getIdZona() == 0 || zona.getIdZona() == 1 || zona.getIdZona() == 5){
             return;
         }
 
         Lista<Posicion> spawns = zona.getSpawnEnemigos();
-        for(int i = 0; i < spawns.getSize(); i++){
-            Posicion spawn = spawns.get(i);
-            if(!zona.esValida(spawn.getRow(), spawn.getCol())) continue;
+        if(spawns.getSize() > 0) {
+            for (int i = 0; i < spawns.getSize(); i++) {
+                Posicion spawn = spawns.get(i);
+                if (!zona.esValida(spawn.getRow(), spawn.getCol())) continue;
 
-            Celda celda = zona.getCelda(spawn.getRow(), spawn.getCol());
-            if(celda.isOcupada()) continue;
+                Celda celda = zona.getCelda(spawn.getRow(), spawn.getCol());
+                if (celda.isOcupada()) continue;
 
-            Enemigo enemigo = new Enemigo("Chungo",
-                    new Estadisticas(5+(int)(Math.random()*10),2+(int)(Math.random()*3),1+(int)(Math.random()*2),4));
-            enemigo.setPosicion(new Posicion(spawn.getRow(), spawn.getCol()));
-            celda.setEntidad(enemigo);
+                Enemigo enemigo = new Enemigo("Chungo",
+                        new Estadisticas(EnemigosData.VIDA_BASE, EnemigosData.ATAQUE_BASE, EnemigosData.DEFENSA_BASE, EnemigosData.RANGO_MOV_E));
+                enemigo.setPosicion(new Posicion(spawn.getRow(), spawn.getCol()));
+                celda.setEntidad(enemigo);
+            }
+            return;
+        }
+
+        int numEnemigos = EnemigosData.ENEMIGOS_MIN + (int)(Math.random() * (EnemigosData.ENEMIGOS_MAX - EnemigosData.ENEMIGOS_MIN + 1));
+        for(int i = 0; i < numEnemigos; i++){
+            for(int intentos = 0; intentos < 50; intentos++){
+                int row = (int)(Math.random() * zona.getRows());
+                int col = (int)(Math.random() * zona.getCols());
+                Celda celda = zona.getCelda(row, col);
+                if (celda != null && celda.isTransitable() && !celda.isOcupada()
+                        && celda.getTipoCelda() != TipoCelda.PUERTA) {
+                    int vida = EnemigosData.VIDA_BASE + (int)(Math.random() * 10);
+                    int atk = EnemigosData.ATAQUE_BASE + (int)(Math.random() * 3);
+                    int def = EnemigosData.DEFENSA_BASE + (int)(Math.random() * 2);
+                    Enemigo enemigo = new Enemigo("Chungo",
+                            new Estadisticas(vida, atk, def, EnemigosData.RANGO_MOV_E));
+                    enemigo.setPosicion(new Posicion(row, col));
+                    celda.setEntidad(enemigo);
+                    break;
+                }
+            }
         }
     }
 }
