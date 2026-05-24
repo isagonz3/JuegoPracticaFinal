@@ -29,6 +29,7 @@ public class Partida {
     private GatoManager gatoManager;
     private ZonaManager zonaManager;
     private TurnoManager turnoManager;
+    private ObjetoManager objetoManager;
 
     public Partida(GrafoZonas grafo) {
         this.grafo = grafo;
@@ -38,6 +39,7 @@ public class Partida {
         this.gatoManager = new GatoManager(this);
         this.zonaManager = new ZonaManager(this);
         this.turnoManager = new TurnoManager(this);
+        this.objetoManager = new ObjetoManager(this);
     }
 
     public void iniciar() {
@@ -134,6 +136,10 @@ public class Partida {
         return new Posicion(0, 0);
     }
 
+    public Lista<Celda> getCaminoMinimo(int row, int col) {
+        return movimientoManager.getCaminoMinimo(row, col);
+    }
+
 
     public Jugador getJugador() { return jugador; }
     public void setJugador(Jugador jugador) {
@@ -144,19 +150,27 @@ public class Partida {
     public void setGato(Gato gato) { this.gato = gato; }
 
     public GrafoZonas getGrafo() { return grafo; }
+
     public Zona getZonaActual() { return zonaActual; }
     public void setZonaActual(Zona z) { zonaActual = z; }
+
     public int getIdZonaActual() { return idZonaActual; }
     public void setIdZonaActual(int id) { idZonaActual = id; zonaActual = grafo.getZona(id); }
+
     public EstadoJuego getEstadoActual() { return estadoActual; }
     public void setEstadoActual(EstadoJuego e) { estadoActual = e; }
+
     public LogSistema getLog() { return log; }
+
     public int getTurnoActual() { return turnoActual; }
     public void setTurnoActual(int t) { turnoActual = t; }
+
     public boolean isGatoEncontrado() { return gatoEncontrado; }
     public void setGatoEncontrado(boolean b) { gatoEncontrado = b; }
+
     public boolean isAccionRealizada() { return accionRealizada; }
     public void setAccionRealizada(boolean b) { accionRealizada = b; }
+
     public boolean isMovimientoRealizado() { return movimientoRealizado; }
     public void setMovimientoRealizado(boolean b) { movimientoRealizado = b; }
 
@@ -166,4 +180,6 @@ public class Partida {
     public GatoManager getGatoManager() { return gatoManager; }
     public ZonaManager getZonaManager() { return zonaManager; }
     public TurnoManager getTurnoManager() { return turnoManager; }
+    public ObjetoManager getObjetoManager() { return objetoManager; }
+
 }

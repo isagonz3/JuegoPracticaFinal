@@ -58,6 +58,7 @@ public class MovimientoManager {
         partida.setMovimientoRealizado(true);
 
         if (destino.tienePuerta()) partida.cambiarZona(destino.getPuerta());
+        if(destino.tieneObjeto()) partida.recogerObjeto(destino);
         return true;
     }
 
@@ -101,6 +102,18 @@ public class MovimientoManager {
                 partida.getJugador().getPosicion().getRow(),
                 partida.getJugador().getPosicion().getCol(),
                 partida.getJugador().getEstadisticas().getPuntosMovDisponibles());
+    }
+
+    public Lista<Celda> getCaminoMinimo(int destinoRow, int destinoCol) {
+        Jugador jugador = partida.getJugador();
+        if(jugador == null) return new Lista<>();
+
+        Zona zonaActual = partida.getZonaActual();
+        if(zonaActual == null) return new Lista<>();
+
+        return zonaActual.getCaminoMinimo(
+                jugador.getPosicion().getRow(),jugador.getPosicion().getCol(),destinoRow,destinoCol
+        );
     }
 
 }
