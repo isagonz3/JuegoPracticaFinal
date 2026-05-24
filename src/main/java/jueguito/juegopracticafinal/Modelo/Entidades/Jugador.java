@@ -20,6 +20,10 @@ public class Jugador extends Entidad{
         this.equipamiento = new Objeto[2];
     }
 
+    public Jugador() {
+        super();
+    }
+
     public Inventario getInventario() {
         return inventario;
     }

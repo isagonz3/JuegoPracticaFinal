@@ -17,6 +17,10 @@ public class Puerta implements Comparable<Puerta> {
         this.zonaDestino = zonaDestino;
     }
 
+    public Puerta() {
+
+    }
+
     public int getXOrigen() {
         return xOrigen;
     }

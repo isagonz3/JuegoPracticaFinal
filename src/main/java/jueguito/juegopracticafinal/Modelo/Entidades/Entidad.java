@@ -19,6 +19,9 @@ public abstract class  Entidad {
         this.posicion = null;
     }
 
+    public Entidad() {
+    }
+
     public String getNombre() {
         return nombre;
     }

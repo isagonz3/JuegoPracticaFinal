@@ -12,6 +12,9 @@ public class Tradeo {
         this.objetoOfrecido = objetoOfrecido;
     }
 
+    public Tradeo() {
+    }
+
     public Objeto getObjetoPedido() {
         return objetoPedido;
     }

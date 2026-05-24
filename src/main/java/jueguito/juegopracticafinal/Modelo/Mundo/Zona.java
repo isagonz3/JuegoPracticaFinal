@@ -55,6 +55,12 @@ public class Zona {
       this.idZona = -1;
    }
 
+   public Zona(int i, String zona0) {
+   }
+
+   public Zona(int i) {
+   }
+
    public int getIdZona() {
       return idZona;
    }
