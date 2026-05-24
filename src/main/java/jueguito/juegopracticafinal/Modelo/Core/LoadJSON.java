@@ -22,6 +22,9 @@ import java.io.IOException;
 
 public class LoadJSON {
 
+    private static final Gson GSON = new Gson();
+    private static final Gson GSON_PRETTY = new GsonBuilder().setPrettyPrinting().create();
+
     private static class PartidaData{
         String nombreJugador;
         int vidaActual;
@@ -81,9 +84,9 @@ public class LoadJSON {
         }
 
         try (FileWriter w = new FileWriter(ruta)) {
-            new GsonBuilder().setPrettyPrinting().create().toJson(partidaData, w);
+            GSON_PRETTY.toJson(partidaData, w);
         } catch (IOException e) {
-            System.out.println("Error al guardar partida: " + e.getMessage());
+            throw new RuntimeException("Error al guardar partida: " + e.getMessage());
         }
     }
 
@@ -91,10 +94,9 @@ public class LoadJSON {
         PartidaData partidaData = new PartidaData();
 
         try(FileReader fr = new FileReader(ruta)) {
-            partidaData = new Gson().fromJson(fr, partidaData.getClass());
+            partidaData = GSON.fromJson(fr, partidaData.getClass());
         }
         catch (IOException e) {
-            System.out.println("Error al cargar partida: " + e.getMessage());
             return null;
         }
 

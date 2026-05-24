@@ -13,6 +13,9 @@ public class Jugador extends Entidad{
     private Inventario inventario;
     private Objeto[] equipamiento;
     private LogSistema log;
+    private int bonusAtaqueEq;
+    private int bonusDefensaEq;
+    private int bonusRangoEq;
 
     public Jugador(String nombre, Estadisticas estadisticas, Posicion posicion) {
         super(nombre, estadisticas, posicion);
@@ -64,21 +67,24 @@ public class Jugador extends Entidad{
     }
 
     private void addBonusEquipamiento(){
-        int ataque = estadisticas.getAtaqueBase();
-        int defensa = estadisticas.getDefensaBase();
-        int rango = estadisticas.getRangoMov();
+        estadisticas.setAtaqueBase(estadisticas.getAtaqueBase() - bonusAtaqueEq);
+        estadisticas.setDefensaBase(estadisticas.getDefensaBase() - bonusDefensaEq);
+        estadisticas.setRangoMov(estadisticas.getRangoMov() - bonusRangoEq);
 
+        bonusAtaqueEq = 0;
+        bonusDefensaEq = 0;
+        bonusRangoEq = 0;
         for (Objeto objeto : equipamiento) {
             if (objeto != null) {
-                ataque += objeto.getAtaqueBonus();
-                defensa += objeto.getDefensaBonus();
-                rango += objeto.getRangoBonus();
+                bonusAtaqueEq += objeto.getAtaqueBonus();
+                bonusDefensaEq += objeto.getDefensaBonus();
+                bonusRangoEq += objeto.getRangoBonus();
             }
         }
 
-        estadisticas.setAtaqueBase(ataque);
-        estadisticas.setDefensaBase(defensa);
-        estadisticas.setRangoMov(rango);
+        estadisticas.setAtaqueBase(estadisticas.getAtaqueBase() + bonusAtaqueEq);
+        estadisticas.setDefensaBase(estadisticas.getDefensaBase() + bonusDefensaEq);
+        estadisticas.setRangoMov(estadisticas.getRangoMov() + bonusRangoEq);
     }
 
     public void setLog(LogSistema log) {

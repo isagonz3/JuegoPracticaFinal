@@ -61,19 +61,19 @@ public class GrafoZonas {
             return false;
         }
 
-        boolean[] vistadas = new boolean[MAX_ZONAS];
+        boolean[] visitadas = new boolean[MAX_ZONAS];
         Cola<Integer> cola = new Cola<>();
         cola.enqueue(origen);
-        vistadas[origen] = true;
+        visitadas[origen] = true;
 
         while(!cola.isEmpty()) {
             int actual = cola.dequeue();
             for(int i = 0; i < MAX_ZONAS; i++) {
-                if(!vistadas[i] && ady[actual][i]) {
+                if(!visitadas[i] && ady[actual][i]) {
                     if(i == destino) {
                         return true;
                     }
-                    vistadas[i] = true;
+                    visitadas[i] = true;
                     cola.enqueue(i);
                 }
             }
@@ -95,19 +95,19 @@ public class GrafoZonas {
             return null;
         }
 
-        boolean[] vistadas = new boolean[MAX_ZONAS];
+        boolean[] visitadas = new boolean[MAX_ZONAS];
         int[] raiz = new int[MAX_ZONAS];
         Cola<Integer> cola = new Cola<>();
 
         cola.enqueue(origen);
-        vistadas[origen] = true;
+        visitadas[origen] = true;
         raiz[origen] = -1;
 
         while(!cola.isEmpty()) {
             int actual = cola.dequeue();
             for(int i = 0; i < MAX_ZONAS; i++) {
-                if(!vistadas[i] && ady[actual][i]) {
-                    vistadas[i] = true;
+                if(!visitadas[i] && ady[actual][i]) {
+                    visitadas[i] = true;
                     raiz[i] = actual;
 
                     if(i == destino) {

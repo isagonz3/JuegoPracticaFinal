@@ -21,6 +21,7 @@ public class Partida {
     private EstadoJuego estadoActual = EstadoJuego.EN_CURSO;
     private LogSistema log = new LogSistema();
     private int turnoActual;
+    private int idZonaGato = -1;
     private boolean gatoEncontrado, accionRealizada, movimientoRealizado;
 
     private MovimientoManager movimientoManager;
@@ -167,6 +168,9 @@ public class Partida {
 
     public boolean isGatoEncontrado() { return gatoEncontrado; }
     public void setGatoEncontrado(boolean b) { gatoEncontrado = b; }
+
+    public int getIdZonaGato() { return idZonaGato; }
+    public void setIdZonaGato(int id) { idZonaGato = id; }
 
     public boolean isAccionRealizada() { return accionRealizada; }
     public void setAccionRealizada(boolean b) { accionRealizada = b; }

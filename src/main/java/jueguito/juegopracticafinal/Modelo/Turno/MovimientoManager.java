@@ -31,24 +31,18 @@ public class MovimientoManager {
         Jugador jugador = partida.getJugador();
         Posicion actual = jugador.getPosicion();
         int puntosMov = jugador.getEstadisticas().getPuntosMovDisponibles();
-        Lista<Celda> accesibles = zonaActual.getCeldasAccesibles(actual.getRow(), actual.getCol(),puntosMov);
 
-        boolean accesible = false;
-        for(int i = 0; i < accesibles.getSize(); i++){
-            Celda celda = accesibles.get(i);
-            if(celda.getRow() == row && celda.getCol() == col){
-                accesible = true;
-                break;
-            }
+        int coste = calcularDist(actual.getRow(), actual.getCol(), row, col, zonaActual);
+        if(coste == Integer.MAX_VALUE){
+            partida.getLog().registrar("No hay camino disponible hacia esa posición");
+            return false;
         }
-        if(!accesible){
+        if(coste > puntosMov){
             partida.getLog().registrar("No tienes suficientes puntos de movimiento (PM)");
             return false;
         }
-
-        int coste = calcularDist(actual.getRow(), actual.getCol(),row,col,zonaActual);
         if(!jugador.getEstadisticas().usarMovimiento(coste)){
-            return  false;
+            return false;
         }
 
         Celda origen = zonaActual.getCelda(actual.getRow(),actual.getCol());

@@ -54,14 +54,20 @@ public class GatoManager {
         if (zonaGato == null) return;
 
         int[][] dirs = {{-1,0},{1,0},{0,-1},{0,1}};
-        int d = (int)(Math.random() * 4);
-        int nr = posGato.getRow() + dirs[d][0], nc = posGato.getCol() + dirs[d][1];
-        if (zonaGato.esValida(nr, nc)) {
-            Celda c = zonaGato.getCelda(nr, nc);
-            if (c.isTransitable() && !c.isOcupada()) {
-                zonaGato.getCelda(posGato.getRow(), posGato.getCol()).setEntidad(null);
-                gato.moverA(new Posicion(nr, nc));
-                c.setEntidad(gato);
+        for (int i = dirs.length - 1; i > 0; i--) {
+            int j = (int)(Math.random() * (i + 1));
+            int[] tmp = dirs[i]; dirs[i] = dirs[j]; dirs[j] = tmp;
+        }
+        for (int[] dir : dirs) {
+            int nr = posGato.getRow() + dir[0], nc = posGato.getCol() + dir[1];
+            if (zonaGato.esValida(nr, nc)) {
+                Celda c = zonaGato.getCelda(nr, nc);
+                if (c.isTransitable() && !c.isOcupada()) {
+                    zonaGato.getCelda(posGato.getRow(), posGato.getCol()).setEntidad(null);
+                    gato.moverA(new Posicion(nr, nc));
+                    c.setEntidad(gato);
+                    return;
+                }
             }
         }
     }
@@ -91,6 +97,7 @@ public class GatoManager {
 
     public Posicion spawnGato(){
         int z = ZONAS_GATO[(int)(Math.random()*ZONAS_GATO.length)];
+        partida.setIdZonaGato(z);
         Zona zonaGato = partida.getGrafo().getZona(z);
 
         for(int intentos = 0; intentos < 50; intentos++){
@@ -106,11 +113,16 @@ public class GatoManager {
     }
 
     private int zonaGato(Posicion pos) {
+        int cached = partida.getIdZonaGato();
+        if (cached >= 0) return cached;
         for (int i = 0; i < 10; i++) {
             Zona zona = partida.getGrafo().getZona(i);
             if (zona != null && zona.esValida(pos.getRow(), pos.getCol())) {
                 Celda c = zona.getCelda(pos.getRow(), pos.getCol());
-                if (c != null && c.getEntidad() == partida.getGato()) return i;
+                if (c != null && c.getEntidad() == partida.getGato()) {
+                    partida.setIdZonaGato(i);
+                    return i;
+                }
             }
         }
         return -1;

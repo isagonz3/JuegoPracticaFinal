@@ -69,9 +69,9 @@ public class JuegoController {
         this.partida = partida;
         this.app = app;
 
-        imgJugador = new Image(getClass().getResourceAsStream("/jugador/jugador_down00.png"));
-        imgGato = new Image(getClass().getResourceAsStream("/gato/gato_quieto.png"));
-        imgEnemigo1 = new Image(getClass().getResourceAsStream("/enemigos/soldado_quieto.png"));
+        imgJugador = cargaImagen("/jugador/jugador_down00.png");
+        imgGato = cargaImagen("/gato/gato_quieto.png");
+        imgEnemigo1 = cargaImagen("/enemigos/soldado_quieto.png");
 
         partida.iniciarTurno();
         renderMapa();
@@ -97,9 +97,20 @@ public class JuegoController {
         }
 
         Image mapa = new Image(getClass().getResourceAsStream("/zonas/" + nombreArchivo + ".png"));
+
+
+        boolean[][] checkCelda = null;
+        if(celdasAccesibles != null){
+            checkCelda = new boolean[zona.getRows()][zona.getCols()];
+            for(int c = 0; c < celdasAccesibles.getSize(); c++){
+                Celda access = celdasAccesibles.get(c);
+                checkCelda[access.getRow()][access.getCol()] = true;
+            }
+        }
+
+        PixelReader pixelReader = mapa.getPixelReader();
         for(int i = 0; i < zona.getRows(); i++){
             for(int j = 0; j < zona.getCols(); j++){
-                PixelReader pixelReader = mapa.getPixelReader();
                 WritableImage tile = new WritableImage(pixelReader, j*TILE_SIZE, i*TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 ImageView tileView = new ImageView(tile);
 
@@ -142,15 +153,9 @@ public class JuegoController {
                     celdaPane.getChildren().add(new Circle(TILE_SIZE*0.35, Color.RED));
                 }
 
-                if(celdasAccesibles != null){
-                    for(int c = 0; c < celdasAccesibles.getSize(); c++){
-                        Celda access = celdasAccesibles.get(c);
-                        if(access.getRow() == i && access.getCol() == j){
-                            Rectangle ilum = new Rectangle(TILE_SIZE, TILE_SIZE, Color.rgb(0, 200, 0, 0.3));
-                            celdaPane.getChildren().add(ilum);
-                            break;
-                        }
-                    }
+                if(checkCelda != null && checkCelda[i][j]){
+                    Rectangle ilum = new Rectangle(TILE_SIZE, TILE_SIZE, Color.rgb(0, 200, 0, 0.3));
+                    celdaPane.getChildren().add(ilum);
                 }
 
                 int row = i;
@@ -307,5 +312,8 @@ public class JuegoController {
         }
     }
 
-
+    private Image cargaImagen(String ruta) {
+        var is = getClass().getResourceAsStream(ruta);
+        return is != null ? new Image(is) : null;
+    }
 }

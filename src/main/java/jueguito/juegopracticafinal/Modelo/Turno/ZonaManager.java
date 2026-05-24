@@ -71,9 +71,6 @@ public class ZonaManager {
         nuevaZona.getCelda(destRow,destCol).setEntidad(partida.getJugador());
 
         partida.getLog().registrar("Has entrado en: " + nuevaZona.getNombreZona());
-        if(nuevaZona.getCountTurnos() == 0){
-            partida.getEnemigoManager().poblarZona(nuevaZona);
-        }
     }
 
     public void cruzarPuerta(Celda destino) {

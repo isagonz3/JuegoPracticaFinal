@@ -56,9 +56,27 @@ public class Zona {
    }
 
    public Zona(int i, String zona0) {
+      this.idZona = i;
+      this.nombreZona = zona0;
+      this.spawnJugador = null;
+      this.spawnEnemigos = new Lista<>();
+      this.spawnObjects = new Lista<>();
+      this.spawnNPCs = new Lista<>();
+      this.puertas = new Lista<>();
+      this.countTurnos = 0;
+      this.visitada = false;
    }
 
    public Zona(int i) {
+      this.idZona = i;
+      this.nombreZona = "Zona" + i;
+      this.spawnJugador = null;
+      this.spawnEnemigos = new Lista<>();
+      this.spawnObjects = new Lista<>();
+      this.spawnNPCs = new Lista<>();
+      this.puertas = new Lista<>();
+      this.countTurnos = 0;
+      this.visitada = false;
    }
 
    public int getIdZona() {
@@ -188,13 +206,13 @@ public class Zona {
                int newrow = colaRow + coordenada[0];
                int newcol = colaCol + coordenada[1];
 
-               if (matrix.esValida(newrow, newcol) && !visitadas[newrow][newcol]) {
-                  Celda celda = matrix.get(newrow, newcol);
-                  if (celda != null && celda.isTransitable()) {
-                     visitadas[newrow][newcol] = true;
-                     cola.enqueue(new int[]{newrow, newcol, colaDist + 1});
-                  }
-               }
+                   if (matrix.esValida(newrow, newcol) && !visitadas[newrow][newcol]) {
+                      Celda celda = matrix.get(newrow, newcol);
+                      if (celda != null && celda.isTransitable() && !celda.isOcupada()) {
+                         visitadas[newrow][newcol] = true;
+                         cola.enqueue(new int[]{newrow, newcol, colaDist + 1});
+                      }
+                   }
 
             }
          }
@@ -275,9 +293,9 @@ public class Zona {
             if(esValida(newRow,newCol) && !visitadas[newRow][newCol]){
                Celda celda = matrix.get(newRow, newCol);
                if(celda != null && celda.isTransitable()){
-                  visitadas[newRow][newCol] = true;
-                  raizRow[newRow][newCol] = newRow;
-                  raizCol[newRow][newCol] = newCol;
+                   visitadas[newRow][newCol] = true;
+                   raizRow[newRow][newCol] = row;
+                   raizCol[newRow][newCol] = col;
                   cola.enqueue(new int[]{newRow, newCol});
                }
             }
