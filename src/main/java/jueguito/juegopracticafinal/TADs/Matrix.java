@@ -24,12 +24,16 @@ public class Matrix<T> {
     }
 
     public T get(int r, int c) {
-        esValida(r,c);
+        if(!esValida(r,c)){
+            return null;
+        }
         return rows.get(r).get(c);
     }
 
     public void set(int r, int c, T dato) {
-        esValida(r,c);
+        if(!esValida(r,c)){
+            return;
+        }
         rows.get(r).set(c, dato);
     }
 

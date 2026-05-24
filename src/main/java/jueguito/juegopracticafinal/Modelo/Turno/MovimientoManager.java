@@ -23,7 +23,12 @@ public class MovimientoManager {
 
         Zona zonaActual = partida.getZonaActual();
         Celda destino = zonaActual.getCelda(row,col);
-        if(destino == null || !destino.isTransitable() || destino.isOcupada()){
+        if(destino == null ){
+            partida.getLog().registrar("No puedes moverte aqui");
+            return false;
+        }
+
+        if(!destino.isTransitable() || destino.isOcupada()){
             partida.getLog().registrar("No puedes moverte a " + destino.getTipoCelda());
             return false;
         }

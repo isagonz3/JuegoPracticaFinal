@@ -74,8 +74,8 @@ public class JuegoController {
         imgEnemigo1 = cargaImagen("/enemigos/soldado_quieto.png");
 
         partida.iniciarTurno();
-        renderMapa();
         actualizarUI();
+        renderMapa();
         configEventos();
     }
 
@@ -207,16 +207,16 @@ public class JuegoController {
     private void moverTecla() {
         Posicion pos = partida.getJugador().getPosicion();
         if (partida.moverJugador(pos.getRow() + baseRow, pos.getCol() + baseCol)) {
-            renderMapa();
             actualizarUI();
+            renderMapa();
             partida.findGato();
         }
     }
 
     private void atacarTecla() {
         partida.atacarDireccion(baseRow, baseCol);
-        renderMapa();
         actualizarUI();
+        renderMapa();
     }
 
     private void actualizarUI(){
@@ -289,8 +289,8 @@ public class JuegoController {
                     partida.getLog().getEntradas());
             return;
         }
-        renderMapa();
         actualizarUI();
+        renderMapa();
     }
 
     private void guardaPartida() {
