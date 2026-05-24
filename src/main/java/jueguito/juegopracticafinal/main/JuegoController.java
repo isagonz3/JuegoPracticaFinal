@@ -189,12 +189,6 @@ public class JuegoController {
             return;
         }
 
-        if(partida.moverJugador(i,j)){
-            Lista<Celda> caminoMinimo = partida.getCaminoMinimo(i, j);
-            renderMapa();
-            actualizarUI();
-            partida.findGato();
-        }
     }
 
     void manejarTecla(KeyEvent event) {
