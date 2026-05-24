@@ -57,7 +57,7 @@ public class Partida {
         this.idZonaActual = 0;
         this.zonaActual = zonaInicial;
 
-        Estadisticas statsJugador = new Estadisticas(20,5,2,8);
+        Estadisticas statsJugador = new Estadisticas(20,5,2,50);
         this.jugador = new Jugador("Klin",statsJugador,spawn);
         zonaActual.getCelda(spawn.getRow(),spawn.getCol()).setEntidad(jugador);
 

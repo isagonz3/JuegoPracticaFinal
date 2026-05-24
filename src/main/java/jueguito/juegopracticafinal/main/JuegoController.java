@@ -172,7 +172,7 @@ public class JuegoController {
         switch (event.getCode()) {
             case W: case UP:    baseRow = -1; baseCol = 0;  moverTecla(); break;
             case S: case DOWN:  baseRow = 1;  baseCol = 0;  moverTecla(); break;
-            case A: case LEFT:  baseRow = 0;  baseRow = -1; moverTecla(); break;
+            case A: case LEFT:  baseRow = 0;  baseCol = -1; moverTecla(); break;
             case D: case RIGHT: baseRow = 0;  baseCol = 1;  moverTecla(); break;
             case SPACE: case ENTER: atacarTecla(); break;
             default: return;
