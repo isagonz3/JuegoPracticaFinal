@@ -154,7 +154,7 @@ public class JuegoController {
                 }
 
                 if(checkCelda != null && checkCelda[i][j]){
-                    Rectangle ilum = new Rectangle(TILE_SIZE, TILE_SIZE, Color.rgb(0, 200, 0, 0.3));
+                    Rectangle ilum = new Rectangle(TILE_SIZE, TILE_SIZE, Color.rgb(206, 0, 100, 0.25));
                     celdaPane.getChildren().add(ilum);
                 }
 
