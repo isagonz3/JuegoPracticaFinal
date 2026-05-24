@@ -1,5 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Core;
 
+import jueguito.juegopracticafinal.Modelo.Data.PuertaData;
+import jueguito.juegopracticafinal.Modelo.Data.ZonaData;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.TADs.GsonUtil;
 import jueguito.juegopracticafinal.TADs.Lista;

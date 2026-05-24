@@ -4,6 +4,7 @@ import jueguito.juegopracticafinal.Modelo.Inventario.Inventario;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Inventario.TipoObjeto;
+import jueguito.juegopracticafinal.Modelo.Log.LogSistema;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
 
@@ -11,6 +12,7 @@ public class Jugador extends Entidad{
 
     private Inventario inventario;
     private Objeto[] equipamiento;
+    private LogSistema log;
 
     public Jugador(String nombre, Estadisticas estadisticas, Posicion posicion) {
         super(nombre, estadisticas, posicion);
@@ -73,6 +75,14 @@ public class Jugador extends Entidad{
         estadisticas.setAtaqueBase(ataque);
         estadisticas.setDefensaBase(defensa);
         estadisticas.setRangoMov(rango);
+    }
+
+    public void setLog(LogSistema log) {
+        this.log = log;
+    }
+
+    public LogSistema getLog() {
+        return log;
     }
 
     @Override

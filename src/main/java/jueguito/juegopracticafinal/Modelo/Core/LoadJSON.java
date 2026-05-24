@@ -119,6 +119,7 @@ public class LoadJSON {
         Posicion posJugador = new Posicion(partidaData.posRow,partidaData.posCol);
         Jugador jugador = new Jugador(partidaData.nombreJugador,estadisticas,posJugador);
         partida.setJugador(jugador);
+        jugador.setLog(partida.getLog());
 
         Celda celdaJugador = zona.getCelda(partidaData.posRow,partidaData.posCol);
         if(celdaJugador != null){

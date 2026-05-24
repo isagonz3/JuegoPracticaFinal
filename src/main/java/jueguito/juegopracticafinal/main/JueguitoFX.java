@@ -32,7 +32,7 @@ public class JueguitoFX extends Application {
                     getClass().getResource("/jueguito/juegopracticafinal/main-view.fxml"));
             Scene scene = new Scene(loader.load());
             JuegoController ctrl = loader.getController();
-            ctrl.inicializar(partida, this);
+            ctrl.inicializar(partida,this);
             scene.setOnKeyPressed(ctrl::manejarTecla);
             stage.setScene(scene);
         } catch (IOException e) {

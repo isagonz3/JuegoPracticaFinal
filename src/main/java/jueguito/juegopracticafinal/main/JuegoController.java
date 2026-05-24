@@ -29,7 +29,6 @@ import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 public class JuegoController {
     @FXML private Label zonaLabel;
@@ -41,10 +40,11 @@ public class JuegoController {
     @FXML private Button terminarTurnoBtn, guardarBtn;
 
     private Partida partida;
-    private JueguitoFX app;
+    protected JueguitoFX app;
     private static final int tileSize = 16;
     private Image imgJugador;
     private Image imgGato;
+    private Image imgEnemigo1;
     private int baseRow = 1;
     private int baseCol = 0;
 
@@ -67,6 +67,7 @@ public class JuegoController {
 
         imgJugador = new Image(getClass().getResourceAsStream("/jugador/jugador_down00.png"));
         imgGato = new Image(getClass().getResourceAsStream("/gato/gato_quieto.png"));
+        imgEnemigo1 = new Image(getClass().getResourceAsStream("/enemigos/soldado_quieto.png"));
 
         partida.iniciarTurno();
         renderMapa();
@@ -116,6 +117,13 @@ public class JuegoController {
                         gatoView.setFitWidth(tileSize);
                         celdaPane.getChildren().add(gatoView);
                     }
+
+                    else if(entidad instanceof Enemigo){
+                        ImageView enemigo1View = new ImageView(imgEnemigo1);
+                        enemigo1View.setFitHeight(tileSize);
+                        enemigo1View.setFitWidth(tileSize);
+                        celdaPane.getChildren().add(enemigo1View);
+                    }
                     else{
                         Circle circle = new Circle(tileSize*0.35, Color.PINK);
                         celdaPane.getChildren().add(circle);
@@ -156,7 +164,7 @@ public class JuegoController {
         Posicion posJugador = partida.getJugador().getPosicion();
         Celda celdaJugador = zona.getCelda(posJugador.getRow(),posJugador.getCol());
 
-        if(i == posJugador.getRow() && j == posJugador.getCol()){
+        if(i == celdaJugador.getRow() && j == celdaJugador.getCol()){
             return;
         }
 

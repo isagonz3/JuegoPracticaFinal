@@ -24,6 +24,14 @@
     "yDestino": 13
   },
   {
+    "zonaOrigen": 0,
+    "zonaDestino": 1,
+    "xOrigen": 7,
+    "yOrigen": 13,
+    "xDestino": 9,
+    "yDestino": 3
+  },
+  {
     "zonaOrigen": 1,
     "zonaDestino": 2,
     "xOrigen": 9,
@@ -86,5 +94,133 @@
     "yOrigen": 13,
     "xDestino": 29,
     "yDestino": 9
+  },
+  {
+    "zonaOrigen": 2,
+    "zonaDestino": 4,
+    "xOrigen": 9,
+    "yOrigen": 19,
+    "xDestino": 4,
+    "yDestino": 0
+  },
+  {
+    "zonaOrigen": 4,
+    "zonaDestino": 2,
+    "xOrigen": 4,
+    "yOrigen": 0,
+    "xDestino": 9,
+    "yDestino": 19
+  },
+  {
+    "zonaOrigen": 2,
+    "zonaDestino": 4,
+    "xOrigen": 10,
+    "yOrigen": 19,
+    "xDestino": 5,
+    "yDestino": 0
+  },
+  {
+    "zonaOrigen": 4,
+    "zonaDestino": 2,
+    "xOrigen": 5,
+    "yOrigen": 0,
+    "xDestino": 10,
+    "yDestino": 19
+  },
+  {
+    "zonaOrigen": 4,
+    "zonaDestino": 5,
+    "xOrigen": 15,
+    "yOrigen": 10,
+    "xDestino": 7,
+    "yDestino": 10
+  },
+  {
+    "zonaOrigen": 5,
+    "zonaDestino": 4,
+    "xOrigen": 7,
+    "yOrigen": 10,
+    "xDestino": 15,
+    "yDestino": 10
+  },
+  {
+    "zonaOrigen": 3,
+    "zonaDestino": 6,
+    "xOrigen": 34,
+    "yOrigen": 12,
+    "xDestino": 10,
+    "yDestino": 4
+  },
+  {
+    "zonaOrigen": 6,
+    "zonaDestino": 3,
+    "xOrigen": 10,
+    "yOrigen": 4,
+    "xDestino": 34,
+    "yDestino": 12
+  },
+  {
+    "zonaOrigen": 3,
+    "zonaDestino": 7,
+    "xOrigen": 34,
+    "yOrigen": 13,
+    "xDestino": 9,
+    "yDestino": 1
+  },
+  {
+    "zonaOrigen": 7,
+    "zonaDestino": 3,
+    "xOrigen": 9,
+    "yOrigen": 1,
+    "xDestino": 34,
+    "yDestino": 13
+  },
+  {
+    "zonaOrigen": 7,
+    "zonaDestino": 8,
+    "xOrigen": 0,
+    "yOrigen": 16,
+    "xDestino": 31,
+    "yDestino": 2
+  },
+  {
+    "zonaOrigen": 8,
+    "zonaDestino": 7,
+    "xOrigen": 31,
+    "yOrigen": 2,
+    "xDestino": 0,
+    "yDestino": 16
+  },
+  {
+    "zonaOrigen": 7,
+    "zonaDestino": 8,
+    "xOrigen": 0,
+    "yOrigen": 17,
+    "xDestino": 31,
+    "yDestino": 2
+  },
+  {
+    "zonaOrigen": 8,
+    "zonaDestino": 7,
+    "xOrigen": 31,
+    "yOrigen": 2,
+    "xDestino": 0,
+    "yDestino": 17
+  },
+  {
+    "zonaOrigen": 8,
+    "zonaDestino": 9,
+    "xOrigen": 31,
+    "yOrigen": 41,
+    "xDestino": 8,
+    "yDestino": 32
+  },
+  {
+    "zonaOrigen": 9,
+    "zonaDestino": 8,
+    "xOrigen": 8,
+    "yOrigen": 32,
+    "xDestino": 31,
+    "yDestino": 41
   }
 ]

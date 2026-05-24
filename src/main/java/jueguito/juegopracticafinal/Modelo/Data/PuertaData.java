@@ -1,4 +1,4 @@
-package jueguito.juegopracticafinal.Modelo.Mundo;
+package jueguito.juegopracticafinal.Modelo.Data;
 
 public class PuertaData {
     public int zonaOrigen;
