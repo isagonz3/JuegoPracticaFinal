@@ -9,12 +9,10 @@ public class GrafoZonas {
     private static final int MAX_ZONAS = 10;
     private Zona[] zonas;
     private boolean[][] ady;
-    private int numZonas;
 
     public GrafoZonas() {
         this.zonas = new Zona[MAX_ZONAS];
         this.ady = new boolean[MAX_ZONAS][MAX_ZONAS];
-        this.numZonas = 0;
     }
 
     public void addZona(Zona zona) {
@@ -23,7 +21,6 @@ public class GrafoZonas {
             throw new IllegalArgumentException("ID de zona inválido");
         }
         this.zonas[idZona] = zona;
-        this.numZonas++;
     }
 
     public void conectar(int idZona1, int idZona2){

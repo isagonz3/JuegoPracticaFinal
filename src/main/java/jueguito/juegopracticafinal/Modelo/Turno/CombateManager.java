@@ -3,7 +3,6 @@ package jueguito.juegopracticafinal.Modelo.Turno;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
-import jueguito.juegopracticafinal.Modelo.Log.LogSistema;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
@@ -66,27 +65,4 @@ public class CombateManager {
         return true;
     }
 
-    public void getAtaqueEnemigo(){
-        Jugador jugador = partida.getJugador();
-        Zona zonaActual = partida.getZonaActual();
-        Posicion posicion = jugador.getPosicion();
-        for(int i = 0; i < zonaActual.getRows(); i++){
-            for(int j = 0; j < zonaActual.getCols(); j++){
-                Celda celda = zonaActual.getCelda(i, j);
-                if(celda.tieneEntidad() && celda.getEntidad() instanceof Enemigo){
-                    Enemigo enemigo = (Enemigo)celda.getEntidad();
-
-                    if(!enemigo.estarVivo()){
-                        continue;
-                    }
-
-                    if(celda.esAdyacente(zonaActual.getCelda(posicion.getRow(),posicion.getCol()))){
-                        int hit = (int) Math.max(0, enemigo.getAtaqueTotal()*(Math.random()*2) - jugador.getDefensaTotal());
-                        jugador.recibirAtaque(hit);
-                        partida.getLog().registrar("Has sido atacado por " + enemigo.getNombre() + ", recibes " + hit + " puntos de daño");
-                    }
-                }
-            }
-        }
-    }
 }

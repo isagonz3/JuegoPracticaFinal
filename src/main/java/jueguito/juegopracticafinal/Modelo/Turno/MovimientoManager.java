@@ -2,10 +2,8 @@ package jueguito.juegopracticafinal.Modelo.Turno;
 
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
-import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
-import jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.TADs.Cola;
 import jueguito.juegopracticafinal.TADs.Lista;
@@ -60,11 +58,6 @@ public class MovimientoManager {
         partida.setMovimientoRealizado(true);
 
         if (destino.tienePuerta()) partida.cambiarZona(destino.getPuerta());
-        if (destino.getTipoCelda() == TipoCelda.AGUA && destino.tieneObjeto()) {
-            Objeto o = destino.getObjeto();
-            partida.getLog().registrar("Has encontrado " + o.getNombre() + " en el agua!");
-            destino.setObjeto(null);
-        }
         return true;
     }
 

@@ -5,7 +5,6 @@ import jueguito.juegopracticafinal.TADs.Lista;
 import jueguito.juegopracticafinal.TADs.Matrix;
 
 public class Zona {
-   private Celda[][] celdas;
    private Matrix<Celda> matrix;
    private String nombreZona;
    private int idZona;
@@ -32,7 +31,6 @@ public class Zona {
    }
 
    public Zona(Celda[][] celdas) {
-      this.celdas = celdas;
       int rows = celdas.length;
       int cols = celdas[0].length;
 

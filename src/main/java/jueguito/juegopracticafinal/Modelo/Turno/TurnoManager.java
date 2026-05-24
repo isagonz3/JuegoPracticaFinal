@@ -26,6 +26,7 @@ public class TurnoManager {
     public void terminarTurno() {
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return;
         enemigoManager.moverEnemigos();
+        enemigoManager.atacarJugador();
         gatoManager.moverGato();
         partida.getZonaActual().setCountTurnos(partida.getZonaActual().getCountTurnos() + 1);
         partida.setTurnoActual(partida.getTurnoActual() + 1);

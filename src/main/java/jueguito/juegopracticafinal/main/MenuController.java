@@ -10,7 +10,6 @@ import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Mundo.GrafoZonas;
 import jueguito.juegopracticafinal.Modelo.Mundo.Puerta;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
-import jueguito.juegopracticafinal.TADs.Grafo;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 import java.io.File;

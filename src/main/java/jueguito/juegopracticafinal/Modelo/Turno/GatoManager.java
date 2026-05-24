@@ -3,7 +3,6 @@ package jueguito.juegopracticafinal.Modelo.Turno;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
-import jueguito.juegopracticafinal.Modelo.Log.LogSistema;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 
 public class GatoManager {
@@ -49,7 +48,7 @@ public class GatoManager {
 
     private void moverGatoAleatorio(Gato gato){
         Posicion posGato = gato.getPosicion();
-        int idZona = findZonaPorPosicion(posGato);
+        int idZona = zonaGato(posGato);
         if (!zonasPermitidas(idZona)) return;
         Zona zonaGato = partida.getGrafo().getZona(idZona);
         if (zonaGato == null) return;
@@ -68,19 +67,6 @@ public class GatoManager {
     }
 
 
-
-    private int findZonaPorPosicion(Posicion pos){
-        for(int i = 0; i < 10; i++){
-            Zona zona = partida.getGrafo().getZona(i);
-            if(zona != null && zona.esValida(pos.getRow(),pos.getCol())){
-                Celda celda = zona.getCelda(pos.getRow(),pos.getCol());
-                if(celda != null && celda.getEntidad() == partida.getGato()){
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
 
     public boolean findGato(){
         if(partida.isGatoEncontrado()){

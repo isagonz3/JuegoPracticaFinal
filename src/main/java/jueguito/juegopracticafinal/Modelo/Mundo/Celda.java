@@ -7,19 +7,11 @@ import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 public class Celda {
     private int row;
     private int col;
-    private int gidRaw;
     private TipoCelda tipoCelda;
     private Puerta puerta;
     private Entidad entidad;
     private Objeto objeto;
     private NPC npc;
-
-    public Celda(TipoCelda tipoCelda, int gidRaw, int fila, int columna) {
-        this.tipoCelda = tipoCelda;
-        this.gidRaw = gidRaw;
-        this.row = fila;
-        this.col = columna;
-    }
 
     public Celda(TipoCelda tipo) {
         this.tipoCelda = tipo;
@@ -39,10 +31,6 @@ public class Celda {
 
     public void setCol(int col) {
         this.col = col;
-    }
-
-    public int getGidRaw() {
-        return gidRaw;
     }
 
     public TipoCelda getTipoCelda() {

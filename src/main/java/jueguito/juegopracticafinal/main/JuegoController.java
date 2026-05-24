@@ -10,9 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -40,13 +38,14 @@ public class JuegoController {
     @FXML private Button terminarTurnoBtn, guardarBtn;
 
     private Partida partida;
-    protected JueguitoFX app;
-    private static final int tileSize = 16;
+    private JueguitoFX app;
     private Image imgJugador;
     private Image imgGato;
     private Image imgEnemigo1;
     private int baseRow = 1;
     private int baseCol = 0;
+
+    private static final int TILE_SIZE = 16;
 
     private static final String[][] MAPA_PNG = {
             {"0", "0_InteriorHabitacion"},
@@ -96,7 +95,7 @@ public class JuegoController {
         for(int i = 0; i < zona.getRows(); i++){
             for(int j = 0; j < zona.getCols(); j++){
                 PixelReader pixelReader = mapa.getPixelReader();
-                WritableImage tile = new WritableImage(pixelReader, j*tileSize, i*tileSize, tileSize, tileSize);
+                WritableImage tile = new WritableImage(pixelReader, j*TILE_SIZE, i*TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 ImageView tileView = new ImageView(tile);
 
                 StackPane celdaPane = new StackPane(tileView);
@@ -107,35 +106,35 @@ public class JuegoController {
 
                     if(entidad instanceof Jugador){
                         ImageView jugadorView = new ImageView(imgJugador);
-                        jugadorView.setFitHeight(tileSize);
-                        jugadorView.setFitWidth(tileSize);
+                        jugadorView.setFitHeight(TILE_SIZE);
+                        jugadorView.setFitWidth(TILE_SIZE);
                         celdaPane.getChildren().add(jugadorView);
                     }
                     else if(entidad instanceof Gato){
                         ImageView gatoView = new ImageView(imgGato);
-                        gatoView.setFitHeight(tileSize);
-                        gatoView.setFitWidth(tileSize);
+                        gatoView.setFitHeight(TILE_SIZE);
+                        gatoView.setFitWidth(TILE_SIZE);
                         celdaPane.getChildren().add(gatoView);
                     }
 
                     else if(entidad instanceof Enemigo){
                         ImageView enemigo1View = new ImageView(imgEnemigo1);
-                        enemigo1View.setFitHeight(tileSize);
-                        enemigo1View.setFitWidth(tileSize);
+                        enemigo1View.setFitHeight(TILE_SIZE);
+                        enemigo1View.setFitWidth(TILE_SIZE);
                         celdaPane.getChildren().add(enemigo1View);
                     }
                     else{
-                        Circle circle = new Circle(tileSize*0.35, Color.PINK);
+                        Circle circle = new Circle(TILE_SIZE*0.35, Color.PINK);
                         celdaPane.getChildren().add(circle);
                     }
                 }
 
                 if(celda != null && celda.tieneNPC()){
-                    celdaPane.getChildren().add(new Circle(tileSize*0.35, Color.BLUEVIOLET));
+                    celdaPane.getChildren().add(new Circle(TILE_SIZE*0.35, Color.BLUEVIOLET));
                 }
 
                 if(celda != null && celda.tieneObjeto()){
-                    celdaPane.getChildren().add(new Circle(tileSize*0.35, Color.RED));
+                    celdaPane.getChildren().add(new Circle(TILE_SIZE*0.35, Color.RED));
                 }
 
                 int row = i;

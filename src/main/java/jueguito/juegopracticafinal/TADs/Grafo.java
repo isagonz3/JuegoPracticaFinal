@@ -4,13 +4,11 @@ package jueguito.juegopracticafinal.TADs;
 public class Grafo {
 
     private Nodo[] nodos;
-    private int numNodos;
     private static final int MAX_ZONAS = 11;
 
 
     public Grafo() {
         this.nodos = new Nodo[MAX_ZONAS];
-        this.numNodos = 0;
     }
 
     public void addZona(int id, String nombre, int rows, int cols) {
@@ -18,7 +16,6 @@ public class Grafo {
             throw new IllegalArgumentException("Zona no existe");
         }
         nodos[id] = new Nodo(id, nombre, rows, cols);
-        numNodos++;
     }
 
     public void conectarZona(int zona1, int zona2) {
