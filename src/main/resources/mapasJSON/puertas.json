@@ -3,41 +3,36 @@
     "zonaOrigen": 0,
     "zonaDestino": 1,
     "xOrigen": 7,
-    "yOrigen": 13,
+    "yOrigen": 12,
     "xDestino": 10,
-    "yDestino": 3
+    "yDestino": 5
   },
   {
     "zonaOrigen": 1,
     "zonaDestino": 0,
     "xOrigen": 10,
-    "yOrigen": 3,
+    "yOrigen": 4,
     "xDestino": 7,
-    "yDestino": 13
+    "yDestino": 11
   },
   {
     "zonaOrigen": 1,
     "zonaDestino": 0,
     "xOrigen": 9,
-    "yOrigen": 3,
+    "yOrigen": 4,
     "xDestino": 7,
-    "yDestino": 13
+    "yDestino": 11
   },
-  {
-    "zonaOrigen": 0,
-    "zonaDestino": 1,
-    "xOrigen": 7,
-    "yOrigen": 13,
-    "xDestino": 9,
-    "yDestino": 3
-  },
+
+
+
   {
     "zonaOrigen": 1,
     "zonaDestino": 2,
     "xOrigen": 9,
     "yOrigen": 14,
     "xDestino": 5,
-    "yDestino": 0
+    "yDestino": 1
   },
   {
     "zonaOrigen": 1,
@@ -45,7 +40,7 @@
     "xOrigen": 10,
     "yOrigen": 14,
     "xDestino": 6,
-    "yDestino": 0
+    "yDestino": 1
   },
   {
     "zonaOrigen": 2,
@@ -53,7 +48,7 @@
     "xOrigen": 5,
     "yOrigen": 0,
     "xDestino": 9,
-    "yDestino": 14
+    "yDestino": 13
   },
   {
     "zonaOrigen": 2,
@@ -61,14 +56,16 @@
     "xOrigen": 6,
     "yOrigen": 0,
     "xDestino": 10,
-    "yDestino": 14
+    "yDestino": 13
   },
+
+
   {
     "zonaOrigen": 2,
     "zonaDestino": 3,
     "xOrigen": 29,
     "yOrigen": 8,
-    "xDestino": 0,
+    "xDestino": 1,
     "yDestino": 12
   },
   {
@@ -76,7 +73,7 @@
     "zonaDestino": 3,
     "xOrigen": 29,
     "yOrigen": 9,
-    "xDestino": 0,
+    "xDestino": 1,
     "yDestino": 13
   },
   {
@@ -84,7 +81,7 @@
     "zonaDestino": 2,
     "xOrigen": 0,
     "yOrigen": 12,
-    "xDestino": 29,
+    "xDestino": 28,
     "yDestino": 8
   },
   {
@@ -92,16 +89,18 @@
     "zonaDestino": 2,
     "xOrigen": 0,
     "yOrigen": 13,
-    "xDestino": 29,
+    "xDestino": 28,
     "yDestino": 9
   },
+
+
   {
     "zonaOrigen": 2,
     "zonaDestino": 4,
     "xOrigen": 9,
     "yOrigen": 19,
     "xDestino": 4,
-    "yDestino": 0
+    "yDestino": 1
   },
   {
     "zonaOrigen": 4,
@@ -109,7 +108,7 @@
     "xOrigen": 4,
     "yOrigen": 0,
     "xDestino": 9,
-    "yDestino": 19
+    "yDestino": 18
   },
   {
     "zonaOrigen": 2,
@@ -117,7 +116,7 @@
     "xOrigen": 10,
     "yOrigen": 19,
     "xDestino": 5,
-    "yDestino": 0
+    "yDestino": 1
   },
   {
     "zonaOrigen": 4,
@@ -125,15 +124,17 @@
     "xOrigen": 5,
     "yOrigen": 0,
     "xDestino": 10,
-    "yDestino": 19
+    "yDestino": 18
   },
+
+
   {
     "zonaOrigen": 4,
     "zonaDestino": 5,
     "xOrigen": 15,
     "yOrigen": 10,
     "xDestino": 7,
-    "yDestino": 10
+    "yDestino": 9
   },
   {
     "zonaOrigen": 5,
@@ -141,22 +142,24 @@
     "xOrigen": 7,
     "yOrigen": 10,
     "xDestino": 15,
-    "yDestino": 10
+    "yDestino": 11
   },
+
+
   {
     "zonaOrigen": 3,
-    "zonaDestino": 6,
+    "zonaDestino": 7,
     "xOrigen": 34,
     "yOrigen": 12,
-    "xDestino": 10,
-    "yDestino": 4
+    "xDestino": 1,
+    "yDestino": 16
   },
   {
-    "zonaOrigen": 6,
+    "zonaOrigen": 7,
     "zonaDestino": 3,
-    "xOrigen": 10,
-    "yOrigen": 4,
-    "xDestino": 34,
+    "xOrigen": 0,
+    "yOrigen": 16,
+    "xDestino": 33,
     "yDestino": 12
   },
   {
@@ -164,63 +167,78 @@
     "zonaDestino": 7,
     "xOrigen": 34,
     "yOrigen": 13,
-    "xDestino": 9,
-    "yDestino": 1
+    "xDestino": 1,
+    "yDestino": 17
   },
   {
     "zonaOrigen": 7,
     "zonaDestino": 3,
-    "xOrigen": 9,
-    "yOrigen": 1,
-    "xDestino": 34,
+    "xOrigen": 0,
+    "yOrigen": 17,
+    "xDestino": 33,
+    "yDestino": 13
+  },
+
+
+  {
+    "zonaOrigen": 3,
+    "zonaDestino": 6,
+    "xOrigen": 10,
+    "yOrigen": 0,
+    "xDestino": 4,
     "yDestino": 13
   },
   {
+    "zonaOrigen": 6,
+    "zonaDestino": 3,
+    "xDestino": 10,
+    "yDestino": 1,
+    "xOrigen": 4,
+    "yOrigen": 14
+  },
+  {
+    "zonaOrigen": 3,
+    "zonaDestino": 6,
+    "xOrigen": 9,
+    "yOrigen": 0,
+    "xDestino": 3,
+    "yDestino": 13
+  },
+  {
+    "zonaOrigen": 6,
+    "zonaDestino": 3,
+    "xDestino": 9,
+    "yDestino": 1,
+    "xOrigen": 3,
+    "yOrigen": 14
+  },
+
+
+  {
     "zonaOrigen": 7,
     "zonaDestino": 8,
-    "xOrigen": 0,
-    "yOrigen": 16,
+    "xOrigen": 9,
+    "yOrigen": 1,
     "xDestino": 31,
-    "yDestino": 2
+    "yDestino": 40
   },
   {
     "zonaOrigen": 8,
     "zonaDestino": 7,
     "xOrigen": 31,
-    "yOrigen": 2,
-    "xDestino": 0,
-    "yDestino": 16
-  },
-  {
-    "zonaOrigen": 7,
-    "zonaDestino": 8,
-    "xOrigen": 0,
-    "yOrigen": 17,
-    "xDestino": 31,
+    "yOrigen": 41,
+    "xDestino": 9,
     "yDestino": 2
   },
-  {
-    "zonaOrigen": 8,
-    "zonaDestino": 7,
-    "xOrigen": 31,
-    "yOrigen": 2,
-    "xDestino": 0,
-    "yDestino": 17
-  },
+
+
   {
     "zonaOrigen": 8,
     "zonaDestino": 9,
     "xOrigen": 31,
-    "yOrigen": 41,
+    "yOrigen": 2,
     "xDestino": 8,
     "yDestino": 32
-  },
-  {
-    "zonaOrigen": 9,
-    "zonaDestino": 8,
-    "xOrigen": 8,
-    "yOrigen": 32,
-    "xDestino": 31,
-    "yDestino": 41
   }
+
 ]
