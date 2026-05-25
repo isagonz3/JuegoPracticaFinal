@@ -496,7 +496,7 @@ public class Partida {
             }
         }
 
-        asegurarMinimoGemas(zona, 3);
+        asegurarMinimoGemas(zona, 2);
     }
 
     private void asegurarMinimoGemas(Zona zona, int minimo) {
