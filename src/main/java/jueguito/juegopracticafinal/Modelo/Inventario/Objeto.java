@@ -12,6 +12,16 @@ public class Objeto {
     private int usosRestantes;
     private String descripcion;
 
+    private int cantidad = 1;
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void incrementarCantidad() {
+        cantidad++;
+    }
+
     public Objeto() {
         this.nombre = "Objeto";
         this.tipo = TipoObjeto.CONSUMIBLE;
@@ -82,6 +92,9 @@ public class Objeto {
 
     @Override
     public String toString() {
+        if (cantidad > 1) {
+            return nombre + " x" + cantidad;
+        }
         return nombre;
     }
 }

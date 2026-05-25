@@ -468,42 +468,163 @@ public class Partida {
     // Colocar objetos en el mapa
 
     private void ponerObjetos(Zona zona) {
-        if (zona.getIdZona()==0||zona.getIdZona()==5||zona.getIdZona()==9) return;
-        Lista<Posicion> spawns=zona.getSpawnObjetos();
 
-        if (spawns.getSize()>0) {
-            for (int i=0;i<spawns.getSize();i++) {
-                Posicion p = spawns.get(i);
-                if (!zona.esValida(p.getRow(), p.getCol())) continue;
-                Celda c = zona.getCelda(p.getRow(), p.getCol());
-                if (!c.isOcupada() ) {
-                    c.setObjeto(crearObjetoRandom());
-                }
-            }
+        // Zonas donde NO spawnear objetos
+        if (zona.getIdZona() == 0 ||
+                zona.getIdZona() == 5 ||
+                zona.getIdZona() == 9) {
             return;
         }
-        int n=get().objetos.min+(int)(Math.random()*(get().objetos.max-get().objetos.min+1));
-        for (int i=0;i<n;i++) {
-            for (int intentos = 0; intentos < 50; intentos++) {
-                int r = (int) (Math.random() * zona.getRows()), c = (int) (Math.random() * zona.getCols());
-                Celda cel = zona.getCelda(r, c);
-                if (cel != null && cel.isTransitable() && !cel.isOcupada() && cel.getTipoCelda() != TipoCelda.PUERTA && !cel.tieneObjeto()) {
-                    cel.setObjeto(crearObjetoRandom());
-                    break;
+
+        Lista<Posicion> spawns = zona.getSpawnObjetos();
+
+        // =========================
+        // 1. SPAWNS FIJOS
+        // =========================
+        if (spawns.getSize() > 0) {
+
+            for (int i = 0; i < spawns.getSize(); i++) {
+
+                Posicion pos = spawns.get(i);
+
+                if (!zona.esValida(pos.getRow(), pos.getCol())) continue;
+
+                Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
+
+                if (celda != null && !celda.isOcupada() && !celda.tieneObjeto()) {
+                    celda.setObjeto(crearObjetoRandom());
                 }
             }
+
+            asegurarMinimoGemas(zona, 3);
+            return;
+        }
+
+        // =========================
+        // 2. SPAWN ALEATORIO
+        // =========================
+        int cantidad = get().objetos.min +
+                (int)(Math.random() * (get().objetos.max - get().objetos.min + 1));
+
+        for (int i = 0; i < cantidad; i++) {
+
+            for (int intentos = 0; intentos < 50; intentos++) {
+
+                int fila = (int)(Math.random() * zona.getRows());
+                int col = (int)(Math.random() * zona.getCols());
+
+                Celda celda = zona.getCelda(fila, col);
+
+                if (celda == null) continue;
+
+                if (!celda.isTransitable()) continue;
+                if (celda.isOcupada()) continue;
+                if (celda.tieneObjeto()) continue;
+                if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
+
+                celda.setObjeto(crearObjetoRandom());
+                break;
+            }
+        }
+
+        asegurarMinimoGemas(zona, 3);
+    }
+
+    private void asegurarMinimoGemas(Zona zona, int minimo) {
+
+        int contador = 0;
+
+        // contar gemas existentes
+        for (int i = 0; i < zona.getRows(); i++) {
+            for (int j = 0; j < zona.getCols(); j++) {
+
+                Celda celda = zona.getCelda(i, j);
+
+                if (celda != null &&
+                        celda.tieneObjeto() &&
+                        "Gema".equals(celda.getObjeto().getNombre())) {
+                    contador++;
+                }
+            }
+        }
+
+        // añadir gemas hasta llegar al mínimo
+        while (contador < minimo) {
+
+            int fila = (int)(Math.random() * zona.getRows());
+            int col = (int)(Math.random() * zona.getCols());
+
+            Celda celda = zona.getCelda(fila, col);
+
+            if (celda == null) continue;
+
+            if (!celda.isTransitable()) continue;
+            if (celda.isOcupada()) continue;
+            if (celda.tieneObjeto()) continue;
+
+            celda.setObjeto(new Objeto(
+                    "Gema",
+                    TipoObjeto.CONSUMIBLE,
+                    0, 0, 0, 0,
+                    1,
+                    "Gema"
+            ));
+
+            contador++;
         }
     }
 
     private Objeto crearObjetoRandom() {
-        return switch ((int)(Math.random()*5)) {
-            case 0 -> new Objeto("Pocion de vida",TipoObjeto.CONSUMIBLE,0,0,5,0,1,"Cura 5");
-            case 1 -> new Objeto("Pocion de ataque",TipoObjeto.CONSUMIBLE,2,0,0,5,1,"+2 atk +5 rango");
-            case 2 -> new Objeto("Pocion de defensa",TipoObjeto.CONSUMIBLE,0,1,0,0,1,"+1 def");
-            case 3 -> { Objeto o=new Objeto("Espada",TipoObjeto.EQUIPABLE,3,0,0,0,99,"Espada"); o.setSlot(SlotEquipable.ARMA); yield o; }
-            default -> { Objeto o=new Objeto("Escudo",TipoObjeto.EQUIPABLE,0,2,0,0,99,"Escudo"); o.setSlot(SlotEquipable.ESCUDO); yield o; }
+
+        double r = Math.random(); // 0.0 a 1.0
+
+        if (r < 0.6) {
+            // 60% Gema (base)
+            return new Objeto(
+                    "Gema",
+                    TipoObjeto.CONSUMIBLE,
+                    0, 0, 0, 0,
+                    1,
+                    "Gema"
+            );
+        }
+
+        if (r < 0.7) {
+            // 10% Espada (porque 0.6 → 0.7)
+            Objeto o = new Objeto(
+                    "Espada",
+                    TipoObjeto.EQUIPABLE,
+                    3, 0, 0, 0,
+                    99,
+                    "Espada"
+            );
+            o.setSlot(SlotEquipable.ARMA);
+            return o;
+        }
+
+        if (r < 0.8) {
+            // 10% Escudo
+            Objeto o = new Objeto(
+                    "Escudo",
+                    TipoObjeto.EQUIPABLE,
+                    0, 2, 0, 0,
+                    99,
+                    "Escudo"
+            );
+            o.setSlot(SlotEquipable.ESCUDO);
+            return o;
+        }
+
+        // 20% Pociones
+        int tipo = (int)(Math.random() * 3);
+
+        return switch (tipo) {
+            case 0 -> new Objeto("Pocion de vida", TipoObjeto.CONSUMIBLE, 0, 0, 5, 0, 1, "Cura 5");
+            case 1 -> new Objeto("Pocion de ataque", TipoObjeto.CONSUMIBLE, 2, 0, 0, 5, 1, "+2 atk +5 rango");
+            default -> new Objeto("Pocion de defensa", TipoObjeto.CONSUMIBLE, 0, 1, 0, 0, 1, "+1 def");
         };
     }
+
 
     // Acciones que puede hacer el jugador
 

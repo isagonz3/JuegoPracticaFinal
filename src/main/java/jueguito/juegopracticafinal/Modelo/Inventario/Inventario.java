@@ -17,9 +17,24 @@ public class Inventario {
     }
 
     public boolean addObjeto(Objeto objeto){
+
         if(objetos.getSize() >= sizeInventario){
             return false;
         }
+
+        // SOLO STACK PARA GEMA
+        if(objeto.getNombre().equalsIgnoreCase("gema")){
+
+            for(int i = 0; i < objetos.getSize(); i++){
+                Objeto o = objetos.get(i);
+
+                if(o.getNombre().equalsIgnoreCase("gema")){
+                    o.incrementarCantidad();
+                    return true;
+                }
+            }
+        }
+
         objetos.add(objeto);
         return true;
     }
