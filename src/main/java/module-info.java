@@ -18,6 +18,6 @@ module jueguito.juegopracticafinal {
     exports jueguito.juegopracticafinal.Modelo.Mundo to com.google.gson;
     exports jueguito.juegopracticafinal.Modelo.Core to com.google.gson;
     opens jueguito.juegopracticafinal.Modelo.Core to com.google.gson;
-    exports jueguito.juegopracticafinal.Modelo.Data to com.google.gson;
+
 
 }

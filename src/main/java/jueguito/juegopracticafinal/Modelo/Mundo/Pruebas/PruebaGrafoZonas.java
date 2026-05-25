@@ -13,7 +13,7 @@ public class PruebaGrafoZonas {
         GrafoZonas grafo = new GrafoZonas();
 
         for (int i = 0; i < 10; i++) {
-            grafo.addZona(new Zona(i));
+            grafo.addZona(new Zona(i, "Zona" + i, 5, 5 ));
         }
 
         grafo.conectar(0,1);

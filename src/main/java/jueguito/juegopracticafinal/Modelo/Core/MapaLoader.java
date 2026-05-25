@@ -1,7 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Core;
 
-import jueguito.juegopracticafinal.Modelo.Data.PuertaData;
-import jueguito.juegopracticafinal.Modelo.Data.ZonaData;
+import jueguito.juegopracticafinal.Modelo.Mundo.PuertaData;
+import jueguito.juegopracticafinal.Modelo.Mundo.ZonaData;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.TADs.GsonUtil;
 import jueguito.juegopracticafinal.TADs.Lista;
@@ -28,7 +28,7 @@ public class MapaLoader {
     }
 
     public static Lista<Puerta> cargarPuertas(){
-        PuertaData[] datos = GsonUtil.cargarArray("src/main/resources/mapasJSON/puertas.json",PuertaData[].class);
+        PuertaData[] datos = GsonUtil.cargarArray("src/main/resources/datosJSON/puertas.json",PuertaData[].class);
         Lista<Puerta> puertas = new Lista<>();
         if(datos!=null){
             for(PuertaData d:datos){
@@ -50,12 +50,12 @@ public class MapaLoader {
                     case 'P'->new Celda(TipoCelda.PUERTA);
                     case '?'->new Celda(TipoCelda.INTERACTUABLE);
                     case '~'->new Celda(TipoCelda.AGUA);
-                    case '0'->new Celda(TipoCelda.VACIO);
+                    case 'S'->new Celda(TipoCelda.SALIDA);
                     default -> throw new IllegalArgumentException("Símbolo desconocido: "+simbolo);
                 };
             }
         }
-        return new Zona(celdas);
+        return new Zona(-1, " ", celdas);
     }
 
     public static void conectarPuertas(GrafoZonas grafo, Lista<Puerta> puertas){
