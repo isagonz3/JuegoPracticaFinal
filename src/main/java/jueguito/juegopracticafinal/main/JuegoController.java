@@ -24,6 +24,7 @@ import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
+import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.TADs.Lista;
 
@@ -45,6 +46,7 @@ public class JuegoController {
     private Image imgJugador;
     private Image imgGato;
     private Image imgEnemigo1;
+    private Image imgNPC;
     private int baseRow = 1;
     private int baseCol = 0;
     private Lista<Celda> celdasAccesibles = null;
@@ -69,9 +71,10 @@ public class JuegoController {
         this.partida = partida;
         this.app = app;
 
-        imgJugador = cargaImagen("/jugador/jugador_down00.png");
-        imgGato = cargaImagen("/gato/gato_quieto.png");
-        imgEnemigo1 = cargaImagen("/enemigos/soldado_quieto.png");
+        imgJugador = cargaImagen("/entidades/jugador_down00.png");
+        imgGato = cargaImagen("/entidades/gato_quieto.png");
+        imgEnemigo1 = cargaImagen("/entidades/soldado_quieto.png");
+        imgNPC = cargaImagen("src/main/resources/entidades/NPC_1.png");
 
         partida.iniciarTurno();
         actualizarUI();
@@ -97,7 +100,6 @@ public class JuegoController {
         }
 
         Image mapa = new Image(getClass().getResourceAsStream("/zonas/" + nombreArchivo + ".png"));
-
 
         boolean[][] checkCelda = null;
         if(celdasAccesibles != null){
@@ -146,11 +148,17 @@ public class JuegoController {
                 }
 
                 if(celda != null && celda.tieneNPC()){
-                    celdaPane.getChildren().add(new Circle(TILE_SIZE*0.35, Color.BLUEVIOLET));
+                    ImageView npcView = new ImageView(seleccionarSpriteNPC(celda.getNpc()));
+                    npcView.setFitHeight(TILE_SIZE);
+                    npcView.setFitWidth(TILE_SIZE);
+                    celdaPane.getChildren().add(npcView);
                 }
 
                 if(celda != null && celda.tieneObjeto()){
-                    celdaPane.getChildren().add(new Circle(TILE_SIZE*0.35, Color.RED));
+                    ImageView objView = new ImageView(seleccionarSpriteObjeto(celda.getObjeto()));
+                    objView.setFitHeight(TILE_SIZE);
+                    objView.setFitWidth(TILE_SIZE);
+                    celdaPane.getChildren().add(objView);
                 }
 
                 if(checkCelda != null && checkCelda[i][j]){
@@ -309,5 +317,20 @@ public class JuegoController {
     private Image cargaImagen(String ruta) {
         var is = getClass().getResourceAsStream(ruta);
         return is != null ? new Image(is) : null;
+    }
+
+    private Image seleccionarSpriteNPC(NPC npc) {
+        return cargaImagen("/NPCs/NPC_1.png");
+    }
+
+    private Image seleccionarSpriteObjeto(Objeto objeto) {
+        String ruta;
+        switch(objeto.getNombre().toLowerCase()){
+            case "espada": ruta = "/objetos/espada.png"; break;
+            case "escudo": ruta = "/objetos/escudo.png"; break;
+            case "llave":  ruta = "/objetos/llave.png"; break;
+            default:       ruta = "/objetos/pocionVida.png";
+        }
+        return cargaImagen(ruta);
     }
 }
