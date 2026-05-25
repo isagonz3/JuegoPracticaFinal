@@ -431,6 +431,8 @@ public class JuegoController {
             case "escudo": ruta = "/objetos/escudo.png"; break;
             case "llave":  ruta = "/objetos/llave.png"; break;
             case "gema":   ruta = "/objetos/gema.png"; break;
+            case "pocion de vida": ruta = "/objetos/pocionVida.png"; break;
+            case "pocion de ataque": ruta = "/objetos/pocionRango.png"; break;
             default:       ruta = "/objetos/pocionVida.png";
         }
         return cargaImagen(ruta);
