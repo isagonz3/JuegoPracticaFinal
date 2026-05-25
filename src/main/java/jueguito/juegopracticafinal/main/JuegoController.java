@@ -24,7 +24,6 @@ import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
-import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.TADs.Lista;
 
@@ -148,7 +147,7 @@ public class JuegoController {
                 }
 
                 if(celda != null && celda.tieneNPC()){
-                    ImageView npcView = new ImageView(seleccionarSpriteNPC(celda.getNpc()));
+                    ImageView npcView = new ImageView(seleccionarSpriteNPC());
                     npcView.setFitHeight(TILE_SIZE);
                     npcView.setFitWidth(TILE_SIZE);
                     celdaPane.getChildren().add(npcView);
@@ -166,37 +165,9 @@ public class JuegoController {
                     celdaPane.getChildren().add(ilum);
                 }
 
-                int row = i;
-                int col = j;
-                celdaPane.setOnMouseClicked((e) -> manejarClickCelda(row,col));
                 mapaGrid.add(celdaPane,j,i);
             }
         }
-    }
-
-    private void manejarClickCelda(int i, int j){
-        
-        if(partida.getEstadoActual() != EstadoJuego.EN_CURSO){
-            return;
-        }
-
-        Zona zona = partida.getZonaActual();
-        if(!zona.esValida(i,j)){
-            return;
-        }
-
-        Celda celda = zona.getCelda(i,j);
-        if(celda==null){
-            return;
-        }
-
-        Posicion posJugador = partida.getJugador().getPosicion();
-        Celda celdaJugador = zona.getCelda(posJugador.getRow(),posJugador.getCol());
-
-        if(i == celdaJugador.getRow() && j == celdaJugador.getCol()){
-            return;
-        }
-
     }
 
     void manejarTecla(KeyEvent event) {
@@ -319,7 +290,8 @@ public class JuegoController {
         return is != null ? new Image(is) : null;
     }
 
-    private Image seleccionarSpriteNPC(NPC npc) {
+    //Añadir si da tiempo mas npcs
+    private Image seleccionarSpriteNPC() {
         return cargaImagen("/NPCs/NPC_1.png");
     }
 

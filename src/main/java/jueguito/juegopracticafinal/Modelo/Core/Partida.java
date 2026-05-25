@@ -318,8 +318,16 @@ public class Partida {
     private void ponerObjetos(Zona zona) {
         if (zona.getIdZona()==0||zona.getIdZona()==5||zona.getIdZona()==9) return;
         Lista<Posicion> spawns=zona.getSpawnObjetos();
+
         if (spawns.getSize()>0) {
-            for (int i=0;i<spawns.getSize();i++) { Posicion p=spawns.get(i); if (!zona.esValida(p.getRow(),p.getCol())) continue; Celda c=zona.getCelda(p.getRow(),p.getCol()); if (!c.isOcupada()) c.setObjeto(crearObjetoRandom()); }
+            for (int i=0;i<spawns.getSize();i++) {
+                Posicion p = spawns.get(i);
+                if (!zona.esValida(p.getRow(), p.getCol())) continue;
+                Celda c = zona.getCelda(p.getRow(), p.getCol());
+                if (!c.isOcupada() ) {
+                    c.setObjeto(crearObjetoRandom());
+                }
+            }
             return;
         }
         int n=get().objetos.min+(int)(Math.random()*(get().objetos.max-get().objetos.min+1));

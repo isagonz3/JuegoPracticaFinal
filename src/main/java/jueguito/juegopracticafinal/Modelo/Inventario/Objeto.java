@@ -34,6 +34,7 @@ public class Objeto {
         this.vidaBonus = vidaBonus;
         this.rangoBonus = rangoBonus;
         this.usosMax = usosMax;
+        this.usosRestantes = usosMax;
         this.descripcion = descripcion;
     }
 

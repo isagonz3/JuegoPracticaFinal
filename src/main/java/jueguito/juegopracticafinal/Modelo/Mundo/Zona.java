@@ -37,13 +37,16 @@ public class Zona {
       int rows = celdas.length;
       int cols = celdas[0].length;
       this.matrix = new Matrix<>(rows, cols);
-      for (int i = 0; i < rows; i++)
+
+      for (int i = 0; i < rows; i++){
          for (int j = 0; j < cols; j++) {
             Celda celda = celdas[i][j];
             celda.setRow(i);
             celda.setCol(j);
             matrix.set(i, j, celda);
          }
+      }
+
       this.countTurnos = 0;
       this.visitada = false;
       this.spawnJugador = null;
@@ -123,9 +126,11 @@ public class Zona {
       return matrix.get(row, col);
    }
 
-   public void setCelda(int row, int col, Celda celda){
-      matrix.set(row, col, celda);
-   }
+    public void setCelda(int row, int col, Celda celda){
+        celda.setRow(row);
+        celda.setCol(col);
+        matrix.set(row, col, celda);
+    }
 
    public Lista<Celda> getPuertas() {
       return puertas;
