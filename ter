@@ -18,7 +18,7 @@
  package jueguito.juegopracticafinal.Modelo.Core;[m
  [m
 [31m-import jueguito.juegopracticafinal.Modelo.Data.PuertaData;[m
-[31m-import jueguito.juegopracticafinal.Modelo.Data.ZonaData;[m
+[31m-import jueguito.juegopracticafinal.Modelo.Mundo.ZonaData;[m
  import jueguito.juegopracticafinal.Modelo.Mundo.*;[m
  import jueguito.juegopracticafinal.TADs.GsonUtil;[m
  import jueguito.juegopracticafinal.TADs.Lista;[m
@@ -50,7 +50,7 @@
  [m
 [31m-import static jueguito.juegopracticafinal.Modelo.Data.JugadorData.*;[m
 [31m-import static jueguito.juegopracticafinal.Modelo.Data.GatoData.*;[m
-[31m-import static jueguito.juegopracticafinal.Modelo.Data.ZonaData.*;[m
+[31m-import static jueguito.juegopracticafinal.Modelo.Mundo.ZonaData.*;[m
 [31m-[m
  public class Partida {[m
 [32m+[m[32m    private static final int MAX_TURNOS = 1000;[m

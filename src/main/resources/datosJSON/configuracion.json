@@ -1,0 +1,46 @@
+{
+  "jugador": {
+    "vidaMax": 20,
+    "ataqueBase": 5,
+    "defensaBase": 2,
+    "rangoMov": 50
+  },
+  "gato": {
+    "vida": 10,
+    "ataque": 0,
+    "defensa": 0,
+    "rangoMov": 10,
+    "probMovimiento": 0.3,
+    "zonasPermitidas": [2, 4, 6, 7, 8]
+  },
+  "enemigos": {
+    "vidaBase": 5,
+    "ataqueBase": 2,
+    "defensaBase": 1,
+    "rangoMov": 4,
+    "min": 3,
+    "max": 6
+  },
+  "objetos": {
+    "min": 1,
+    "max": 3
+  },
+  "turno": {
+    "maxTurnos": 50
+  },
+  "inventario": {
+    "maxItems": 10,
+    "slotsEquip": 2
+  },
+  "zona": {
+    "zonasSinSpawn": [0, 5],
+    "zonaCastillo": 9,
+    "zonaInicial": 0,
+    "numZonas": 10
+  },
+  "ui": {
+    "tileSize": 16,
+    "anchoVentana": 960,
+    "altoVentana": 576
+  }
+}
