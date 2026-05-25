@@ -624,13 +624,31 @@ public class Partida {
     }
 
     public boolean interactNPC() {
-        if (estadoActual!=EstadoJuego.EN_CURSO) return false;
-        Posicion pj=jugador.getPosicion();
-        for (int i=0;i<zonaActual.getRows();i++) for (int j=0;j<zonaActual.getCols();j++) {
-            Celda c=zonaActual.getCelda(i,j);
-            if (c.tieneNPC()&&c.esAdyacente(zonaActual.getCelda(pj.getRow(),pj.getCol()))) { NPC npc=c.getNpc(); log.registrar(npc.getNombre()+": "+npc.hablar()); if (npc.tieneInfoGato()) log.registrar("Pista: "+npc.getInfoGato()); return true; }
+
+        if (estadoActual != EstadoJuego.EN_CURSO) return false;
+
+        Posicion pj = jugador.getPosicion();
+        Celda celdaJugador = zonaActual.getCelda(pj.getRow(), pj.getCol());
+
+        for (int i = 0; i < zonaActual.getRows(); i++) {
+            for (int j = 0; j < zonaActual.getCols(); j++) {
+
+                Celda c = zonaActual.getCelda(i, j);
+
+                if (c.tieneNPC() && c.esAdyacente(celdaJugador)) {
+
+                    NPC npc = c.getNpc();
+
+                    String frase = npc.hablar();
+                    log.registrar(npc.getNombre() + ": " + frase);
+
+                    return true;
+                }
+            }
         }
-        log.registrar("Hablar solo da mal rollo!"); return false;
+
+        log.registrar("No hay nadie con quien hablar...");
+        return false;
     }
 
     public boolean realizarTradeo(NPC n, Tradeo t) {
@@ -747,7 +765,7 @@ public class Partida {
             if (celda2 != null && !celda2.isOcupada()) {
 
                 NPC npc2 = new NPC(
-                        "Viejo Sabio",
+                        "Sirena",
                         TipoNPC.ALDEANO
                 );
 

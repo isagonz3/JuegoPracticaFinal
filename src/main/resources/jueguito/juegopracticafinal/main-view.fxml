@@ -61,7 +61,10 @@
                         maxWidth="Infinity"
                         HBox.hgrow="ALWAYS"/>
 
-
+                <Button fx:id="interactuarBtn"
+                        text="Interactuar"
+                        maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <Label text="--- Inventario ---"

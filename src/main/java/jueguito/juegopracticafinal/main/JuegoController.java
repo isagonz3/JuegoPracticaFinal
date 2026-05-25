@@ -41,6 +41,7 @@ public class JuegoController {
     @FXML private ListView<String> inventarioList;
     @FXML private Button usarBtn, equiparBtn;
     @FXML private Button atacarBtn;
+    @FXML private Button interactuarBtn;
 
     private Partida partida;
     private JueguitoFX app;
@@ -262,8 +263,21 @@ public class JuegoController {
         });
 
         atacarBtn.setOnAction(e -> atacarBoton());
+
+        interactuarBtn.setOnAction(e -> interactuarBoton());
     }
 
+    private void interactuarBoton() {
+
+        boolean interactuo = partida.interactNPC();
+
+        actualizarUI();
+        renderMapa();
+
+        if (interactuo) {
+            terminaTurno();
+        }
+    }
 
     private void atacarBoton() {
 
@@ -446,7 +460,7 @@ public class JuegoController {
 
             case "mercader": ruta = "/entidades/NPC_1.png";break;
 
-            case "viejo sabio": ruta = "/entidades/NPC_2.png";break;
+            case "sirena": ruta = "/entidades/NPC_2.png";break;
 
             case "guardia": ruta = "/entidades/NPC_3.png";break;
 

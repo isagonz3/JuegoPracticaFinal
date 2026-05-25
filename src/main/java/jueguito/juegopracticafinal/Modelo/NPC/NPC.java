@@ -7,7 +7,6 @@ public class NPC {
     private TipoNPC tipo;
     private Lista<String> dialogos;
     private Lista<Tradeo> tradeos;
-    private String infoGato;
     private int dialogoActual;
 
     private String sprite;
@@ -17,7 +16,6 @@ public class NPC {
         this.tipo = tipo;
         this.dialogos = new Lista<>();
         this.tradeos = new Lista<>();
-        this.infoGato = "";
         this.dialogoActual = 0;
     }
 
@@ -38,14 +36,6 @@ public class NPC {
         return tradeos;
     }
 
-    public String getInfoGato() {
-        return infoGato;
-    }
-
-    public void setInfoGato(String infoGato) {
-        this.infoGato = infoGato;
-    }
-
     public void addDialogo(String dialogo){
         this.dialogos.add(dialogo);
     }
@@ -54,22 +44,32 @@ public class NPC {
         this.tradeos.add(tradeo);
     }
 
-    public String hablar(){
-        if(dialogos.isEmpty() || dialogoActual >= dialogos.getSize()){
-            return "...";
-        }
+    public String hablar() {
 
-        String frase = dialogos.get(dialogoActual);
-        dialogoActual++;
-        return frase;
+        if (tipo == TipoNPC.ALDEANO) {
+
+            if (nombre.equals("Sirena")) {
+                return "Parece que para llegar a la llave vas a necesitar una barca";
+            }
+
+            if (nombre.equals("Guardia")) {
+                return "Necesitas conseguir una llave para abrir el castillo";
+            }
+
+            // diálogo genérico de aldeanos
+            if (dialogos.isEmpty() || dialogoActual >= dialogos.getSize()) {
+                return "...";
+            }
+
+            String frase = dialogos.get(dialogoActual);
+            dialogoActual++;
+            return frase;
+        }
+        return "...";
     }
 
     public void restartDialogo(){
         this.dialogoActual = 0;
-    }
-
-    public boolean tieneInfoGato(){
-        return infoGato != null && !infoGato.isEmpty();
     }
 
     public boolean comerciar(){
