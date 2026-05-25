@@ -26,7 +26,7 @@ public class Partida {
 
     public Partida(GrafoZonas grafo) { this.grafo = grafo; }
 
-    // ── INICIO ──
+    //Iniciar partida
 
     public void iniciar() {
         Zona zi = grafo.getZona(get().zona.zonaInicial);
@@ -55,11 +55,11 @@ public class Partida {
         log.registrar("INICIANDO PARTIDA \n Bienvenido. Estas en el Interior de tu Casa");
     }
 
-    // ── TURNOS ──
+    //Lógica del sistema de turnos
 
     public void iniciarTurno() {
         if (estadoActual != EstadoJuego.EN_CURSO) return;
-        jugador.getEstadisticas().resetMovimiento();
+        jugador.getEstadisticas().setPuntosMovDisponibles(jugador.getRangoTotal());
     }
 
     public void terminarTurno() {
@@ -88,7 +88,7 @@ public class Partida {
         return false;
     }
 
-    // ── MOVIMIENTO ──
+    //Lógica de movimiento para el jugador
 
     public boolean moverJugador(int row, int col) {
         if (estadoActual != EstadoJuego.EN_CURSO) return false;
@@ -139,7 +139,7 @@ public class Partida {
         return zonaActual.getCaminoMinimo(jugador.getPosicion().getRow(), jugador.getPosicion().getCol(), dr, dc);
     }
 
-    // ── COMBATE ──
+    //Lógica de combates
 
     public ResultadoCombate atacarEnemigo(Enemigo e) {
         if (estadoActual != EstadoJuego.EN_CURSO) return null;
@@ -158,7 +158,7 @@ public class Partida {
         atacarEnemigo((Enemigo)c.getEntidad()); return true;
     }
 
-    // ── ENEMIGOS ──
+    //Lógica de movimiento y ataques de enemigos
 
     private void moverEnemigos() {
         Posicion pj = jugador.getPosicion();
@@ -224,7 +224,7 @@ public class Partida {
             }
     }
 
-    // ── GATO ──
+    // Lógica de movimiento del gato
 
     private void moverGato() { if (gatoEncontrado) seguirJugador(gato); else moverGatoAleatorio(gato); }
 
@@ -274,7 +274,7 @@ public class Partida {
 
     private boolean zonasPermitidas(int id) { for (int z:get().gato.zonasPermitidas) if (z==id) return true; return false; }
 
-    // ── CAMBIO DE ZONA ──
+    // Métodos para cambiar de zona (habitacion)
 
     public void cambiarZona(Puerta puerta) {
         if (puerta==null) return;
@@ -299,7 +299,7 @@ public class Partida {
         log.registrar("Has entrado en: "+nz.getNombreZona());
     }
 
-    // ── OBJETOS ──
+    // Colocar objetos en el mapa
 
     private void ponerObjetos(Zona zona) {
         if (zona.getIdZona()==0||zona.getIdZona()==5||zona.getIdZona()==9) return;
@@ -327,7 +327,7 @@ public class Partida {
         };
     }
 
-    // ── ACCIONES ──
+    // Acciones que puede hacer el jugador
 
     public boolean usarObjeto(Objeto o) {
         if (estadoActual!=EstadoJuego.EN_CURSO) return false;
@@ -376,7 +376,7 @@ public class Partida {
         return new Posicion(0,0);
     }
 
-    // ── GETTERS/SETTERS ──
+    // Getters y setters
 
     public Jugador getJugador() { return jugador; }
     public void setJugador(Jugador j) { this.jugador=j; }

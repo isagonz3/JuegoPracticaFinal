@@ -18,8 +18,9 @@ public class Zona {
 
 
    public Zona(int idZona, String nombreZona, int rows, int cols){
-      this.nombreZona = nombreZona;
       this.idZona = idZona;
+      this.nombreZona = nombreZona;
+      this.matrix = new Matrix<>(rows, cols);
       this.countTurnos = 0;
       this.visitada = false;
       this.spawnJugador = null;
@@ -27,57 +28,32 @@ public class Zona {
       this.spawnObjects = new Lista<>();
       this.spawnNPCs = new Lista<>();
       this.puertas = new Lista<>();
-      this.matrix = new Matrix<>(rows, cols);
+
    }
 
-   public Zona(Celda[][] celdas) {
+   public Zona(int idZona, String nombreZona, Celda[][] celdas) {
+      this.idZona = idZona;
+      this.nombreZona = nombreZona;
       int rows = celdas.length;
       int cols = celdas[0].length;
-
       this.matrix = new Matrix<>(rows, cols);
-      for (int i = 0; i < rows; i++) {
+      for (int i = 0; i < rows; i++)
          for (int j = 0; j < cols; j++) {
             Celda celda = celdas[i][j];
             celda.setRow(i);
             celda.setCol(j);
             matrix.set(i, j, celda);
          }
-      }
-
+      this.countTurnos = 0;
+      this.visitada = false;
       this.spawnJugador = null;
       this.spawnEnemigos = new Lista<>();
       this.spawnObjects = new Lista<>();
       this.spawnNPCs = new Lista<>();
       this.puertas = new Lista<>();
-      this.countTurnos = 0;
-      this.visitada = false;
-      this.nombreZona = " ";
-      this.idZona = -1;
    }
 
-   public Zona(int i, String zona0) {
-      this.idZona = i;
-      this.nombreZona = zona0;
-      this.spawnJugador = null;
-      this.spawnEnemigos = new Lista<>();
-      this.spawnObjects = new Lista<>();
-      this.spawnNPCs = new Lista<>();
-      this.puertas = new Lista<>();
-      this.countTurnos = 0;
-      this.visitada = false;
-   }
 
-   public Zona(int i) {
-      this.idZona = i;
-      this.nombreZona = "Zona" + i;
-      this.spawnJugador = null;
-      this.spawnEnemigos = new Lista<>();
-      this.spawnObjects = new Lista<>();
-      this.spawnNPCs = new Lista<>();
-      this.puertas = new Lista<>();
-      this.countTurnos = 0;
-      this.visitada = false;
-   }
 
    public int getIdZona() {
       return idZona;

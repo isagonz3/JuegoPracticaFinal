@@ -43,7 +43,6 @@ public class Jugador extends Entidad{
         if(objeto.getTipo() != TipoObjeto.EQUIPABLE){
             return false;
         }
-
         Objeto actual = equipamiento[slot.ordinal()];
         if(actual != null && !inventario.addObjeto(actual)){
                 return false;
@@ -55,7 +54,6 @@ public class Jugador extends Entidad{
         equipamiento[slot.ordinal()] = objeto;
         addBonusEquipamiento();
         return true;
-
     }
 
     public void quitarEquipamiento(SlotEquipable slot){
@@ -67,13 +65,10 @@ public class Jugador extends Entidad{
     }
 
     private void addBonusEquipamiento(){
-        estadisticas.setAtaqueBase(estadisticas.getAtaqueBase() - bonusAtaqueEq);
-        estadisticas.setDefensaBase(estadisticas.getDefensaBase() - bonusDefensaEq);
-        estadisticas.setRangoMov(estadisticas.getRangoMov() - bonusRangoEq);
-
         bonusAtaqueEq = 0;
         bonusDefensaEq = 0;
         bonusRangoEq = 0;
+
         for (Objeto objeto : equipamiento) {
             if (objeto != null) {
                 bonusAtaqueEq += objeto.getAtaqueBonus();
@@ -81,16 +76,37 @@ public class Jugador extends Entidad{
                 bonusRangoEq += objeto.getRangoBonus();
             }
         }
+    }
 
-        estadisticas.setAtaqueBase(estadisticas.getAtaqueBase() + bonusAtaqueEq);
-        estadisticas.setDefensaBase(estadisticas.getDefensaBase() + bonusDefensaEq);
-        estadisticas.setRangoMov(estadisticas.getRangoMov() + bonusRangoEq);
+    @Override
+    public int getAtaqueTotal(){
+        return estadisticas.getAtaqueBase() + bonusAtaqueEq;
+    }
+
+    @Override
+    public int getDefensaTotal(){
+        return estadisticas.getDefensaBase() + bonusDefensaEq;
+    }
+
+    public int getRangoTotal(){
+        return estadisticas.getRangoMov() + bonusRangoEq;
+    }
+
+    public int getBonusAtaqueEq() {
+        return bonusAtaqueEq;
+    }
+
+    public int getBonusDefensaEq() {
+        return bonusDefensaEq;
+    }
+
+    public int getBonusRangoEq() {
+        return bonusRangoEq;
     }
 
     public void setLog(LogSistema log) {
         this.log = log;
     }
-
     public LogSistema getLog() {
         return log;
     }

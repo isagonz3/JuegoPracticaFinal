@@ -50,12 +50,12 @@ public class MapaLoader {
                     case 'P'->new Celda(TipoCelda.PUERTA);
                     case '?'->new Celda(TipoCelda.INTERACTUABLE);
                     case '~'->new Celda(TipoCelda.AGUA);
-                    case '0'->new Celda(TipoCelda.VACIO);
+                    case 'S'->new Celda(TipoCelda.SALIDA);
                     default -> throw new IllegalArgumentException("Símbolo desconocido: "+simbolo);
                 };
             }
         }
-        return new Zona(celdas);
+        return new Zona(-1, " ", celdas);
     }
 
     public static void conectarPuertas(GrafoZonas grafo, Lista<Puerta> puertas){
