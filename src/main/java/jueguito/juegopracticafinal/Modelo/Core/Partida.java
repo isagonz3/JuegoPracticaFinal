@@ -53,14 +53,8 @@ public class Partida {
         gato = new Gato("Gatiko",
                 new Estadisticas(get().gato.vida, get().gato.ataque, get().gato.defensa, get().gato.rangoMov));
 
-        Posicion sg = spawnGato();
-        if (sg != null) {
-            gato.setPosicion(sg);
-            for (int z : get().gato.zonasPermitidas)
-                if (grafo.getZona(z).esValida(sg.getRow(), sg.getCol()))
-                { grafo.getZona(z).getCelda(sg.getRow(), sg.getCol()).setEntidad(gato); break; }
-        }
         turnoActual = 0;
+        colocarGatoFijo();
         log.registrar("INICIANDO PARTIDA \n Bienvenido. Estas en el Interior de tu Casa");
     }
 
@@ -73,7 +67,7 @@ public class Partida {
 
     public void terminarTurno() {
         if (estadoActual != EstadoJuego.EN_CURSO) return;
-        moverEnemigos(); atacarJugador(); moverGato();
+        moverEnemigos(); atacarJugador();
         zonaActual.setCountTurnos(zonaActual.getCountTurnos() + 1);
         turnoActual++;
         if (checkDerrota() || checkVictoria()) return;
@@ -392,28 +386,6 @@ public class Partida {
 
     // Lógica de movimiento del gato
 
-    private void moverGato() { if (gatoEncontrado) seguirJugador(gato); else moverGatoAleatorio(gato); }
-
-    private void seguirJugador(Gato g) {
-        Posicion pj=jugador.getPosicion(), pg=g.getPosicion();
-        if (idZonaActual!=zonaGato(pg)) return;
-        int nr=pg.getRow()+Integer.signum(pj.getRow()-pg.getRow()), nc=pg.getCol()+Integer.signum(pj.getCol()-pg.getCol());
-        if (zonaActual.esValida(nr,nc)) {
-            Celda c=zonaActual.getCelda(nr,nc);
-            if (c.isTransitable()&&!c.isOcupada()) { zonaActual.getCelda(pg.getRow(),pg.getCol()).setEntidad(null); g.moverA(new Posicion(nr,nc)); c.setEntidad(g); }
-        }
-    }
-
-    private void moverGatoAleatorio(Gato g) {
-        Posicion pg=g.getPosicion(); int idZ=zonaGato(pg);
-        if (!zonasPermitidas(idZ)) return;
-        Zona zg=grafo.getZona(idZ); if (zg==null) return;
-        int[][] dirs={{-1,0},{1,0},{0,-1},{0,1}};
-        for (int i=3;i>0;i--) { int j=(int)(Math.random()*(i+1)); int[] t=dirs[i]; dirs[i]=dirs[j]; dirs[j]=t; }
-        for (int[] d:dirs) { int nr=pg.getRow()+d[0], nc=pg.getCol()+d[1];
-            if (zg.esValida(nr,nc)) { Celda c=zg.getCelda(nr,nc); if (c.isTransitable()&&!c.isOcupada()) { zg.getCelda(pg.getRow(),pg.getCol()).setEntidad(null); g.moverA(new Posicion(nr,nc)); c.setEntidad(g); return; } } }
-    }
-
     public boolean findGato() {
         if (gatoEncontrado) return true;
         if (zonaGato(gato.getPosicion())!=idZonaActual) return false;
@@ -423,14 +395,7 @@ public class Partida {
         } return false;
     }
 
-    private Posicion spawnGato() {
-        int[] zonas=get().gato.zonasPermitidas;
-        int z=zonas[(int)(Math.random()*zonas.length)]; idZonaGato=z;
-        Zona zg=grafo.getZona(z);
-        for (int i=0;i<50;i++) { int r=(int)(Math.random()*zg.getRows()), c=(int)(Math.random()*zg.getCols());
-            Celda cel=zg.getCelda(r,c); if (cel!=null&&cel.isTransitable()&&!cel.isOcupada()&&cel.getTipoCelda()!=TipoCelda.AGUA) return new Posicion(r,c); }
-        return null;
-    }
+
 
     private int zonaGato(Posicion p) {
         if (idZonaGato>=0) return idZonaGato;
@@ -673,6 +638,45 @@ public class Partida {
     private Posicion findSpawn(Zona zona) {
         for (int i=0;i<zona.getRows();i++) for (int j=0;j<zona.getCols();j++) { Celda c=zona.getCelda(i,j); if (c!=null&&c.isTransitable()&&!c.isOcupada()) return new Posicion(i,j); }
         return new Posicion(0,0);
+    }
+
+
+    private void colocarGatoFijo() {
+
+        // Zona fija donde quieres el gato
+        int zonaId = 8;
+
+        Zona zonaGato = grafo.getZona(zonaId);
+        if (zonaGato == null) return;
+
+        // Crear el gato si no existe
+        if (gato == null) {
+            gato = new Gato(
+                    "Gatiko",
+                    new Estadisticas(
+                            get().gato.vida,
+                            get().gato.ataque,
+                            get().gato.defensa,
+                            get().gato.rangoMov
+                    )
+            );
+        }
+
+        // Posición fija
+        Posicion pos = new Posicion(16, 14);
+
+        // Validación básica
+        if (!zonaGato.esValida(16, 14)) return;
+
+        Celda celda = zonaGato.getCelda(16, 14);
+        if (celda == null || celda.isOcupada()) return;
+
+        // Colocar gato
+        gato.setPosicion(pos);
+        celda.setEntidad(gato);
+
+        // Guardar zona del gato
+        idZonaGato = zonaId;
     }
 
     // Getters y setters
