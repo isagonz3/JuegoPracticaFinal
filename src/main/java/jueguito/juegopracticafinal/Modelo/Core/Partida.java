@@ -547,8 +547,8 @@ public class Partida {
 
         double r = Math.random(); // 0.0 a 1.0
 
-        if (r < 0.6) {
-            // 60% Gema (base)
+        if (r < 0.5) {
+            // 50% Gema (base)
             return new Objeto(
                     "Gema",
                     TipoObjeto.CONSUMIBLE,
@@ -558,8 +558,8 @@ public class Partida {
             );
         }
 
-        if (r < 0.7) {
-            // 10% Espada (porque 0.6 → 0.7)
+        if (r < 0.65) {
+            // 15% Espada
             Objeto o = new Objeto(
                     "Espada",
                     TipoObjeto.EQUIPABLE,
@@ -572,7 +572,7 @@ public class Partida {
         }
 
         if (r < 0.8) {
-            // 10% Escudo
+            // 15% Escudo
             Objeto o = new Objeto(
                     "Escudo",
                     TipoObjeto.EQUIPABLE,
