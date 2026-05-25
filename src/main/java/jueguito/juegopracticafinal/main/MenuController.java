@@ -19,6 +19,12 @@ public class MenuController {
     private Button nuevaPartidaBtn, cargarPartidaBtn, salirBtn;
     private JueguitoFX app;
 
+    private static final String[] NOMBRES_ZONAS = {
+            "InteriorHabitacion", "ExteriorHabitacion", "BosqueOeste", "Aldea",
+            "ExteriorTienda", "InteriorTienda", "Lago", "BosqueEste",
+            "ExteriorCastillo", "InteriorCastillo"
+    };
+
     public void setApp(JueguitoFX app) { this.app = app; }
 
     private GrafoZonas crearGrafo(){
@@ -27,18 +33,9 @@ public class MenuController {
 
         for(int i = 0; i < zonas.getSize(); i++){
             Zona zona = zonas.get(i);
-            zona.setIdZona(i);
-            switch (i) {
-                case 0: zona.setNombreZona("InteriorHabitacion"); break;
-                case 1: zona.setNombreZona("ExteriorHabitacion"); break;
-                case 2: zona.setNombreZona("BosqueOeste"); break;
-                case 3: zona.setNombreZona("Aldea"); break;
-                case 4: zona.setNombreZona("ExteriorTienda"); break;
-                case 5: zona.setNombreZona("InteriorTienda"); break;
-                case 6: zona.setNombreZona("Lago"); break;
-                case 7: zona.setNombreZona("BosqueEste"); break;
-                case 8: zona.setNombreZona("ExteriorCastillo"); break;
-                case 9: zona.setNombreZona("InteriorCastillo"); break;
+            int id = zona.getIdZona();
+            if(id >= 0 && id < NOMBRES_ZONAS.length){
+                zona.setNombreZona(NOMBRES_ZONAS[id]);
             }
             grafo.addZona(zona);
         }

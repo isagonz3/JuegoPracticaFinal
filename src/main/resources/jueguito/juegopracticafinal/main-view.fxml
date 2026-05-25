@@ -53,7 +53,7 @@
             <Label text="--- Log ---"
                    style="-fx-font-weight: bold; -fx-margin-top: 10;" />
             <TextArea fx:id="logArea" editable="false"
-                      prefRowCount="12" prefWidth="200" />
+                      prefHeight="12" prefWidth="200" />
         </VBox>
     </right>
 </BorderPane>

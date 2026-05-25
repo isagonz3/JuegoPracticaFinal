@@ -3,14 +3,14 @@
     "vidaMax": 20,
     "ataqueBase": 5,
     "defensaBase": 2,
-    "rangoMov": 50
+    "rangoMov": 10
   },
   "gato": {
     "vida": 10,
     "ataque": 0,
     "defensa": 0,
     "rangoMov": 10,
-    "probMovimiento": 0.3,
+    "probMovimiento": 0.5,
     "zonasPermitidas": [2, 4, 6, 7, 8]
   },
   "enemigos": {

@@ -212,13 +212,6 @@ public class Zona {
       puertas.add(celda);
    }
 
-   public Celda findCelda(int row, int col){
-      if(!esValida(row,col)){
-         return null;
-      }
-      return matrix.get(row, col);
-   }
-
    public Lista<Celda> getCaminoMinimo(int origenRow, int origenCol,int destinoRow, int destinoCol){
       if(!esValida(origenRow,origenCol) || !esValida(destinoRow,destinoCol)){
          return new Lista<>();

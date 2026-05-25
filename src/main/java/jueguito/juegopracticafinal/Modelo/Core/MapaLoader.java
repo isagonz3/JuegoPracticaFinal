@@ -8,20 +8,14 @@ import jueguito.juegopracticafinal.TADs.Lista;
 
 
 public class MapaLoader {
-    private static final char PARED = '#';
-    private static final char SUELO = '_';
-    private static final char PUERTA = 'P';
-    private static final char INTERACTUABLE = '?';
-    private static final char AGUA = '~';
-    private static final char VACIO = '0';
-
 
     public static Lista<Zona> cargarZonas(){
         ZonaData[] datos= GsonUtil.cargarArray("src/main/resources/datosJSON/habitaciones.json", ZonaData[].class);
         Lista<Zona> zonas=new Lista<>();
         if(datos!=null){
             for(ZonaData d:datos){
-                zonas.add(crearDesdeTexto(d.mapa));
+                Zona z = crearDesdeTexto(d.id, d.mapa);
+                zonas.add(z);
             }
         }
         return zonas;
@@ -38,24 +32,24 @@ public class MapaLoader {
         return puertas;
     }
 
-    private static Zona crearDesdeTexto(String[] mapa){
+    private static Zona crearDesdeTexto(int id ,String[] mapa){
         Celda[][] celdas=new Celda[mapa.length][];
         for(int y=0; y<mapa.length; y++){
             celdas[y]=new Celda[mapa[y].length()];
             for(int x=0;x<mapa[y].length();x++){
-                char simbolo=mapa[y].charAt(x);
-                celdas[y][x]=switch(simbolo){
-                    case '#'->new Celda(TipoCelda.PARED);
-                    case '_'->new Celda(TipoCelda.SUELO);
-                    case 'P'->new Celda(TipoCelda.PUERTA);
-                    case '?'->new Celda(TipoCelda.INTERACTUABLE);
-                    case '~'->new Celda(TipoCelda.AGUA);
-                    case 'S'->new Celda(TipoCelda.SALIDA);
-                    default -> throw new IllegalArgumentException("Símbolo desconocido: "+simbolo);
+                celdas[y][x] = switch (mapa[y].charAt(x)) {
+                    case '#' -> new Celda(TipoCelda.PARED);
+                    case '_' -> new Celda(TipoCelda.SUELO);
+                    case 'P' -> new Celda(TipoCelda.PUERTA);
+                    case '?' -> new Celda(TipoCelda.INTERACTUABLE);
+                    case '~' -> new Celda(TipoCelda.AGUA);
+                    case '0' -> new Celda(TipoCelda.VACIO);
+                    case 'S' -> new Celda(TipoCelda.SALIDA);
+                    default -> throw new IllegalArgumentException("Símbolo desconocido: " + mapa[y].charAt(x));
                 };
             }
         }
-        return new Zona(-1, " ", celdas);
+        return new Zona(id, " ", celdas);
     }
 
     public static void conectarPuertas(GrafoZonas grafo, Lista<Puerta> puertas){

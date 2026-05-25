@@ -30,20 +30,29 @@ public class Partida {
 
     public void iniciar() {
         Zona zi = grafo.getZona(get().zona.zonaInicial);
-        if (zi == null) { log.registrar("ERROR: Zona inicial no encontrada"); estadoActual = EstadoJuego.DERROTA; return; }
+        if (zi == null) {
+            log.registrar("ERROR: Zona inicial no encontrada");
+            estadoActual = EstadoJuego.DERROTA; return;
+        }
         Posicion spawn = zi.getSpawnJugador();
-        if (spawn == null) { spawn = findSpawn(zi); zi.setSpawnJugador(spawn); }
+        if (spawn == null) {
+            spawn = findSpawn(zi);
+            zi.setSpawnJugador(spawn);
+        }
 
         idZonaActual = get().zona.zonaInicial;
         zonaActual = zi;
+
         jugador = new Jugador("NoLink",
                 new Estadisticas(get().jugador.vidaMax, get().jugador.ataqueBase, get().jugador.defensaBase, get().jugador.rangoMov),
                 spawn);
+
         jugador.setLog(log);
         zonaActual.getCelda(spawn.getRow(), spawn.getCol()).setEntidad(jugador);
 
         gato = new Gato("Gatiko",
                 new Estadisticas(get().gato.vida, get().gato.ataque, get().gato.defensa, get().gato.rangoMov));
+
         Posicion sg = spawnGato();
         if (sg != null) {
             gato.setPosicion(sg);
@@ -188,15 +197,16 @@ public class Partida {
 
     private void atacarJugador() {
         Posicion pj = jugador.getPosicion();
-        for (int i = 0; i < zonaActual.getRows(); i++)
+        for (int i = 0; i < zonaActual.getRows(); i++) {
             for (int j = 0; j < zonaActual.getCols(); j++) {
-                Celda c = zonaActual.getCelda(i,j);
+                Celda c = zonaActual.getCelda(i, j);
                 if (!(c.getEntidad() instanceof Enemigo e) || !e.estarVivo()) continue;
-                if (!c.esAdyacente(zonaActual.getCelda(pj.getRow(),pj.getCol()))) continue;
-                int hit = (int)Math.max(0, e.getAtaqueTotal()*Math.random()*2 - jugador.getDefensaTotal());
+                if (!c.esAdyacente(zonaActual.getCelda(pj.getRow(), pj.getCol()))) continue;
+                int hit = (int) Math.max(0, e.getAtaqueTotal() * Math.random() * 2 - jugador.getDefensaTotal());
                 jugador.recibirAtaque(hit);
-                log.registrar("Has sido atacado por "+e.getNombre()+", recibes "+hit+" de dano");
+                log.registrar("Has sido atacado por " + e.getNombre() + ", recibes " + hit + " de dano");
             }
+        }
     }
 
     private void poblarZona(Zona zona) {
@@ -212,16 +222,20 @@ public class Partida {
                 e.setPosicion(new Posicion(s.getRow(),s.getCol())); c.setEntidad(e);
             } return;
         }
+
         int n=get().enemigos.min+(int)(Math.random()*(get().enemigos.max-get().enemigos.min+1));
-        for (int i=0;i<n;i++)
-            for (int intentos=0;intentos<50;intentos++) {
-                int r=(int)(Math.random()*zona.getRows()), co=(int)(Math.random()*zona.getCols());
-                Celda c=zona.getCelda(r,co);
-                if (c!=null&&c.isTransitable()&&!c.isOcupada()&&c.getTipoCelda()!=TipoCelda.PUERTA) {
-                    Enemigo e=new Enemigo("Chungo",new Estadisticas(get().enemigos.vidaBase+(int)(Math.random()*10),get().enemigos.ataqueBase+(int)(Math.random()*3),get().enemigos.defensaBase+(int)(Math.random()*2),get().enemigos.rangoMov));
-                    e.setPosicion(new Posicion(r,co)); c.setEntidad(e); break;
+        for (int i=0;i<n;i++) {
+            for (int intentos = 0; intentos < 50; intentos++) {
+                int r = (int) (Math.random() * zona.getRows()), co = (int) (Math.random() * zona.getCols());
+                Celda c = zona.getCelda(r, co);
+                if (c != null && c.isTransitable() && !c.isOcupada() && c.getTipoCelda() != TipoCelda.PUERTA) {
+                    Enemigo e = new Enemigo("Chungo", new Estadisticas(get().enemigos.vidaBase + (int) (Math.random() * 10), get().enemigos.ataqueBase + (int) (Math.random() * 3), get().enemigos.defensaBase + (int) (Math.random() * 2), get().enemigos.rangoMov));
+                    e.setPosicion(new Posicion(r, co));
+                    c.setEntidad(e);
+                    break;
                 }
             }
+        }
     }
 
     // Lógica de movimiento del gato
@@ -309,12 +323,16 @@ public class Partida {
             return;
         }
         int n=get().objetos.min+(int)(Math.random()*(get().objetos.max-get().objetos.min+1));
-        for (int i=0;i<n;i++)
-            for (int intentos=0;intentos<50;intentos++) {
-                int r=(int)(Math.random()*zona.getRows()), c=(int)(Math.random()*zona.getCols());
-                Celda cel=zona.getCelda(r,c);
-                if (cel!=null&&cel.isTransitable()&&!cel.isOcupada()&&cel.getTipoCelda()!=TipoCelda.PUERTA&&!cel.tieneObjeto()) { cel.setObjeto(crearObjetoRandom()); break; }
+        for (int i=0;i<n;i++) {
+            for (int intentos = 0; intentos < 50; intentos++) {
+                int r = (int) (Math.random() * zona.getRows()), c = (int) (Math.random() * zona.getCols());
+                Celda cel = zona.getCelda(r, c);
+                if (cel != null && cel.isTransitable() && !cel.isOcupada() && cel.getTipoCelda() != TipoCelda.PUERTA && !cel.tieneObjeto()) {
+                    cel.setObjeto(crearObjetoRandom());
+                    break;
+                }
             }
+        }
     }
 
     private Objeto crearObjetoRandom() {
