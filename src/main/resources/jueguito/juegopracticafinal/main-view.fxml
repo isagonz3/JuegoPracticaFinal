@@ -1,49 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="576" prefWidth="960" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.main.JuegoController">
-    <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="jueguito.juegopracticafinal.main.JuegoController"
+            prefHeight="576" prefWidth="960">
+    <padding><Insets bottom="10" left="10" right="10" top="10"/></padding>
 
     <top>
-        <Label fx:id="zonaLabel" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Zona: ?" />
+        <Label fx:id="zonaLabel" text="Zona: ?"
+               style="-fx-font-size: 18; -fx-font-weight: bold;" />
     </top>
 
     <center>
-        <ScrollPane fitToHeight="true" fitToWidth="true">
-            <GridPane fx:id="mapaGrid" focusTraversable="true" gridLinesVisible="true" prefHeight="473.0" prefWidth="699.0" />
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <GridPane fx:id="mapaGrid" />
         </ScrollPane>
     </center>
 
     <right>
-        <VBox alignment="BOTTOM_LEFT" spacing="10">
-            <Label fx:id="turnoLabel" style="-fx-font-size: 14;" text="Turno: 0" />
+        <VBox spacing="10" minWidth="200">
+            <Label fx:id="turnoLabel" text="Turno: 0"
+                   style="-fx-font-size: 14;" />
             <Label fx:id="vidaLabel" text="Vida: 20/20" />
             <ProgressBar fx:id="vidaBar" prefWidth="180" />
-            <Label fx:id="ataqueLabel" text="Ataque: 5" />
-            <Label fx:id="defensaLabel" text="Defensa: 2" />
-            <Label fx:id="movLabel" text="Rango Mov: 10" />
-            <Label fx:id="puntosMovLabel" text="PM disp: 10" />
-            <Label fx:id="armaLabel" text="Arma: ninguna" />
-            <Label fx:id="escudoLabel" text="Escudo: ninguno" />
 
-            <Label style="-fx-font-weight: bold; -fx-margin-top: 10;" text="--- Acciones ---" />
-            <Button fx:id="terminarTurnoBtn" maxWidth="Infinity" text="Terminar Turno" />
-            <Button fx:id="guardarBtn" maxWidth="Infinity" text="Guardar Partida" />
-            <Button fx:id="menuBtn" maxWidth="Infinity" text="Abrir Menu" />
-
-            <Label style="-fx-font-weight: bold; -fx-margin-top: 10;" text="--- Inventario ---" />
-            <ListView fx:id="inventarioList" orientation="HORIZONTAL" prefHeight="120" prefWidth="200" />
+            <Label text="--- Acciones ---"
+                   style="-fx-font-weight: bold; -fx-margin-top: 10;" />
+            <Button fx:id="terminarTurnoBtn" text="Terminar Turno"
+                    maxWidth="Infinity" />
+            <Button fx:id="guardarBtn" text="Guardar Partida"
+                    maxWidth="Infinity" />
+            <Label text="--- Inventario ---"
+                   style="-fx-font-weight: bold; -fx-margin-top: 10;" />
+            <ListView fx:id="inventarioList" prefHeight="120" prefWidth="200" />
             <HBox spacing="5">
-                <Button fx:id="usarBtn" maxWidth="Infinity" text="Usar" HBox.hgrow="ALWAYS" />
-                <Button fx:id="equiparBtn" maxWidth="Infinity" text="Equipar" HBox.hgrow="ALWAYS" />
-                <Button fx:id="atacarBtn" maxWidth="Infinity" text="Atacar" HBox.hgrow="ALWAYS" />
-                <Button fx:id="recogerBtn" maxWidth="Infinity" text="Recoger" HBox.hgrow="ALWAYS" />
+                <Button fx:id="usarBtn" text="Usar" maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS" />
+                <Button fx:id="equiparBtn" text="Equipar" maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS" />
             </HBox>
-            <Label style="-fx-font-weight: bold; -fx-margin-top: 10;" text="--- Log ---" />
-            <TextArea fx:id="logArea" editable="false" prefRowCount="12" prefWidth="200" />
+            <Label text="--- Log ---"
+                   style="-fx-font-weight: bold; -fx-margin-top: 10;" />
+            <TextArea fx:id="logArea" editable="false"
+                      prefRowCount="12" prefWidth="200" />
         </VBox>
     </right>
 </BorderPane>

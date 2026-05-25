@@ -19,6 +19,8 @@ public class TurnoManager {
     public void iniciarTurno() {
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return;
         partida.getJugador().getEstadisticas().resetMovimiento();
+        partida.setAccionRealizada(false);
+        partida.setMovimientoRealizado(false);
     }
 
     public void terminarTurno() {
@@ -28,6 +30,8 @@ public class TurnoManager {
         gatoManager.moverGato();
         partida.getZonaActual().setCountTurnos(partida.getZonaActual().getCountTurnos() + 1);
         partida.setTurnoActual(partida.getTurnoActual() + 1);
+        partida.setAccionRealizada(false);
+        partida.setMovimientoRealizado(false);
         if (checkDerrota() || checkVictoria()) return;
         partida.getLog().registrar("--- Turno " + partida.getTurnoActual() + " ---");
         iniciarTurno();

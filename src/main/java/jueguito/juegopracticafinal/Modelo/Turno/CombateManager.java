@@ -41,6 +41,7 @@ public class CombateManager {
         }
 
         partida.getLog().registrar(mensaje);
+        partida.setAccionRealizada(true);
         return new ResultadoCombate(hit,enemigo.getEstadisticas().getVidaActual(),enemigoKO,mensaje);
     }
 
