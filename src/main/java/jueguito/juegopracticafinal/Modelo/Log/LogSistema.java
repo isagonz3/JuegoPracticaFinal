@@ -7,7 +7,9 @@ public class LogSistema {
     private final Lista<EntradaLog> entradas = new Lista<>();
 
     public void registrar(String mensaje) {
-        entradas.add(new EntradaLog(mensaje));
+        if(!entradas.contains(new EntradaLog(mensaje))) {
+            entradas.add(new EntradaLog(mensaje));
+        }
     }
 
     public Lista<EntradaLog> getEntradas() {

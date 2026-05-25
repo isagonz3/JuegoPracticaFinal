@@ -1,6 +1,8 @@
 package jueguito.juegopracticafinal.main;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,16 +15,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import jueguito.juegopracticafinal.Modelo.Core.LoadJSON;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
-import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
-import jueguito.juegopracticafinal.Modelo.Entidades.Entidad;
-import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
-import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
+import jueguito.juegopracticafinal.Modelo.Entidades.*;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
+import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
+import jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.TADs.Lista;
@@ -32,21 +34,34 @@ import java.io.File;
 public class JuegoController {
     @FXML private Label zonaLabel;
     @FXML private Label turnoLabel;
-    @FXML private Label vidaLabel;
+    @FXML private Label vidaLabel, ataqueLabel,defensaLabel,movLabel;
+    @FXML private Label armaLabel, escudoLabel, llaveLabel;
+    @FXML private Label puntosMovLabel;
     @FXML private ProgressBar vidaBar;
     @FXML private TextArea logArea;
     @FXML private GridPane mapaGrid;
-    @FXML private Button terminarTurnoBtn, guardarBtn;
+    @FXML private Button terminarTurnoBtn, guardarBtn, menuBtn;
     @FXML private ListView<String> inventarioList;
-    @FXML private Button usarBtn, equiparBtn;
+    @FXML private Button usarBtn, equiparBtn, atacarBtn, recogerBtn;
 
     private Partida partida;
     private JueguitoFX app;
-    private Image imgJugador;
+    private Image[][] imgJugadorAndar;
+    private Image[][] imgJugadorAtaque;
+    private Image[][] imgGatoAndar;
+    private Image imgJugadorAgua;
     private Image imgGato;
     private Image imgEnemigo1;
     private int baseRow = 1;
     private int baseCol = 0;
+    private static final int DIR_DOWN = 0;
+    private static final int DIR_UP = 1;
+    private static final int DIR_LEFT = 2;
+    private static final int DIR_RIGHT = 3;
+    private int direccionActual = DIR_DOWN;
+    private int frameAndar = 0;
+    private boolean animacionAtaque = false;
+    private int frameAtaque = 0;
     private Lista<Celda> celdasAccesibles = null;
     private Objeto objetoSeleccionado;
 
@@ -69,9 +84,30 @@ public class JuegoController {
         this.partida = partida;
         this.app = app;
 
-        imgJugador = cargaImagen("/jugador/jugador_down00.png");
+        imgJugadorAndar = new Image[4][6];
+        imgJugadorAtaque = new Image[4][7];
+        imgGatoAndar = new Image[4][4];
         imgGato = cargaImagen("/gato/gato_quieto.png");
         imgEnemigo1 = cargaImagen("/enemigos/soldado_quieto.png");
+        imgJugadorAgua = cargaImagen("/jugador/jugador_agua.png");
+
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < JUGADOR_ANDAR_FRAMES[i]; j++) {
+                imgJugadorAndar[i][j] = cargaImagen("/jugador/" + JUGADOR_ANDAR[i][j] + ".png");
+            }
+        }
+
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < JUGADOR_ATAQUE_FRAMES[i]; j++) {
+                imgJugadorAtaque[i][j] = cargaImagen("/jugador/" + JUGADOR_ATAQUE[i][j] + ".png");
+            }
+        }
+
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < GATO_ANDAR_FRAMES[i]; j++) {
+                imgGatoAndar[i][j] = cargaImagen("/gato/" + GATO_ANDAR[i][j] + ".png");
+            }
+        }
 
         partida.iniciarTurno();
         actualizarUI();
@@ -91,13 +127,11 @@ public class JuegoController {
                 break;
             }
         }
-
         if(nombreArchivo==null){
             return;
         }
 
         Image mapa = new Image(getClass().getResourceAsStream("/zonas/" + nombreArchivo + ".png"));
-
 
         boolean[][] checkCelda = null;
         if(celdasAccesibles != null){
@@ -121,22 +155,31 @@ public class JuegoController {
                     Entidad entidad = celda.getEntidad();
 
                     if(entidad instanceof Jugador){
-                        ImageView jugadorView = new ImageView(imgJugador);
+                        ImageView jugadorView = new ImageView(getJugadorSprite());
+                        jugadorView.setPreserveRatio(true);
                         jugadorView.setFitHeight(TILE_SIZE);
                         jugadorView.setFitWidth(TILE_SIZE);
+                        if(direccionActual == DIR_RIGHT){
+                            jugadorView.setScaleX(-1);
+                        }
+                        StackPane.setAlignment(jugadorView, Pos.BOTTOM_CENTER);
                         celdaPane.getChildren().add(jugadorView);
                     }
                     else if(entidad instanceof Gato){
-                        ImageView gatoView = new ImageView(imgGato);
+                        ImageView gatoView = new ImageView(getGatoSprite());
+                        gatoView.setPreserveRatio(true);
                         gatoView.setFitHeight(TILE_SIZE);
                         gatoView.setFitWidth(TILE_SIZE);
+                        StackPane.setAlignment(gatoView, Pos.BOTTOM_CENTER);
                         celdaPane.getChildren().add(gatoView);
                     }
 
                     else if(entidad instanceof Enemigo){
                         ImageView enemigo1View = new ImageView(imgEnemigo1);
+                        enemigo1View.setPreserveRatio(true);
                         enemigo1View.setFitHeight(TILE_SIZE);
                         enemigo1View.setFitWidth(TILE_SIZE);
+                        StackPane.setAlignment(enemigo1View, Pos.BOTTOM_CENTER);
                         celdaPane.getChildren().add(enemigo1View);
                     }
                     else{
@@ -146,11 +189,17 @@ public class JuegoController {
                 }
 
                 if(celda != null && celda.tieneNPC()){
-                    celdaPane.getChildren().add(new Circle(TILE_SIZE*0.35, Color.BLUEVIOLET));
+                    ImageView npcView = new ImageView(seleccionarSpriteNPC(celda.getNpc()));
+                    npcView.setFitHeight(TILE_SIZE);
+                    npcView.setFitWidth(TILE_SIZE);
+                    celdaPane.getChildren().add(npcView);
                 }
 
                 if(celda != null && celda.tieneObjeto()){
-                    celdaPane.getChildren().add(new Circle(TILE_SIZE*0.35, Color.RED));
+                    ImageView objView = new ImageView(seleccionarSpriteObjeto(celda.getObjeto()));
+                    objView.setFitHeight(TILE_SIZE);
+                    objView.setFitWidth(TILE_SIZE);
+                    celdaPane.getChildren().add(objView);
                 }
 
                 if(checkCelda != null && checkCelda[i][j]){
@@ -158,38 +207,11 @@ public class JuegoController {
                     celdaPane.getChildren().add(ilum);
                 }
 
-                int row = i;
-                int col = j;
-                celdaPane.setOnMouseClicked((e) -> manejarClickCelda(row,col));
                 mapaGrid.add(celdaPane,j,i);
             }
         }
     }
 
-    private void manejarClickCelda(int i, int j){
-        
-        if(partida.getEstadoActual() != EstadoJuego.EN_CURSO){
-            return;
-        }
-
-        Zona zona = partida.getZonaActual();
-        if(!zona.esValida(i,j)){
-            return;
-        }
-
-        Celda celda = zona.getCelda(i,j);
-        if(celda==null){
-            return;
-        }
-
-        Posicion posJugador = partida.getJugador().getPosicion();
-        Celda celdaJugador = zona.getCelda(posJugador.getRow(),posJugador.getCol());
-
-        if(i == celdaJugador.getRow() && j == celdaJugador.getCol()){
-            return;
-        }
-
-    }
 
     void manejarTecla(KeyEvent event) {
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return;
@@ -205,8 +227,10 @@ public class JuegoController {
     }
 
     private void moverTecla() {
+        direccionActual = deltaADireccion(baseRow, baseCol);
         Posicion pos = partida.getJugador().getPosicion();
         if (partida.moverJugador(pos.getRow() + baseRow, pos.getCol() + baseCol)) {
+            frameAndar = (frameAndar + 1) % JUGADOR_ANDAR_FRAMES[direccionActual];
             actualizarUI();
             renderMapa();
             partida.findGato();
@@ -214,9 +238,30 @@ public class JuegoController {
     }
 
     private void atacarTecla() {
+        if(baseRow != 0 || baseCol != 0){
+            direccionActual = deltaADireccion(baseRow, baseCol);
+        }
+        animacionAtaque = true;
+        frameAtaque = 0;
+        int framesTotales = JUGADOR_ATAQUE_FRAMES[direccionActual];
+
         partida.atacarDireccion(baseRow, baseCol);
         actualizarUI();
         renderMapa();
+
+        PauseTransition pausa = new PauseTransition(Duration.millis(80));
+        pausa.setOnFinished(e -> {
+            frameAtaque++;
+            if(frameAtaque < framesTotales){
+                renderMapa();
+                pausa.playFromStart();
+            } else {
+                animacionAtaque = false;
+                renderMapa();
+                terminaTurno();
+            }
+        });
+        pausa.play();
     }
 
     private void actualizarUI(){
@@ -226,6 +271,14 @@ public class JuegoController {
         turnoLabel.setText("Turno: " + partida.getTurnoActual() + " Puntos Movimiento (PM): " + jugador.getEstadisticas().getPuntosMovDisponibles());
         vidaLabel.setText("Vida: " + jugador.getEstadisticas().getVidaActual() + "/" + jugador.getEstadisticas().getVidaMax());
         vidaBar.setProgress((double) jugador.getEstadisticas().getVidaActual() / jugador.getEstadisticas().getVidaMax());
+        ataqueLabel.setText("Ataque: " + jugador.getEstadisticas().getAtaqueBase());
+        defensaLabel.setText("Defensa: " + jugador.getEstadisticas().getDefensaBase());
+        movLabel.setText("Rango Mov: " + jugador.getEstadisticas().getRangoMov());
+        puntosMovLabel.setText("PM disp: " + jugador.getEstadisticas().getPuntosMovDisponibles());
+        Objeto arma = jugador.getEquipamiento(SlotEquipable.ARMA);
+        Objeto escudo = jugador.getEquipamiento(SlotEquipable.ESCUDO);
+        armaLabel.setText("Arma: " + (arma != null ? arma.getNombre() : "ninguna"));
+        escudoLabel.setText("Escudo: " + (escudo != null ? escudo.getNombre() : "ninguno"));
         String lastLog = partida.getLog().getUltimaEntrada();
 
         if(!lastLog.isEmpty()){
@@ -258,7 +311,7 @@ public class JuegoController {
             if (objetoSeleccionado == null) return;
             if (partida.usarObjeto(objetoSeleccionado)) {
                 renderMapa();
-                actualizarUI();
+                terminaTurno();
             }
         });
 
@@ -272,9 +325,20 @@ public class JuegoController {
             }
             if (partida.equiparObjeto(objetoSeleccionado, slot)) {
                 renderMapa();
-                actualizarUI();
+                terminaTurno();
             }
         });
+
+        atacarBtn.setOnAction(e -> atacarTecla());
+        recogerBtn.setOnAction(e -> {
+            Posicion p = partida.getJugador().getPosicion();
+            Celda c = partida.getZonaActual().getCelda(p.getRow(), p.getCol());
+            if(c.tieneObjeto() && partida.recogerObjeto(c)){
+                renderMapa();
+                terminaTurno();
+            }
+        });
+        menuBtn.setOnAction(e -> app.volverAlMenu());
     }
 
     private void terminaTurno() {
@@ -289,8 +353,8 @@ public class JuegoController {
                     partida.getLog().getEntradas());
             return;
         }
-        actualizarUI();
         renderMapa();
+        actualizarUI();
     }
 
     private void guardaPartida() {
@@ -310,4 +374,89 @@ public class JuegoController {
         var is = getClass().getResourceAsStream(ruta);
         return is != null ? new Image(is) : null;
     }
+
+    private Image seleccionarSpriteNPC(NPC npc) {
+        return cargaImagen("/NPCs/NPC_1.png");
+    }
+
+    private Image seleccionarSpriteObjeto(Objeto objeto) {
+        String ruta;
+        switch(objeto.getNombre().toLowerCase()){
+            case "espada": ruta = "/objetos/espada.png"; break;
+            case "escudo": ruta = "/objetos/escudo.png"; break;
+            case "llave":  ruta = "/objetos/llave.png"; break;
+            default:       ruta = "/objetos/pocionVida.png";
+        }
+        return cargaImagen(ruta);
+    }
+
+    private int deltaADireccion(int row, int col){
+        if(row == -1) return DIR_UP;
+        if(row == 1)  return DIR_DOWN;
+        if(col == 1) return DIR_LEFT;
+        if(col == -1)  return DIR_RIGHT;
+        return direccionActual;
+    }
+
+    private Image getJugadorSprite(){
+        if(animacionAtaque){
+            return imgJugadorAtaque[direccionActual][frameAtaque];
+        }
+        Zona zona = partida.getZonaActual();
+        Posicion pos = partida.getJugador().getPosicion();
+        if(zona != null && zona.esValida(pos.getRow(), pos.getCol())){
+            Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
+            if(celda != null && celda.getTipoCelda() == TipoCelda.AGUA){
+                return imgJugadorAgua;
+            }
+        }
+        return imgJugadorAndar[direccionActual][frameAndar];
+    }
+
+    private Image getGatoSprite(){
+        Gato gato = partida.getGato();
+        if(gato == null) return imgGato;
+
+        if(partida.isGatoEncontrado()){
+            Posicion posGato = gato.getPosicion();
+            Posicion posJug = partida.getJugador().getPosicion();
+            if(posGato != null && posJug != null){
+                int dr = posJug.getRow() - posGato.getRow();
+                int dc = posJug.getCol() - posGato.getCol();
+                int dirGato;
+                if(Math.abs(dr) >= Math.abs(dc)){
+                    dirGato = dr > 0 ? DIR_DOWN : DIR_UP;
+                } else {
+                    dirGato = dc > 0 ? DIR_RIGHT : DIR_LEFT;
+                }
+                return imgGatoAndar[dirGato][frameAndar % 4];
+            }
+        }
+        return imgGato;
+    }
+
+    private static final String[][] JUGADOR_ANDAR = {
+            {"jugador_down00","jugador_down01","jugador_down02","jugador_down03","jugador_down04","jugador_down05"},
+            {"jugador_up00","jugador_up01","jugador_up02","jugador_up03","jugador_up04","jugador_up05"},
+            {"jugador_left00","jugador_left01","jugador_left02","jugador_left03","jugador_left04","jugador_left05"},
+            {"jugador_left00","jugador_left01","jugador_left02","jugador_left03","jugador_left04","jugador_left05"} // RIGHT = mirror de LEFT
+    };
+
+    private static final String[][] JUGADOR_ATAQUE = {
+            {"jugador_atakDown00","jugador_atakDown01","jugador_atakDown02","jugador_atakDown03","jugador_atakDown04","jugador_atakDown05"},
+            {"jugador_atakUp00","jugador_atakUp01","jugador_atakUp02","jugador_atakUp03","jugador_atakUp04","jugador_atakUp05"},
+            {"jugador_atakLeft00","jugador_atakLeft01","jugador_atakLeft02","jugador_atakLeft03","jugador_atakLeft04","jugador_atakLeft05","jugador_atakLeft06"},
+            {"jugador_atakLeft00","jugador_atakLeft01","jugador_atakLeft02","jugador_atakLeft03","jugador_atakLeft04","jugador_atakLeft05","jugador_atakLeft06"} // RIGHT = mirror
+    };
+
+    private static final String[][] GATO_ANDAR = {
+            {"gato_down00","gato_down01","gato_down02","gato_down03"},
+            {"gato_up00","gato_up01","gato_up02","gato_up03"},
+            {"gato_left00","gato_left01","gato_left02","gato_left03"},
+            {"gato_right00","gato_right01","gato_right02","gato_right03"} // El gato SÍ tiene right
+    };
+
+    private static final int[] JUGADOR_ANDAR_FRAMES = {6, 6, 6, 6};
+    private static final int[] JUGADOR_ATAQUE_FRAMES = {6, 6, 7, 7};
+    private static final int[] GATO_ANDAR_FRAMES = {4, 4, 4, 4};
 }

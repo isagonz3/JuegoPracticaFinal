@@ -72,8 +72,6 @@ public class GatoManager {
         }
     }
 
-
-
     public boolean findGato(){
         if(partida.isGatoEncontrado()){
             return true;
@@ -96,7 +94,7 @@ public class GatoManager {
     }
 
     public Posicion spawnGato(){
-        int z = ZONAS_GATO[(int)(Math.random()*ZONAS_GATO.length)];
+        int z = ZONAS_GATO[(int)(Math.random()*4)];
         partida.setIdZonaGato(z);
         Zona zonaGato = partida.getGrafo().getZona(z);
 
@@ -129,7 +127,9 @@ public class GatoManager {
     }
 
     private boolean zonasPermitidas(int idZona) {
-        for (int z : ZONAS_GATO) if (z == idZona) return true;
+        for (int z : ZONAS_GATO){
+            if (z == idZona) return true;
+        }
         return false;
     }
 }

@@ -54,7 +54,6 @@ public class MovimientoManager {
         origen.setEntidad(null);
         jugador.moverA(new Posicion(row,col));
         destino.setEntidad(jugador);
-        partida.setMovimientoRealizado(true);
 
         if (destino.tienePuerta()) partida.cambiarZona(destino.getPuerta());
         if(destino.tieneObjeto()) partida.recogerObjeto(destino);

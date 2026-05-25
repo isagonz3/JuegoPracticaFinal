@@ -42,7 +42,7 @@ public class Celda {
     }
 
     public boolean isTransitable() {
-        return tipoCelda == TipoCelda.SUELO || tipoCelda == TipoCelda.PUERTA || tipoCelda == TipoCelda.AGUA;
+        return tipoCelda == TipoCelda.SUELO || tipoCelda == TipoCelda.PUERTA || tipoCelda == TipoCelda.AGUA || tipoCelda == TipoCelda.SALIDA;
     }
 
     public Puerta getPuerta() {

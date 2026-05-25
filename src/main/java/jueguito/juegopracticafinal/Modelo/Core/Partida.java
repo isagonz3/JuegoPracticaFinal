@@ -22,7 +22,7 @@ public class Partida {
     private LogSistema log = new LogSistema();
     private int turnoActual;
     private int idZonaGato = -1;
-    private boolean gatoEncontrado, accionRealizada, movimientoRealizado;
+    private boolean gatoEncontrado;
 
     private MovimientoManager movimientoManager;
     private CombateManager combateManager;
@@ -88,7 +88,7 @@ public class Partida {
         if (o.getRangoBonus() > 0) { jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus()); log.registrar("Usaste "+o.getNombre()+": +"+o.getRangoBonus()+" rango"); }
         o.usarObjeto();
         if (o.objetoGastado()) { jugador.getInventario().removeObjeto(o); log.registrar(o.getNombre()+" gastado!"); }
-        accionRealizada = true; return true;
+        return true;
     }
 
     public boolean recogerObjeto(Celda c) {
@@ -101,7 +101,7 @@ public class Partida {
 
     public boolean equiparObjeto(Objeto o, SlotEquipable s) {
         if (estadoActual != EstadoJuego.EN_CURSO) return false;
-        if (jugador.equipar(o, s)) { log.registrar("Equipaste "+o.getNombre()+"!"); accionRealizada = true; return true; }
+        if (jugador.equipar(o, s)) { log.registrar("Equipaste "+o.getNombre()+"!"); return true; }
         return false;
     }
 
@@ -115,7 +115,7 @@ public class Partida {
                     NPC npc = c.getNpc();
                     log.registrar(npc.getNombre()+": "+npc.hablar());
                     if (npc.tieneInfoGato()) log.registrar("Pista: "+npc.getInfoGato());
-                    accionRealizada = true; return true;
+                    return true;
                 }
             }
         log.registrar("Hablar solo da mal rollo!"); return false;
@@ -123,7 +123,7 @@ public class Partida {
 
     public boolean realizarTradeo(NPC n, Tradeo t) {
         if (estadoActual != EstadoJuego.EN_CURSO || !n.comerciar()) return false;
-        if (t.tradear(jugador)) { log.registrar("Un placer hacer negocios"); accionRealizada = true; return true; }
+        if (t.tradear(jugador)) { log.registrar("Un placer hacer negocios"); return true; }
         log.registrar("No hay trato"); return false;
     }
 
@@ -172,11 +172,6 @@ public class Partida {
     public int getIdZonaGato() { return idZonaGato; }
     public void setIdZonaGato(int id) { idZonaGato = id; }
 
-    public boolean isAccionRealizada() { return accionRealizada; }
-    public void setAccionRealizada(boolean b) { accionRealizada = b; }
-
-    public boolean isMovimientoRealizado() { return movimientoRealizado; }
-    public void setMovimientoRealizado(boolean b) { movimientoRealizado = b; }
 
     public MovimientoManager getMovimientoManager() { return movimientoManager; }
     public CombateManager getCombateManager() { return combateManager; }

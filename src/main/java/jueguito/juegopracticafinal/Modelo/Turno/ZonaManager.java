@@ -1,6 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Turno;
 
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
+import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.Puerta;
@@ -69,6 +70,27 @@ public class ZonaManager {
 
         partida.getJugador().moverA(new Posicion(destRow,destCol));
         nuevaZona.getCelda(destRow,destCol).setEntidad(partida.getJugador());
+
+        if(partida.isGatoEncontrado()){
+            Gato gato = partida.getGato();
+            Celda celdaGato = zonaActual.findCelda(gato.getPosicion().getRow(), gato.getPosicion().getCol());
+            if(celdaGato != null) celdaGato.setEntidad(null);
+
+            int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+            for(int[] d : dirs){
+                int cr = destRow + d[0], cc = destCol + d[1];
+                if(nuevaZona.esValida(cr, cc)){
+                    Celda c = nuevaZona.getCelda(cr, cc);
+                    if(c != null && c.isTransitable() && !c.isOcupada()){
+                        gato.moverA(new Posicion(cr, cc));
+                        c.setEntidad(gato);
+                        partida.setIdZonaGato(nuevaIdZona);
+                        partida.getLog().registrar("El gato te ha seguido hasta: " + nuevaZona.getNombreZona());
+                        break;
+                    }
+                }
+            }
+        }
 
         partida.getLog().registrar("Has entrado en: " + nuevaZona.getNombreZona());
     }
