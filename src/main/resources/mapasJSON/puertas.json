@@ -5,7 +5,15 @@
     "xOrigen": 7,
     "yOrigen": 12,
     "xDestino": 10,
-    "yDestino": 5
+    "yDestino": 4
+  },
+  {
+    "zonaOrigen": 0,
+    "zonaDestino": 1,
+    "xOrigen": 7,
+    "yOrigen": 12,
+    "xDestino": 9,
+    "yDestino": 4
   },
   {
     "zonaOrigen": 1,
@@ -13,7 +21,7 @@
     "xOrigen": 10,
     "yOrigen": 4,
     "xDestino": 7,
-    "yDestino": 11
+    "yDestino": 12
   },
   {
     "zonaOrigen": 1,
@@ -21,7 +29,7 @@
     "xOrigen": 9,
     "yOrigen": 4,
     "xDestino": 7,
-    "yDestino": 11
+    "yDestino": 12
   },
 
 
@@ -30,17 +38,17 @@
     "zonaOrigen": 1,
     "zonaDestino": 2,
     "xOrigen": 9,
-    "yOrigen": 14,
+    "yOrigen": 15,
     "xDestino": 5,
-    "yDestino": 1
+    "yDestino": 0
   },
   {
     "zonaOrigen": 1,
     "zonaDestino": 2,
     "xOrigen": 10,
-    "yOrigen": 14,
+    "yOrigen": 15,
     "xDestino": 6,
-    "yDestino": 1
+    "yDestino": 0
   },
   {
     "zonaOrigen": 2,
@@ -48,7 +56,7 @@
     "xOrigen": 5,
     "yOrigen": 0,
     "xDestino": 9,
-    "yDestino": 13
+    "yDestino": 14
   },
   {
     "zonaOrigen": 2,
@@ -56,24 +64,24 @@
     "xOrigen": 6,
     "yOrigen": 0,
     "xDestino": 10,
-    "yDestino": 13
+    "yDestino": 14
   },
 
 
   {
     "zonaOrigen": 2,
     "zonaDestino": 3,
-    "xOrigen": 29,
+    "xOrigen": 30,
     "yOrigen": 8,
-    "xDestino": 1,
+    "xDestino": 0,
     "yDestino": 12
   },
   {
     "zonaOrigen": 2,
     "zonaDestino": 3,
-    "xOrigen": 29,
+    "xOrigen": 30,
     "yOrigen": 9,
-    "xDestino": 1,
+    "xDestino": 0,
     "yDestino": 13
   },
   {
@@ -81,7 +89,7 @@
     "zonaDestino": 2,
     "xOrigen": 0,
     "yOrigen": 12,
-    "xDestino": 28,
+    "xDestino": 29,
     "yDestino": 8
   },
   {
@@ -89,7 +97,7 @@
     "zonaDestino": 2,
     "xOrigen": 0,
     "yOrigen": 13,
-    "xDestino": 28,
+    "xDestino": 29,
     "yDestino": 9
   },
 
@@ -98,9 +106,9 @@
     "zonaOrigen": 2,
     "zonaDestino": 4,
     "xOrigen": 9,
-    "yOrigen": 19,
+    "yOrigen": 20,
     "xDestino": 4,
-    "yDestino": 1
+    "yDestino": 0
   },
   {
     "zonaOrigen": 4,
@@ -108,15 +116,15 @@
     "xOrigen": 4,
     "yOrigen": 0,
     "xDestino": 9,
-    "yDestino": 18
+    "yDestino": 19
   },
   {
     "zonaOrigen": 2,
     "zonaDestino": 4,
     "xOrigen": 10,
-    "yOrigen": 19,
+    "yOrigen": 20,
     "xDestino": 5,
-    "yDestino": 1
+    "yDestino": 0
   },
   {
     "zonaOrigen": 4,
@@ -124,7 +132,7 @@
     "xOrigen": 5,
     "yOrigen": 0,
     "xDestino": 10,
-    "yDestino": 18
+    "yDestino": 19
   },
 
 
@@ -132,9 +140,9 @@
     "zonaOrigen": 4,
     "zonaDestino": 5,
     "xOrigen": 15,
-    "yOrigen": 10,
+    "yOrigen": 9,
     "xDestino": 7,
-    "yDestino": 9
+    "yDestino": 10
   },
   {
     "zonaOrigen": 5,
@@ -142,16 +150,16 @@
     "xOrigen": 7,
     "yOrigen": 10,
     "xDestino": 15,
-    "yDestino": 11
+    "yDestino": 10
   },
 
 
   {
     "zonaOrigen": 3,
     "zonaDestino": 7,
-    "xOrigen": 34,
+    "xOrigen": 35,
     "yOrigen": 12,
-    "xDestino": 1,
+    "xDestino": 0,
     "yDestino": 16
   },
   {
@@ -159,15 +167,15 @@
     "zonaDestino": 3,
     "xOrigen": 0,
     "yOrigen": 16,
-    "xDestino": 33,
+    "xDestino": 34,
     "yDestino": 12
   },
   {
     "zonaOrigen": 3,
     "zonaDestino": 7,
-    "xOrigen": 34,
+    "xOrigen": 35,
     "yOrigen": 13,
-    "xDestino": 1,
+    "xDestino": 0,
     "yDestino": 17
   },
   {
@@ -175,7 +183,7 @@
     "zonaDestino": 3,
     "xOrigen": 0,
     "yOrigen": 17,
-    "xDestino": 33,
+    "xDestino": 34,
     "yDestino": 13
   },
 
@@ -186,15 +194,7 @@
     "xOrigen": 10,
     "yOrigen": 0,
     "xDestino": 4,
-    "yDestino": 13
-  },
-  {
-    "zonaOrigen": 6,
-    "zonaDestino": 3,
-    "xDestino": 10,
-    "yDestino": 1,
-    "xOrigen": 4,
-    "yOrigen": 14
+    "yDestino": 14
   },
   {
     "zonaOrigen": 3,
@@ -202,15 +202,7 @@
     "xOrigen": 9,
     "yOrigen": 0,
     "xDestino": 3,
-    "yDestino": 13
-  },
-  {
-    "zonaOrigen": 6,
-    "zonaDestino": 3,
-    "xDestino": 9,
-    "yDestino": 1,
-    "xOrigen": 3,
-    "yOrigen": 14
+    "yDestino": 14
   },
 
 
@@ -218,9 +210,9 @@
     "zonaOrigen": 7,
     "zonaDestino": 8,
     "xOrigen": 9,
-    "yOrigen": 1,
+    "yOrigen": 0,
     "xDestino": 31,
-    "yDestino": 40
+    "yDestino": 41
   },
   {
     "zonaOrigen": 8,
@@ -228,7 +220,7 @@
     "xOrigen": 31,
     "yOrigen": 41,
     "xDestino": 9,
-    "yDestino": 2
+    "yDestino": 1
   },
 
 

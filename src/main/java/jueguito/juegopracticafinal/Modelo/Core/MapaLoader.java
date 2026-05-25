@@ -28,7 +28,7 @@ public class MapaLoader {
     }
 
     public static Lista<Puerta> cargarPuertas(){
-        PuertaData[] datos = GsonUtil.cargarArray("src/main/resources/datosJSON/puertas.json",PuertaData[].class);
+        PuertaData[] datos = GsonUtil.cargarArray("src/main/resources/mapasJSON/puertas.json",PuertaData[].class);
         Lista<Puerta> puertas = new Lista<>();
         if(datos!=null){
             for(PuertaData d:datos){
