@@ -1,158 +1,89 @@
 package jueguito.juegopracticafinal.Modelo.Mundo;
 
 import jueguito.juegopracticafinal.TADs.Cola;
-import jueguito.juegopracticafinal.TADs.Grafo;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 public class GrafoZonas {
-
-    private static final int MAX_ZONAS = 10;
-    private Zona[] zonas;
-    private boolean[][] ady;
+    private Lista<Zona> zonas;
+    private Lista<Lista<Integer>> ady;
 
     public GrafoZonas() {
-        this.zonas = new Zona[MAX_ZONAS];
-        this.ady = new boolean[MAX_ZONAS][MAX_ZONAS];
+        this.zonas = new Lista<>();
+        this.ady = new Lista<>();
     }
 
     public void addZona(Zona zona) {
-        int idZona = zona.getIdZona();
-        if(idZona < 0 || idZona >= MAX_ZONAS) {
-            throw new IllegalArgumentException("ID de zona inválido");
-        }
-        this.zonas[idZona] = zona;
+        zonas.add(zona);
+        ady.add(new Lista<>());
     }
 
-    public void conectar(int idZona1, int idZona2){
-        if(idZona1 < 0 || idZona1 >= MAX_ZONAS || idZona2 < 0 || idZona2 >= MAX_ZONAS) {
-            throw new IllegalArgumentException("ID de zona inválido");
-        }
-        ady[idZona1][idZona2] = true;
-        ady[idZona2][idZona1] = true;
+    private int indice(int idZona) {
+        for (int i = 0; i < zonas.getSize(); i++)
+            if (zonas.get(i).getIdZona() == idZona) return i;
+        return -1;
     }
 
-    public Zona getZona(int idZona){
-        if(idZona < 0 || idZona >= MAX_ZONAS) {
-            return null;
-        }
-        return zonas[idZona];
+    public Zona getZona(int idZona) {
+        int i = indice(idZona);
+        return i >= 0 ? zonas.get(i) : null;
     }
 
-    public Lista<Integer> getZonasVecinas(int idZona){
-        Lista<Integer> vecinas = new Lista<>();
-        if(idZona < 0 || idZona >= MAX_ZONAS) {
-            return vecinas;
+    public void conectar(int id1, int id2) {
+        int i1 = indice(id1), i2 = indice(id2);
+        if (i1 >= 0 && i2 >= 0) {
+            if (!ady.get(i1).contains(id2)) ady.get(i1).add(id2);
+            if (!ady.get(i2).contains(id1)) ady.get(i2).add(id1);
         }
-
-        for(int i = 0; i < MAX_ZONAS; i++) {
-            if(ady[idZona][i]) {
-                vecinas.add(i);
-            }
-        }
-        return vecinas;
     }
 
-    public boolean existeCamino(int origen, int destino){
-        if(origen == destino) {
-            return true;
-        }
+    public boolean zonaValida(int idZona) { return indice(idZona) >= 0; }
 
-        if(!zonaValida(origen) || !zonaValida(destino)){
-            return false;
-        }
+    public Lista<Integer> getZonasVecinas(int idZona) {
+        int i = indice(idZona);
+        return i >= 0 ? ady.get(i) : new Lista<>();
+    }
 
-        boolean[] visitadas = new boolean[MAX_ZONAS];
+    public boolean existeCamino(int origen, int destino) {
+        return BFSZonas(origen, destino) != null;
+    }
+
+    public Lista<Integer> BFSZonas(int origen, int destino) {
+        if (origen == destino) { Lista<Integer> r = new Lista<>(); r.add(origen); return r; }
+        int iO = indice(origen), iD = indice(destino);
+        if (iO < 0 || iD < 0) return null;
+
+        int n = zonas.getSize();
+        boolean[] visit = new boolean[n];
+        int[] padreId = new int[n];
+        for (int i = 0; i < n; i++) padreId[i] = -1;
+
         Cola<Integer> cola = new Cola<>();
         cola.enqueue(origen);
-        visitadas[origen] = true;
+        visit[iO] = true;
 
-        while(!cola.isEmpty()) {
+        while (!cola.isEmpty()) {
             int actual = cola.dequeue();
-            for(int i = 0; i < MAX_ZONAS; i++) {
-                if(!visitadas[i] && ady[actual][i]) {
-                    if(i == destino) {
-                        return true;
-                    }
-                    visitadas[i] = true;
-                    cola.enqueue(i);
+            int iAct = indice(actual);
+            if (actual == destino) {
+                Lista<Integer> camino = new Lista<>();
+                int cur = destino;
+                while (cur != -1) {
+                    camino.addFirst(cur);
+                    cur = padreId[indice(cur)];
                 }
+                return camino;
             }
-        }
-        return false;
-    }
-
-    public boolean zonaValida(int idZona){
-        return idZona >= 0 && idZona < MAX_ZONAS && zonas[idZona] != null;
-    }
-
-    public Lista<Integer> BFSZonas(int origen, int destino){
-        if(origen == destino) {
-            Lista<Integer> lista = new Lista<>();
-            lista.add(origen);
-            return lista;
-        }
-        if(!zonaValida(origen) || !zonaValida(destino)){
-            return null;
-        }
-
-        boolean[] visitadas = new boolean[MAX_ZONAS];
-        int[] raiz = new int[MAX_ZONAS];
-        Cola<Integer> cola = new Cola<>();
-
-        cola.enqueue(origen);
-        visitadas[origen] = true;
-        raiz[origen] = -1;
-
-        while(!cola.isEmpty()) {
-            int actual = cola.dequeue();
-            for(int i = 0; i < MAX_ZONAS; i++) {
-                if(!visitadas[i] && ady[actual][i]) {
-                    visitadas[i] = true;
-                    raiz[i] = actual;
-
-                    if(i == destino) {
-                        Lista<Integer> camino = new Lista<>();
-                        int d = destino;
-                        while(d != -1){
-                            camino.addFirst(d);
-                            d = raiz[d];
-                        }
-                        return camino;
-                    }
-                    cola.enqueue(i);
+            Lista<Integer> vecinos = ady.get(iAct);
+            for (int j = 0; j < vecinos.getSize(); j++) {
+                int v = vecinos.get(j);
+                int iV = indice(v);
+                if (!visit[iV]) {
+                    visit[iV] = true;
+                    padreId[iV] = actual;
+                    cola.enqueue(v);
                 }
             }
         }
         return null;
     }
-
-
-    public static Grafo crearGrafoZonas() {
-        Grafo grafo = new Grafo();
-
-        grafo.addZona(0, "InteriorCasa", 15,15);
-        grafo.addZona(1, "ExteriorCasa", 20,15);
-        grafo.addZona(2, "BosqueOeste", 30,20);
-        grafo.addZona(3, "Aldea", 35,25);
-        grafo.addZona(4, "ExteriorTienda", 20,20);
-        grafo.addZona(5, "InteriorTienda", 15,12);
-        grafo.addZona(6, "Lago", 15,15);
-        grafo.addZona(7, "BosqueEste", 20,20);
-        grafo.addZona(8, "ExteriorCastillo", 63,42);
-        grafo.addZona(9, "InteriorCastillo", 17,35);
-
-        grafo.conectarZona(0,1);
-        grafo.conectarZona(1,2);
-        grafo.conectarZona(2,3);
-        grafo.conectarZona(2,4);
-        grafo.conectarZona(3,6);
-        grafo.conectarZona(3,7);
-        grafo.conectarZona(4,5);
-        grafo.conectarZona(7,8);
-        grafo.conectarZona(8,9);
-
-        return grafo;
-    }
-
-
 }

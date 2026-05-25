@@ -137,9 +137,11 @@ public class Lista<T> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < this.getSize(); i++) {
-            sb.append(this.get(i));
-            if (i < this.getSize() - 1) sb.append(", ");
+        ElementoDobleEnlazada<T> aux = first;
+        while (aux != null){
+            sb.append(aux.elemento);
+            if (aux.next != null) sb.append(", ");
+            aux = aux.next;
         }
         sb.append("]");
         return sb.toString();

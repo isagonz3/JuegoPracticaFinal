@@ -60,11 +60,6 @@ public class PruebaZona {
         // Probar celdas accesibles totales
         System.out.println("Celdas transitables totales: " + zona.numCeldasAccesibles());
 
-        // Probar findCelda
-        Celda encontrada = zona.findCelda(2, 2);
-        System.out.println("\nFindCelda (2,2): " +
-                (encontrada != null ? encontrada.getTipoCelda() : "null"));
-
         // Probar puertas
         zona.addPuerta(c1);
         zona.addPuerta(c3);
