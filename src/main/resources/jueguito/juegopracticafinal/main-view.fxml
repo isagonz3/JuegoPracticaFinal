@@ -61,10 +61,6 @@
                         maxWidth="Infinity"
                         HBox.hgrow="ALWAYS"/>
 
-                <Button fx:id="defenderBtn"
-                        text="Defender"
-                        maxWidth="Infinity"
-                        HBox.hgrow="ALWAYS"/>
 
             </HBox>
 

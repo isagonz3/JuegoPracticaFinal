@@ -39,7 +39,7 @@ public class JuegoController {
     @FXML private Button terminarTurnoBtn, guardarBtn;
     @FXML private ListView<String> inventarioList;
     @FXML private Button usarBtn, equiparBtn;
-    @FXML private Button atacarBtn, defenderBtn;
+    @FXML private Button atacarBtn;
 
     private Partida partida;
     private JueguitoFX app;
@@ -262,9 +262,6 @@ public class JuegoController {
         });
 
         atacarBtn.setOnAction(e -> atacarBoton());
-
-        defenderBtn.setOnAction(e -> defenderBoton());
-
     }
 
 
@@ -382,20 +379,6 @@ public class JuegoController {
         }
 
         ataqueRealizado = false;
-
-        actualizarUI();
-        renderMapa();
-    }
-
-    private void defenderBoton() {
-
-        if(partida.getEstadoActual() != EstadoJuego.EN_CURSO){
-            return;
-        }
-
-        // AQUÍ IRÁ LA LÓGICA DE DEFENDER
-
-        partida.getLog().registrar("Te has puesto en posición defensiva.");
 
         actualizarUI();
         renderMapa();
