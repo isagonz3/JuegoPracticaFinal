@@ -24,6 +24,7 @@ import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
+import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.TADs.Lista;
 
@@ -53,7 +54,6 @@ public class JuegoController {
     private Objeto objetoSeleccionado;
 
 
-
     private boolean ataqueRealizado = false;
 
 
@@ -79,7 +79,6 @@ public class JuegoController {
         imgJugador = cargaImagen("/entidades/jugador_down00.png");
         imgGato = cargaImagen("/entidades/gato_quieto.png");
         imgEnemigo1 = cargaImagen("/entidades/soldado_quieto.png");
-        imgNPC = cargaImagen("src/main/resources/entidades/NPC_1.png");
 
         partida.iniciarTurno();
         actualizarUI();
@@ -152,8 +151,9 @@ public class JuegoController {
                     }
                 }
 
-                if(celda != null && celda.tieneNPC()){
-                    ImageView npcView = new ImageView(seleccionarSpriteNPC());
+                if (celda != null && celda.tieneNPC()) {
+                    NPC npc = celda.getNpc();
+                    ImageView npcView = new ImageView(seleccionarSpriteNPC(npc));
                     npcView.setFitHeight(TILE_SIZE);
                     npcView.setFitWidth(TILE_SIZE);
                     celdaPane.getChildren().add(npcView);
@@ -433,6 +433,24 @@ public class JuegoController {
             case "gema":   ruta = "/objetos/gema.png"; break;
             default:       ruta = "/objetos/pocionVida.png";
         }
+        return cargaImagen(ruta);
+    }
+
+    private Image seleccionarSpriteNPC(NPC npc) {
+
+        String ruta;
+
+        switch (npc.getNombre().toLowerCase()) {
+
+            case "mercader": ruta = "/entidades/NPC_1.png";break;
+
+            case "viejo sabio": ruta = "/entidades/NPC_2.png";break;
+
+            case "guardia": ruta = "/entidades/NPC_3.png";break;
+
+            default: ruta = "/entidades/NPC_1.png";
+        }
+
         return cargaImagen(ruta);
     }
 }

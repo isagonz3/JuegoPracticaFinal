@@ -10,6 +10,8 @@ public class NPC {
     private String infoGato;
     private int dialogoActual;
 
+    private String sprite;
+
     public NPC(String nombre, TipoNPC tipo) {
         this.nombre = nombre;
         this.tipo = tipo;
@@ -72,5 +74,13 @@ public class NPC {
 
     public boolean comerciar(){
         return tipo == TipoNPC.COMERCIANTE && tradeos.getSize() > 0;
+    }
+
+    public String getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(String sprite) {
+        this.sprite = sprite;
     }
 }

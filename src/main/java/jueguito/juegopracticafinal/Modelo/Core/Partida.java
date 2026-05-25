@@ -54,7 +54,11 @@ public class Partida {
                 new Estadisticas(get().gato.vida, get().gato.ataque, get().gato.defensa, get().gato.rangoMov));
 
         turnoActual = 0;
+
         colocarGatoFijo();
+        colocarLlaveFija();
+        colocarNPCsFijos();
+
         log.registrar("INICIANDO PARTIDA \n Bienvenido. Estas en el Interior de tu Casa");
     }
 
@@ -677,6 +681,103 @@ public class Partida {
 
         // Guardar zona del gato
         idZonaGato = zonaId;
+    }
+
+
+    private void colocarLlaveFija() {
+
+        int zonaId = 6; // ejemplo
+        Zona zona = grafo.getZona(zonaId);
+        if (zona == null) return;
+
+        int row = 9;
+        int col = 9;
+
+        if (!zona.esValida(row, col)) return;
+
+        Celda celda = zona.getCelda(row, col);
+        if (celda == null) return;
+
+        if (celda.tieneObjeto()) return;
+
+        Objeto llave = new Objeto(
+                "Llave",
+                TipoObjeto.LLAVE,
+                0,0,0,0,
+                1,
+                "Abre una puerta"
+        );
+
+        celda.setObjeto(llave);
+    }
+
+    private void colocarNPCsFijos() {
+
+        // =========================
+        // NPC 1
+        // =========================
+        Zona zona1 = grafo.getZona(5);
+
+        if (zona1 != null && zona1.esValida(4, 9)) {
+
+            Celda celda1 = zona1.getCelda(4, 9);
+
+            if (celda1 != null && !celda1.isOcupada()) {
+
+                NPC npc1 = new NPC(
+                        "Mercader",
+                        TipoNPC.COMERCIANTE
+                );
+
+                npc1.setSprite("/entidades/NPC_1.png");
+
+                celda1.setNpc(npc1);
+            }
+        }
+
+        // =========================
+        // NPC 2
+        // =========================
+        Zona zona2 = grafo.getZona(6);
+
+        if (zona2 != null && zona2.esValida(13,1)) {
+
+            Celda celda2 = zona2.getCelda(13, 1);
+
+            if (celda2 != null && !celda2.isOcupada()) {
+
+                NPC npc2 = new NPC(
+                        "Viejo Sabio",
+                        TipoNPC.ALDEANO
+                );
+
+                npc2.setSprite("/entidades/NPC_2.png");
+
+                celda2.setNpc(npc2);
+            }
+        }
+
+        // =========================
+        // NPC 3
+        // =========================
+        Zona zona3 = grafo.getZona(7);
+
+        if (zona3 != null && zona3.esValida(5, 8)) {
+
+            Celda celda3 = zona3.getCelda(5, 8);
+
+            if (celda3 != null && !celda3.isOcupada()) {
+
+                NPC npc3 = new NPC(
+                        "Guardia",
+                        TipoNPC.ALDEANO
+                );
+
+                npc3.setSprite("/entidades/NPC_3.png");
+
+                celda3.setNpc(npc3);
+            }
+        }
     }
 
     // Getters y setters
