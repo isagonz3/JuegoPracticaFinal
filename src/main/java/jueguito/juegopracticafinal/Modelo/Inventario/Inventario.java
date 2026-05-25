@@ -18,7 +18,7 @@ public class Inventario {
 
     public boolean addObjeto(Objeto objeto){
 
-        if(objetos.getSize() >= sizeInventario){
+        if(contarObjetosReales() >= sizeInventario){
             return false;
         }
 
@@ -88,5 +88,23 @@ public class Inventario {
 
     public int getSizeInventario(){
         return sizeInventario;
+    }
+
+    public int contarObjetosReales() {
+
+        int total = 0;
+
+        for (int i = 0; i < objetos.getSize(); i++) {
+
+            Objeto o = objetos.get(i);
+
+            if (o.getNombre().equalsIgnoreCase("gema")) {
+                total += o.getCantidad();
+            } else {
+                total += 1;
+            }
+        }
+
+        return total;
     }
 }
