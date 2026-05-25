@@ -155,6 +155,7 @@ public class Partida {
         if (!e.estarVivo()) return new ResultadoCombate(0,0,false,"Ya derrotado");
         int hit = Math.max(0, (int)(jugador.getAtaqueTotal()*Math.random()*2) - jugador.getDefensaTotal());
         e.recibirAtaque(hit);
+        e.setAtacado(true);
         if (!e.estarVivo()) { zonaActual.getCelda(e.getPosicion().getRow(),e.getPosicion().getCol()).setEntidad(null); log.registrar("Has derrotado a "+e.getNombre()+"!!"); }
         else log.registrar("Has atacado a "+e.getNombre()+", recibe "+hit+" de dano");
         return new ResultadoCombate(hit, e.getEstadisticas().getVidaActual(), !e.estarVivo(), "");
@@ -170,29 +171,180 @@ public class Partida {
     //Lógica de movimiento y ataques de enemigos
 
     private void moverEnemigos() {
+
         Posicion pj = jugador.getPosicion();
-        for (int i = 0; i < zonaActual.getRows(); i++)
+
+        // ==============================
+        // 1. COPIA DE ENEMIGOS (IMPORTANTE)
+        // ==============================
+        Lista<Enemigo> enemigos = new Lista<>();
+
+        for (int i = 0; i < zonaActual.getRows(); i++) {
             for (int j = 0; j < zonaActual.getCols(); j++) {
-                Celda c = zonaActual.getCelda(i,j);
-                if (!(c.getEntidad() instanceof Enemigo e) || !e.estarVivo()) continue;
-                if (c.esAdyacente(zonaActual.getCelda(pj.getRow(),pj.getCol()))) continue;
-                int bestDir=-1, bestDist=Integer.MAX_VALUE;
-                for (int d=0; d<4; d++) {
-                    int[][] dirs={{-1,0},{1,0},{0,-1},{0,1}};
-                    int nr=i+dirs[d][0], nc=j+dirs[d][1];
-                    if (!zonaActual.esValida(nr,nc)) continue;
-                    Celda ady = zonaActual.getCelda(nr,nc);
-                    if (!ady.isTransitable()||ady.isOcupada()) continue;
-                    int dist = Math.abs(nr-pj.getRow())+Math.abs(nc-pj.getCol());
-                    if (dist<bestDist) { bestDir=d; bestDist=dist; }
+
+                Celda c = zonaActual.getCelda(i, j);
+
+                if (c != null &&
+                        c.getEntidad() instanceof Enemigo e &&
+                        e.estarVivo()) {
+
+                    enemigos.add(e);
                 }
-                if (bestDir<0) continue;
-                int[][] dirs={{-1,0},{1,0},{0,-1},{0,1}};
-                int nr=i+dirs[bestDir][0], nc=j+dirs[bestDir][1];
-                zonaActual.getCelda(i,j).setEntidad(null);
-                e.moverA(new Posicion(nr,nc));
-                zonaActual.getCelda(nr,nc).setEntidad(e);
             }
+        }
+
+        // ==============================
+        // 2. PROCESAR ENEMIGOS
+        // ==============================
+        for (int k = 0; k < enemigos.getSize(); k++) {
+
+            Enemigo e = enemigos.get(k);
+            Posicion p = e.getPosicion();
+
+            int i = p.getRow();
+            int j = p.getCol();
+
+            // si ya murió en este turno
+            if (!e.estarVivo()) {
+                continue;
+            }
+
+            int distJugador =
+                    Math.abs(i - pj.getRow()) +
+                            Math.abs(j - pj.getCol());
+
+            // ==============================
+            // FUERA DE RANGO
+            // ==============================
+            if (distJugador > 10) {
+                continue;
+            }
+
+            int[][] dirs = {
+                    {-1,0},
+                    {1,0},
+                    {0,-1},
+                    {0,1}
+            };
+
+            int bestDir = -1;
+
+            // ==============================
+            // CASO: ATACADO
+            // ==============================
+            if (e.isAtacado()) {
+
+                int decision = (int)(Math.random() * 2);
+
+                // ===== HUIR =====
+                if (decision == 0) {
+
+                    int bestDist = -1;
+
+                    for (int d = 0; d < 4; d++) {
+
+                        int nr = i + dirs[d][0];
+                        int nc = j + dirs[d][1];
+
+                        if (!zonaActual.esValida(nr, nc)) continue;
+
+                        Celda ady = zonaActual.getCelda(nr, nc);
+
+                        if (!ady.isTransitable() || ady.isOcupada()) continue;
+
+                        int dist = Math.abs(nr - pj.getRow()) +
+                                Math.abs(nc - pj.getCol());
+
+                        if (dist > bestDist) {
+                            bestDist = dist;
+                            bestDir = d;
+                        }
+                    }
+
+                    if (bestDir >= 0) {
+
+                        int nr = i + dirs[bestDir][0];
+                        int nc = j + dirs[bestDir][1];
+
+                        zonaActual.getCelda(i, j).setEntidad(null);
+
+                        e.moverA(new Posicion(nr, nc));
+
+                        zonaActual.getCelda(nr, nc).setEntidad(e);
+
+                        log.registrar(e.getNombre() + " ha huido.");
+                    }
+                }
+
+                // ===== ATACAR =====
+                else {
+
+                    Celda pjCelda = zonaActual.getCelda(pj.getRow(), pj.getCol());
+
+                    if (pjCelda != null && zonaActual.getCelda(i, j).esAdyacente(pjCelda)) {
+
+                        int hit = (int)Math.max(
+                                0,
+                                e.getAtaqueTotal() * Math.random() * 2
+                                        - jugador.getDefensaTotal()
+                        );
+
+                        jugador.recibirAtaque(hit);
+
+                        log.registrar(
+                                e.getNombre() +
+                                        " te ha atacado y te ha quitado " +
+                                        hit + " de vida."
+                        );
+                    }
+                }
+
+                e.setAtacado(false);
+                continue;
+            }
+
+            // ==============================
+            // CASO NORMAL: PERSEGUIR
+            // ==============================
+            Celda pjCelda = zonaActual.getCelda(pj.getRow(), pj.getCol());
+
+            if (zonaActual.getCelda(i, j).esAdyacente(pjCelda)) {
+                continue;
+            }
+
+            int bestDist = Integer.MAX_VALUE;
+
+            for (int d = 0; d < 4; d++) {
+
+                int nr = i + dirs[d][0];
+                int nc = j + dirs[d][1];
+
+                if (!zonaActual.esValida(nr, nc)) continue;
+
+                Celda ady = zonaActual.getCelda(nr, nc);
+
+                if (!ady.isTransitable() || ady.isOcupada()) continue;
+
+                int dist = Math.abs(nr - pj.getRow()) +
+                        Math.abs(nc - pj.getCol());
+
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    bestDir = d;
+                }
+            }
+
+            if (bestDir < 0) continue;
+
+            int nr = i + dirs[bestDir][0];
+            int nc = j + dirs[bestDir][1];
+
+            zonaActual.getCelda(i, j).setEntidad(null);
+
+            e.moverA(new Posicion(nr, nc));
+
+            zonaActual.getCelda(nr, nc).setEntidad(e);
+        }
     }
 
     private void atacarJugador() {

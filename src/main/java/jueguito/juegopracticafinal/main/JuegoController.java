@@ -39,6 +39,7 @@ public class JuegoController {
     @FXML private Button terminarTurnoBtn, guardarBtn;
     @FXML private ListView<String> inventarioList;
     @FXML private Button usarBtn, equiparBtn;
+    @FXML private Button atacarBtn, defenderBtn;
 
     private Partida partida;
     private JueguitoFX app;
@@ -50,6 +51,11 @@ public class JuegoController {
     private int baseCol = 0;
     private Lista<Celda> celdasAccesibles = null;
     private Objeto objetoSeleccionado;
+
+
+
+    private boolean ataqueRealizado = false;
+
 
     private static final int TILE_SIZE = 16;
 
@@ -254,7 +260,147 @@ public class JuegoController {
                 actualizarUI();
             }
         });
+
+        atacarBtn.setOnAction(e -> atacarBoton());
+
+        defenderBtn.setOnAction(e -> defenderBoton());
+
     }
+
+
+    private void atacarBoton() {
+
+        if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) {
+            return;
+        }
+
+        // SOLO UN ATAQUE POR TURNO
+        if (ataqueRealizado) {
+
+            partida.getLog().registrar(
+                    "Ya has realizado un ataque en este turno."
+            );
+
+            actualizarUI();
+            return;
+        }
+
+        Zona zona = partida.getZonaActual();
+
+        Posicion posJugador = partida.getJugador().getPosicion();
+
+        int filaObjetivo = posJugador.getRow() + baseRow;
+        int colObjetivo = posJugador.getCol() + baseCol;
+
+        if (!zona.esValida(filaObjetivo, colObjetivo)) {
+
+            partida.getLog().registrar(
+                    "No hay ningún objetivo en esa dirección."
+            );
+
+            actualizarUI();
+            return;
+        }
+
+        Celda celdaObjetivo = zona.getCelda(
+                filaObjetivo,
+                colObjetivo
+        );
+
+        if (celdaObjetivo == null ||
+                !celdaObjetivo.tieneEntidad() ||
+                !(celdaObjetivo.getEntidad() instanceof Enemigo)) {
+
+            partida.getLog().registrar(
+                    "No hay enemigos para atacar."
+            );
+
+            actualizarUI();
+            return;
+        }
+
+        Enemigo enemigo = (Enemigo) celdaObjetivo.getEntidad();
+
+        int vidaEnemigoAntes =
+                enemigo.getEstadisticas().getVidaActual();
+
+        // ATAQUE DEL JUGADOR
+        partida.atacarDireccion(baseRow, baseCol);
+        enemigo.setAtacado(true);
+
+        int vidaEnemigoDespues =
+                enemigo.getEstadisticas().getVidaActual();
+
+        int danoRealizado =
+                vidaEnemigoAntes - vidaEnemigoDespues;
+
+        partida.getLog().registrar(
+                "Has hecho " +
+                        danoRealizado +
+                        " de daño. Vida restante del enemigo: " +
+                        Math.max(vidaEnemigoDespues, 0)
+        );
+
+        ataqueRealizado = true;
+
+        actualizarUI();
+        renderMapa();
+
+        // VIDA DEL JUGADOR ANTES DEL TURNO ENEMIGO
+        int vidaJugadorAntes =
+                partida.getJugador()
+                        .getEstadisticas()
+                        .getVidaActual();
+
+        // TURNO ENEMIGO
+        terminaTurno();
+
+        // VIDA DESPUÉS DEL ATAQUE ENEMIGO
+        int vidaJugadorDespues =
+                partida.getJugador()
+                        .getEstadisticas()
+                        .getVidaActual();
+
+        int danoRecibido =
+                vidaJugadorAntes - vidaJugadorDespues;
+
+        // MENSAJES ENEMIGO
+        if (danoRecibido > 0) {
+
+            partida.getLog().registrar(
+                    "El enemigo te ha atacado y te ha quitado "
+                            + danoRecibido +
+                            " puntos de vida."
+            );
+        }
+
+        else {
+
+            partida.getLog().registrar(
+                    "El enemigo ha huido o no ha conseguido atacarte."
+            );
+        }
+
+        ataqueRealizado = false;
+
+        actualizarUI();
+        renderMapa();
+    }
+
+    private void defenderBoton() {
+
+        if(partida.getEstadoActual() != EstadoJuego.EN_CURSO){
+            return;
+        }
+
+        // AQUÍ IRÁ LA LÓGICA DE DEFENDER
+
+        partida.getLog().registrar("Te has puesto en posición defensiva.");
+
+        actualizarUI();
+        renderMapa();
+    }
+
 
     private void terminaTurno() {
         partida.terminarTurno();

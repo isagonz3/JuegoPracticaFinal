@@ -7,15 +7,18 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="jueguito.juegopracticafinal.main.JuegoController"
             prefHeight="576" prefWidth="960">
-    <padding><Insets bottom="10" left="10" right="10" top="10"/></padding>
+
+    <padding>
+        <Insets bottom="10" left="10" right="10" top="10"/>
+    </padding>
 
     <top>
         <Label fx:id="zonaLabel" text="Zona: ?"
@@ -30,30 +33,75 @@
 
     <right>
         <VBox spacing="10" minWidth="200">
+
             <Label fx:id="turnoLabel" text="Turno: 0"
                    style="-fx-font-size: 14;" />
+
             <Label fx:id="vidaLabel" text="Vida: 20/20" />
             <ProgressBar fx:id="vidaBar" prefWidth="180" />
 
             <Label text="--- Acciones ---"
                    style="-fx-font-weight: bold; -fx-margin-top: 10;" />
-            <Button fx:id="terminarTurnoBtn" text="Terminar Turno"
-                    maxWidth="Infinity" />
-            <Button fx:id="guardarBtn" text="Guardar Partida"
-                    maxWidth="Infinity" />
-            <Label text="--- Inventario ---"
-                   style="-fx-font-weight: bold; -fx-margin-top: 10;" />
-            <ListView fx:id="inventarioList" prefHeight="120" prefWidth="200" />
+
+            <Button fx:id="terminarTurnoBtn"
+                    text="Terminar Turno"
+                    maxWidth="Infinity"/>
+
+            <Button fx:id="guardarBtn"
+                    text="Guardar Partida"
+                    maxWidth="Infinity"/>
+
+            <!-- ===================== -->
+            <!-- NUEVOS BOTONES -->
+            <!-- ===================== -->
             <HBox spacing="5">
-                <Button fx:id="usarBtn" text="Usar" maxWidth="Infinity"
-                        HBox.hgrow="ALWAYS" />
-                <Button fx:id="equiparBtn" text="Equipar" maxWidth="Infinity"
-                        HBox.hgrow="ALWAYS" />
+
+                <Button fx:id="atacarBtn"
+                        text="Atacar"
+                        maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="defenderBtn"
+                        text="Defender"
+                        maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS"/>
+
             </HBox>
+
+            <Label text="--- Inventario ---"
+                   style="-fx-font-weight: bold;" />
+
+            <ListView fx:id="inventarioList"
+                      prefHeight="120"
+                      prefWidth="200" />
+
+            <HBox spacing="5">
+
+                <Button fx:id="usarBtn"
+                        text="Usar"
+                        maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="equiparBtn"
+                        text="Equipar"
+                        maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS"/>
+
+            </HBox>
+
             <Label text="--- Log ---"
-                   style="-fx-font-weight: bold; -fx-margin-top: 10;" />
-            <TextArea fx:id="logArea" editable="false"
-                      prefHeight="12" prefWidth="200" />
+                   style="-fx-font-weight: bold;" />
+
+            <!-- ===================== -->
+            <!-- LOG ARREGLADO -->
+            <!-- ===================== -->
+            <TextArea fx:id="logArea"
+                      editable="false"
+                      wrapText="true"
+                      prefHeight="250"
+                      prefWidth="200" />
+
         </VBox>
     </right>
+
 </BorderPane>
