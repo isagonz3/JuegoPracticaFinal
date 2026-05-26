@@ -213,9 +213,9 @@ public class PartidaObjetosYCombate {
         if (ok) {
             c.setObjeto(null);
             partida.getLog().registrar("Recogiste " + o.getNombre() + "!");
-
-            partida.getUi().actualizarUI(partida);
-
+            if(partida.getUi() != null) {
+                partida.getUi().actualizarUI(partida);
+            }
             return true;
         }
 

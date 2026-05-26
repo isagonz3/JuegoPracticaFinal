@@ -28,8 +28,6 @@ public class PartidaMovimiento {
         Zona zonaActual = partida.getZonaActual();
         Jugador jugador = partida.getJugador();
 
-        if (partida.isMovimientoRealizado()) { partida.getLog().registrar("Ya te has movido este turno"); return false; }
-
         Celda destino = zonaActual.getCelda(row, col);
         if (destino == null) {
             partida.getLog().registrar("No puedes moverte aqui");

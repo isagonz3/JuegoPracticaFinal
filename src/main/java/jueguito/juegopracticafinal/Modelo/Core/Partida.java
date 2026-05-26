@@ -429,10 +429,11 @@ public class Partida {
         return grafo;
     }
 
-
-
     public void setIdZonaActual(int idZonaActual) {
         this.idZonaActual = idZonaActual;
+    }
+    public void setZonaActual(Zona zonaActual) {
+        this.zonaActual = zonaActual;
     }
 
     public void setTurnoActual(int turnoActual) {

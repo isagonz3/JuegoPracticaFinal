@@ -176,6 +176,7 @@ public class LoadJSON {
 
         Partida partida = new Partida(grafo);
         partida.setIdZonaActual(partidaData.idZonaActual);
+        partida.setZonaActual(zona);
         partida.setTurnoActual(partidaData.turnoActual);
         partida.setGatoEncontrado(partidaData.gatoEncontrado);
         partida.setEstadoActual(EstadoJuego.valueOf(partidaData.estadoActual));
@@ -229,8 +230,16 @@ public class LoadJSON {
         //Cargar gato
         Gato gato = new Gato(partidaData.nombreGato, new Estadisticas(10, 0, 0, 4));
         partida.setGato(gato);
+        Zona zonaGato = grafo.getZona(8);
+        if (zonaGato != null && zonaGato.esValida(16, 14)) {
+            Celda celdaGato = zonaGato.getCelda(16, 14);
+            if (celdaGato != null && !celdaGato.isOcupada()) {
+                gato.setPosicion(new Posicion(16, 14));
+                celdaGato.setEntidad(gato);
+            }
+        }
 
-        // --- LOGS ---
+        //Cargar logs
         if (partidaData.entradasLog != null) {
             for (String mensaje : partidaData.entradasLog) {
                 if (mensaje != null) partida.getLog().registrar(mensaje);
