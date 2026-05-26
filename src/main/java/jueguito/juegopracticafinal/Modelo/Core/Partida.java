@@ -177,6 +177,32 @@ public class Partida {
             return;
         }
 
+        // ============================================================
+        // BLOQUEO DE SEGURIDAD: DE ZONA 7 A ZONA 8 SE NECESITA LLAVE
+        // ============================================================
+        if (idZonaActual == 7 && nid == 8) {
+
+            boolean tieneLlave = false;
+            jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
+
+            // Recorremos las celdas de la mochila buscando la "Llave"
+            for (int i = 0; i < inv.size(); i++) {
+                if (inv.getObjeto(i) != null && "Llave".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
+                    tieneLlave = true;
+                    break;
+                }
+            }
+
+            // Si la mochila no tiene la llave, se cancela el cambio de zona
+            if (!tieneLlave) {
+                log.registrar("¡La puerta a la Zona 8 está cerrada! Necesitas la Llave.");
+                return;
+            }
+
+            log.registrar("Usaste la Llave para abrir el gran portón a la Zona 8...");
+        }
+        // ============================================================
+
         if (nz.getCountTurnos() == 0) {
             objetosYCombate.poblarZona(nz);
             objetosYCombate.ponerObjetos(nz);
@@ -503,4 +529,5 @@ public class Partida {
     public UIRenderer getUi() {
         return ui;
     }
+
 }

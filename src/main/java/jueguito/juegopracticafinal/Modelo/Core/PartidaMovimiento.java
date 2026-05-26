@@ -71,7 +71,6 @@ public class PartidaMovimiento {
             partida.cambiarZona(destino.getPuerta());
         }
 
-        partida.setMovimientoRealizado(true);
         return true;
     }
 
