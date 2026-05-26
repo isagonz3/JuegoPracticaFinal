@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="jueguito.juegopracticafinal.main.TiendaController"
+            prefWidth="400" prefHeight="300">
+
+    <center>
+        <VBox spacing="20" alignment="CENTER">
+
+            <Label text="TIENDA DEL COMERCIANTE"
+                   style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+            <VBox spacing="10">
+
+                <Label text="Barca - 5 gemas" />
+                <Button text="Comprar"
+                        fx:id="comprarBarcaBtn" />
+
+            </VBox>
+
+            <VBox spacing="10">
+
+                <Label text="Mapa - 3 gemas" />
+                <Button text="Comprar"
+                        fx:id="comprarMapaBtn" />
+
+            </VBox>
+
+            <Button text="Salir"
+                    fx:id="salirBtn" />
+
+        </VBox>
+    </center>
+
+</BorderPane>

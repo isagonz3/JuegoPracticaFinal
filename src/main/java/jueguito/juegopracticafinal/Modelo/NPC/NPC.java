@@ -56,7 +56,6 @@ public class NPC {
                 return "Necesitas conseguir una llave para abrir el castillo";
             }
 
-            // diálogo genérico de aldeanos
             if (dialogos.isEmpty() || dialogoActual >= dialogos.getSize()) {
                 return "...";
             }
@@ -65,6 +64,7 @@ public class NPC {
             dialogoActual++;
             return frase;
         }
+
         return "...";
     }
 

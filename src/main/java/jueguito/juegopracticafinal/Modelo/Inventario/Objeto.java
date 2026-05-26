@@ -14,14 +14,6 @@ public class Objeto {
 
     private int cantidad = 1;
 
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void incrementarCantidad() {
-        cantidad++;
-    }
-
     public Objeto() {
         this.nombre = "Objeto";
         this.tipo = TipoObjeto.CONSUMIBLE;
@@ -48,43 +40,76 @@ public class Objeto {
         this.descripcion = descripcion;
     }
 
-    public Objeto(String espada) {
-        //placeholder
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public TipoObjeto getTipo() { return tipo; }
-    public void setTipo(TipoObjeto tipo) { this.tipo = tipo; }
+    public TipoObjeto getTipo() {
+        return tipo;
+    }
 
-    public SlotEquipable getSlot() { return slot; }
-    public void setSlot(SlotEquipable slot) { this.slot = slot; }
+    public void setTipo(TipoObjeto tipo) {
+        this.tipo = tipo;
+    }
 
-    public int getAtaqueBonus() { return ataqueBonus; }
-    public int getDefensaBonus() { return defensaBonus; }
-    public int getRangoBonus() { return rangoBonus; }
-    public int getVidaBonus(){ return vidaBonus; }
-    public int getUsosMax() { return usosMax; }
-    public int getUsosRestantes() { return usosRestantes; }
-    public String getDescripcion() { return descripcion; }
+    public SlotEquipable getSlot() {
+        return slot;
+    }
 
-    public boolean isConsumible() { return this.tipo == TipoObjeto.CONSUMIBLE || this.tipo == TipoObjeto.LLAVE; }
+    public void setSlot(SlotEquipable slot) {
+        this.slot = slot;
+    }
 
-    public boolean usarObjeto(){
-        if(usosRestantes <= 0){
+    public int getAtaqueBonus() {
+        return ataqueBonus;
+    }
+
+    public int getDefensaBonus() {
+        return defensaBonus;
+    }
+
+    public int getRangoBonus() {
+        return rangoBonus;
+    }
+
+    public int getVidaBonus() {
+        return vidaBonus;
+    }
+
+    public int getUsosMax() {
+        return usosMax;
+    }
+
+    public int getUsosRestantes() {
+        return usosRestantes;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public boolean isConsumible() {
+        return this.tipo == TipoObjeto.CONSUMIBLE || this.tipo == TipoObjeto.LLAVE;
+    }
+
+    public boolean usarObjeto() {
+        if (usosRestantes <= 0) {
             return false;
         }
         usosRestantes--;
         return true;
     }
 
-    public boolean objetoGastado(){
+    public boolean objetoGastado() {
         return isConsumible() && usosRestantes <= 0;
     }
 
-    public Objeto copiar(){
-        Objeto copia = new Objeto(nombre,tipo,ataqueBonus,defensaBonus,vidaBonus,rangoBonus,usosMax,descripcion);
+    public Objeto copiar() {
+        Objeto copia = new Objeto(nombre, tipo, ataqueBonus, defensaBonus, vidaBonus, rangoBonus, usosMax, descripcion);
         copia.slot = this.slot;
         return copia;
     }

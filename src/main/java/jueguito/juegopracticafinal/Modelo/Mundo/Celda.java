@@ -113,6 +113,13 @@ public class Celda {
         this.npc = null;
         this.puerta = null;
     }
+
+    public boolean esAdyacenteDistancia(Celda otra, int dist) {
+        int dx = Math.abs(this.row - otra.row);
+        int dy = Math.abs(this.col - otra.col);
+
+        return (dx + dy) == dist;
+    }
 }
 
 

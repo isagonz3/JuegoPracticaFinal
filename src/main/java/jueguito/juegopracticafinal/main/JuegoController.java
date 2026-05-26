@@ -9,6 +9,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -19,12 +20,15 @@ import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Entidad;
 import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
+import jueguito.juegopracticafinal.Modelo.Inventario.Inventario;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
+import jueguito.juegopracticafinal.Modelo.Inventario.TipoObjeto;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.Modelo.NPC.NPC;
+import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.TADs.Lista;
 
@@ -42,6 +46,11 @@ public class JuegoController {
     @FXML private Button usarBtn, equiparBtn;
     @FXML private Button atacarBtn;
     @FXML private Button interactuarBtn;
+    @FXML private VBox tiendaPanel;
+    @FXML private Button comprarBarcaBtn;
+    @FXML private Button comprarMapaBtn;
+    @FXML private Button salirTiendaBtn;
+
 
     private Partida partida;
     private JueguitoFX app;
@@ -265,19 +274,98 @@ public class JuegoController {
         atacarBtn.setOnAction(e -> atacarBoton());
 
         interactuarBtn.setOnAction(e -> interactuarBoton());
+
+        interactuarBtn.setOnAction(e -> interactuarBoton());
+
+        comprarBarcaBtn.setOnAction(e -> comprar("Barca", 5));
+
+        comprarMapaBtn.setOnAction(e -> comprar("Mapa", 3));
+
+        salirTiendaBtn.setOnAction(e -> cerrarTienda());
     }
 
     private void interactuarBoton() {
 
-        boolean interactuo = partida.interactNPC();
+        NPC npc = partida.interactNPC();
 
         actualizarUI();
         renderMapa();
 
-        if (interactuo) {
-            terminaTurno();
+        if (npc == null) {
+            logArea.appendText("No hay nadie cerca...\n");
+            return;
         }
+
+        if (npc.getTipo() == TipoNPC.COMERCIANTE) {
+            abrirTienda(npc);
+            return;
+        }
+
+        logArea.appendText(npc.getNombre() + ": " + npc.hablar() + "\n");
+        terminaTurno();
     }
+
+    private void abrirTienda(NPC npc) {
+
+        tiendaPanel.setVisible(true);
+
+        logArea.appendText("Has entrado en la tienda del comerciante\n");
+    }
+
+    private void cerrarTienda() {
+        tiendaPanel.setVisible(false);
+    }
+
+    public void comprar(String item, int coste) {
+
+        Inventario inv = partida.getJugador().inventario;
+
+        // =========================
+        // 1. CONTAR GEMAS
+        // =========================
+        int gemas = 0;
+
+        for (int i = 0; i < inv.size(); i++) {
+            if (inv.getObjeto(i).getNombre().equalsIgnoreCase("gema")) {
+                gemas++;
+            }
+        }
+
+        if (gemas < coste) {
+            logArea.appendText("No tienes suficientes gemas\n");
+            return;
+        }
+
+        // =========================
+        // 2. QUITAR GEMAS (SEGURO)
+        // =========================
+        for (int c = 0; c < coste; c++) {
+
+            for (int i = 0; i < inv.size(); i++) {
+
+                Objeto o = inv.getObjeto(i);
+
+                if (o.getNombre().equalsIgnoreCase("gema")) {
+                    inv.removeObjeto(o);
+                    break;
+                }
+            }
+        }
+
+        // =========================
+        // 3. AÑADIR ITEM
+        // =========================
+        inv.addObjeto(new Objeto(item, TipoObjeto.NPC));
+
+        // =========================
+        // 4. LOG
+        // =========================
+        logArea.appendText("Coste: " + coste + " gemas\n");
+        logArea.appendText(item + " comprado\n");
+
+        actualizarUI();
+    }
+
 
     private void atacarBoton() {
 

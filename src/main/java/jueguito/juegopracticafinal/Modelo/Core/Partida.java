@@ -623,9 +623,9 @@ public class Partida {
         return false;
     }
 
-    public boolean interactNPC() {
+    public NPC interactNPC() {
 
-        if (estadoActual != EstadoJuego.EN_CURSO) return false;
+        if (estadoActual != EstadoJuego.EN_CURSO) return null;
 
         Posicion pj = jugador.getPosicion();
         Celda celdaJugador = zonaActual.getCelda(pj.getRow(), pj.getCol());
@@ -635,27 +635,28 @@ public class Partida {
 
                 Celda c = zonaActual.getCelda(i, j);
 
-                if (c.tieneNPC() && c.esAdyacente(celdaJugador)) {
+                if (c.tieneNPC()) {
 
                     NPC npc = c.getNpc();
 
-                    String frase = npc.hablar();
-                    log.registrar(npc.getNombre() + ": " + frase);
+                    // 🧍 ALDEANO (1 casilla)
+                    if (npc.getTipo() == TipoNPC.ALDEANO &&
+                            c.esAdyacente(celdaJugador)) {
+                        return npc;
+                    }
 
-                    return true;
+                    // 🛒 COMERCIANTE (2 casillas)
+                    if (npc.getTipo() == TipoNPC.COMERCIANTE &&
+                            c.esAdyacenteDistancia(celdaJugador, 2)) {
+                        return npc;
+                    }
                 }
             }
         }
 
-        log.registrar("No hay nadie con quien hablar...");
-        return false;
+        return null;
     }
 
-    public boolean realizarTradeo(NPC n, Tradeo t) {
-        if (estadoActual!=EstadoJuego.EN_CURSO||!n.comerciar()) return false;
-        if (t.tradear(jugador)) { log.registrar("Un placer hacer negocios"); return true; }
-        log.registrar("No hay trato"); return false;
-    }
 
     private Posicion findSpawn(Zona zona) {
         for (int i=0;i<zona.getRows();i++) for (int j=0;j<zona.getCols();j++) { Celda c=zona.getCelda(i,j); if (c!=null&&c.isTransitable()&&!c.isOcupada()) return new Posicion(i,j); }

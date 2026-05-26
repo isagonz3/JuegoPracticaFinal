@@ -10,7 +10,7 @@ import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
 
 public class Jugador extends Entidad{
 
-    private Inventario inventario;
+    public Inventario inventario;
     private Objeto[] equipamiento;
     private LogSistema log;
     private int bonusAtaqueEq;
