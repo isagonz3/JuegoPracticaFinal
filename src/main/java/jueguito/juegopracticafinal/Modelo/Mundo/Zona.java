@@ -187,14 +187,18 @@ public class Zona {
                int newrow = colaRow + coordenada[0];
                int newcol = colaCol + coordenada[1];
 
-                   if (matrix.esValida(newrow, newcol) && !visitadas[newrow][newcol]) {
-                      Celda celda = matrix.get(newrow, newcol);
-                      if (celda != null && celda.isTransitable() && !celda.isOcupada()) {
-                         visitadas[newrow][newcol] = true;
-                         cola.enqueue(new int[]{newrow, newcol, colaDist + 1});
-                      }
-                   }
+               if (matrix.esValida(newrow, newcol) && !visitadas[newrow][newcol]) {
+                  Celda celda = matrix.get(newrow, newcol);
 
+                  // 🔥 CORRECCIÓN CRÍTICA:
+                  // Para expandir el camino, la celda debe ser transitable.
+                  // Se permite pisar la celda si NO está ocupada por un enemigo,
+                  // o si tiene un objeto en el suelo (¡así la UI te dejará hacer click en ella!).
+                  if (celda != null && celda.isTransitable() && (!celda.isOcupada() || celda.tieneObjeto())) {
+                     visitadas[newrow][newcol] = true;
+                     cola.enqueue(new int[]{newrow, newcol, colaDist + 1});
+                  }
+               }
             }
          }
       }

@@ -176,8 +176,6 @@ public class PartidaObjetosYCombate {
         return true;
     }
 
-
-
     public boolean recogerObjeto(Celda c) {
 
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO)
@@ -200,7 +198,8 @@ public class PartidaObjetosYCombate {
             c.setObjeto(null);
             partida.getLog().registrar("Recogiste " + o.getNombre() + "!");
 
-            partida.getUi().actualizarUI(partida);
+            // ❌ ELIMINA O COMENTA ESTA LÍNEA QUE CAUSA EL NULLPOINTEREXCEPTION:
+            // partida.getUi().actualizarUI(partida);
 
             return true;
         }
@@ -368,6 +367,7 @@ public class PartidaObjetosYCombate {
     // ============================================================
     // SPAWN DE OBJETOS
     // ============================================================
+
     public void ponerObjetos(Zona zona) {
 
         // Zonas donde NO spawnear objetos
@@ -383,7 +383,7 @@ public class PartidaObjetosYCombate {
         int ALEATORIOS = 3;
 
         // ============================================================
-        // 1. SPAWNS FIJOS
+        // 1. SPAWNS FIJOS (Vienen del archivo .txt)
         // ============================================================
         if (spawns.getSize() > 0) {
 
@@ -398,7 +398,9 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                if (celda != null && !celda.isOcupada() && !celda.tieneObjeto()) {
+                // 🔥 CORRECCIÓN: Validamos que sea transitable (un '0' real) y que no sea puerta
+                if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
+                        && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearGema());
                     colocados++;
                 }
@@ -415,7 +417,9 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                if (celda != null && !celda.isOcupada() && !celda.tieneObjeto()) {
+                // 🔥 CORRECCIÓN: Validamos que sea transitable (un '0' real) y que no sea puerta
+                if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
+                        && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearObjetoRandom());
                     colocadosAleatorios++;
                 }
@@ -427,7 +431,7 @@ public class PartidaObjetosYCombate {
         }
 
         // ============================================================
-        // 2. SPAWN ALEATORIO (si no hay spawns fijos)
+        // 2. SPAWN ALEATORIO (si no hay spawns fijos en el archivo)
         // ============================================================
 
         // Primero GEMAS
@@ -444,6 +448,8 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
+            // 🔥 CORRECCIÓN: No spawnear en puertas de forma aleatoria
+            if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearGema());
             colocadasGemas++;
@@ -463,6 +469,8 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
+            // 🔥 CORRECCIÓN: No spawnear en puertas de forma aleatoria
+            if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearObjetoRandom());
             colocadosAleatorios++;
@@ -471,6 +479,45 @@ public class PartidaObjetosYCombate {
         asegurarMinimoGemas(zona, GEMAS);
     }
 
+
+    private void asegurarMinimoGemas(Zona zona, int minimo) {
+
+        int contador = 0;
+
+        // Contar gemas existentes
+        for (int i = 0; i < zona.getRows(); i++) {
+            for (int j = 0; j < zona.getCols(); j++) {
+
+                Celda celda = zona.getCelda(i, j);
+
+                if (celda != null &&
+                        celda.tieneObjeto() &&
+                        "Gema".equalsIgnoreCase(celda.getObjeto().getNombre())) {
+
+                    contador++;
+                }
+            }
+        }
+
+        // Añadir gemas hasta llegar al mínimo
+        while (contador < minimo) {
+
+            int fila = (int)(Math.random() * zona.getRows());
+            int col = (int)(Math.random() * zona.getCols());
+
+            Celda celda = zona.getCelda(fila, col);
+
+            if (celda == null) continue;
+            if (!celda.isTransitable()) continue;
+            if (celda.isOcupada()) continue;
+            if (celda.tieneObjeto()) continue;
+            // 🔥 CORRECCIÓN: En el relleno de seguridad tampoco permitimos puertas
+            if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
+
+            celda.setObjeto(crearGema());
+            contador++;
+        }
+    }
 
     private Objeto crearGema() {
         return new Objeto(
@@ -510,42 +557,4 @@ public class PartidaObjetosYCombate {
             default -> new Objeto("Pocion de defensa", TipoObjeto.USABLE, 0, 1, 0, 0, 1, "+1 def");
         };
     }
-
-    private void asegurarMinimoGemas(Zona zona, int minimo) {
-
-        int contador = 0;
-
-        // Contar gemas existentes
-        for (int i = 0; i < zona.getRows(); i++) {
-            for (int j = 0; j < zona.getCols(); j++) {
-
-                Celda celda = zona.getCelda(i, j);
-
-                if (celda != null &&
-                        celda.tieneObjeto() &&
-                        "Gema".equalsIgnoreCase(celda.getObjeto().getNombre())) {
-
-                    contador++;
-                }
-            }
-        }
-
-        // Añadir gemas hasta llegar al mínimo
-        while (contador < minimo) {
-
-            int fila = (int)(Math.random() * zona.getRows());
-            int col = (int)(Math.random() * zona.getCols());
-
-            Celda celda = zona.getCelda(fila, col);
-
-            if (celda == null) continue;
-            if (!celda.isTransitable()) continue;
-            if (celda.isOcupada()) continue;
-            if (celda.tieneObjeto()) continue;
-
-            celda.setObjeto(crearGema());
-            contador++;
-        }
-    }
-
 }
