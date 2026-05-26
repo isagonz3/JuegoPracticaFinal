@@ -139,58 +139,43 @@ public class PartidaObjetosYCombate {
     // ============================================================
 
     public boolean usarObjeto(Objeto o) {
-
-        if (partida.getEstadoActual() != EstadoJuego.EN_CURSO)
-            return false;
-
-        if (!partida.isFaseJugadorActiva())
-            return false;
+        if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return false;
+        if (!partida.isFaseJugadorActiva()) return false;
 
         Jugador jugador = partida.getJugador();
+        Inventario inv = jugador.getInventario();
 
-        // SOLO objetos USABLES
-        if (o.getTipo() != TipoObjeto.USABLE) {
-            partida.getLog().registrar("No puedes usar este objeto");
+        // Validaciones de seguridad (Si falla, NO pasa el turno, el jugador conserva su acción)
+        if (o == null || o.getTipo() != TipoObjeto.USABLE || !inv.contiene(o)) {
+            partida.getLog().registrar("No puedes usar este objeto o no lo tienes.");
             return false;
         }
 
-        if (!jugador.getInventario().contiene(o))
+        // Aplicar efectos del objeto de tu base de datos
+        if (!o.usarObjeto()) {
+            partida.getLog().registrar("No se pudo usar el objeto.");
             return false;
+        }
 
-        // Aplicar efectos
-        if (!o.usarObjeto())
-            return false;
-
-        if (o.getVidaBonus() > 0)
-            jugador.getEstadisticas().curarVida(o.getVidaBonus());
-
-        if (o.getAtaqueBonus() > 0)
-            jugador.getEstadisticas().aumentarAtaque(o.getAtaqueBonus());
-
-        if (o.getDefensaBonus() > 0)
-            jugador.getEstadisticas().aumentarDefensa(o.getDefensaBonus());
-
-        if (o.getRangoBonus() > 0)
-            jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus());
+        // Aplicar bonus estadísticas
+        if (o.getVidaBonus() > 0) jugador.getEstadisticas().curarVida(o.getVidaBonus());
+        if (o.getAtaqueBonus() > 0) jugador.getEstadisticas().aumentarAtaque(o.getAtaqueBonus());
+        if (o.getDefensaBonus() > 0) jugador.getEstadisticas().aumentarDefensa(o.getDefensaBonus());
+        if (o.getRangoBonus() > 0) jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus());
 
         partida.getLog().registrar("Usaste " + o.getNombre());
 
-        // DURACIÓN: 1 turno
-        o.setDuracionTurnos(1);
+        o.setDuracionTurnos(2);
         o.resetTurnos();
 
-        // MOVER A USADOS
-        jugador.getInventario().getObjetosUsados().add(o);
+        inv.getObjetosUsados().add(o);
+        inv.removeObjeto(o);
 
-        // ELIMINAR DEL INVENTARIO
-        jugador.getInventario().removeObjeto(o);
-
-        // ACTUALIZAR UI
-        partida.getUi().actualizarUI(partida);
-
+        // 🔥 AQUÍ SÍ: Uso exitoso = El turno termina automáticamente
         partida.terminarTurnoPublic();
         return true;
     }
+
 
 
     public boolean recogerObjeto(Celda c) {
@@ -223,62 +208,43 @@ public class PartidaObjetosYCombate {
         return false;
     }
 
-
-
     public boolean equiparObjeto(Objeto o, SlotEquipable s) {
-
-        if (partida.getEstadoActual() != EstadoJuego.EN_CURSO)
-            return false;
-
-        if (!partida.isFaseJugadorActiva())
-            return false;
+        if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return false;
+        if (!partida.isFaseJugadorActiva()) return false;
 
         Jugador jugador = partida.getJugador();
         Inventario inv = jugador.getInventario();
 
-        // SOLO objetos EQUIPABLES
-        if (o.getTipo() != TipoObjeto.EQUIPABLE) {
-            partida.getLog().registrar("No puedes equipar este objeto");
+        // Validaciones de seguridad
+        if (o == null || o.getTipo() != TipoObjeto.EQUIPABLE || !inv.contiene(o)) {
+            partida.getLog().registrar("No puedes equipar este objeto.");
             return false;
         }
 
-        // Debe coincidir el slot
         if (o.getSlot() == null || !o.getSlot().equals(s)) {
-            partida.getLog().registrar("Este objeto no se puede equipar en ese slot");
+            partida.getLog().registrar("Este objeto no va en este slot.");
             return false;
         }
 
-        // Debe estar en inventario
-        if (!inv.contiene(o))
-            return false;
-
-        // Intentar equipar según tu Inventario
+        // Intentar equipar en el inventario
         boolean ok = inv.equipar(o);
         if (!ok) {
-            partida.getLog().registrar("No se puede equipar este objeto");
+            partida.getLog().registrar("No se puede equipar este objeto.");
             return false;
         }
 
-        // DURACIÓN: 3 turnos
-        o.setDuracionTurnos(3);
+        // Configurar la duración del objeto
+        o.setDuracionTurnos(4);
         o.resetTurnos();
 
-        // AÑADIR A LISTA DE EQUIPADOS
-        inv.getObjetosEquipados().add(o);
-
-        // ELIMINAR DEL INVENTARIO
         inv.removeObjeto(o);
 
         partida.getLog().registrar("Equipaste " + o.getNombre());
 
-        // ACTUALIZAR UI INMEDIATAMENTE
-        partida.getUi().actualizarUI(partida);
-
+        // El equipamiento ha sido un éxito -> El turno termina automáticamente
         partida.terminarTurnoPublic();
         return true;
     }
-
-
 
 
 

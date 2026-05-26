@@ -3,6 +3,7 @@ package jueguito.juegopracticafinal.Controladores.Juego;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
+import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 
 public class JuegoControllerInventario {
 
@@ -16,47 +17,41 @@ public class JuegoControllerInventario {
         this.partida = partida;
     }
 
-    // ============================================================
-    // SELECCIÓN DE OBJETO
-    // ============================================================
-
     public void seleccionarObjeto(Objeto nuevo) {
-
-        if (nuevo == null) {
-            objetoSeleccionado = null;
-            return;
-        }
-
-        objetoSeleccionado = partida.getJugador()
-                .getInventario()
-                .findObjeto(String.valueOf(nuevo));
+        // Guardamos la referencia directa del objeto seleccionado en la lista
+        this.objetoSeleccionado = nuevo;
     }
 
     // ============================================================
-    // USAR OBJETO
+    // USAR OBJETO AUTOMÁTICO
     // ============================================================
-
     public void usarObjeto() {
-
         if (objetoSeleccionado == null) return;
 
-        if (partida.usarObjeto(objetoSeleccionado)) {
+        Objeto aUsar = objetoSeleccionado;
 
-            // Actualizar UI y mapa con los nuevos módulos
+        if (partida.usarObjeto(aUsar)) {
+            // Limpiamos la selección de la UI antes de actualizar pantallas
+            ctrl.getInventarioList().getSelectionModel().clearSelection();
+            objetoSeleccionado = null;
+
+            if (verificarFinJuego()) return;
+
+            // Forzamos el renderizado del mapa con el turno ya pasado y enemigos movidos
             ctrl.getUiRenderer().actualizarUI(partida);
             ctrl.getMapaRenderer().render(partida);
         }
     }
 
     // ============================================================
-    // EQUIPAR OBJETO
+    // EQUIPAR OBJETO AUTOMÁTICO (CORREGIDO)
     // ============================================================
-
     public void equiparObjeto() {
-
         if (objetoSeleccionado == null) return;
 
-        SlotEquipable slot = objetoSeleccionado.getSlot();
+        // 🔥 PASO CLAVE: Guardamos una copia local del objeto de forma segura
+        Objeto aEquipar = objetoSeleccionado;
+        SlotEquipable slot = aEquipar.getSlot();
 
         if (slot == null) {
             partida.getLog().registrar("Este objeto no es equipable");
@@ -64,11 +59,33 @@ public class JuegoControllerInventario {
             return;
         }
 
-        if (partida.equiparObjeto(objetoSeleccionado, slot)) {
+        // 🔥 Enviamos el objeto y su slot exacto a la partida
+        if (partida.equiparObjeto(aEquipar, slot)) {
 
-            // Actualizar UI y mapa con los nuevos módulos
+            // Limpiamos la selección en la interfaz de JavaFX
+            ctrl.getInventarioList().getSelectionModel().clearSelection();
+            objetoSeleccionado = null;
+
+            if (verificarFinJuego()) return;
+
+            // 🔥 ACTUALIZACIÓN COMPLETA: Ahora sí pasará el turno, moverá enemigos y redibujará
             ctrl.getUiRenderer().actualizarUI(partida);
             ctrl.getMapaRenderer().render(partida);
         }
+    }
+
+    private boolean verificarFinJuego() {
+        if (partida.getEstadoActual() == EstadoJuego.VICTORIA) {
+            ctrl.getApp().irAEnd("VICTORIA: Has encontrado al gato y llegado al castillo.",
+                    partida.getLog().getEntradas());
+            return true;
+        }
+
+        if (partida.getEstadoActual() == EstadoJuego.DERROTA) {
+            ctrl.getApp().irAEnd("DERROTA: " + partida.getLog().getUltimaEntrada(),
+                    partida.getLog().getEntradas());
+            return true;
+        }
+        return false;
     }
 }

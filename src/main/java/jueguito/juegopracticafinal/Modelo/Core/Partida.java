@@ -387,8 +387,71 @@ public class Partida {
     }
 
     private void colocarNPCsFijos() {
-        // Si tu clase original tenía NPCs fijos, aquí los colocas.
-        // Si no, deja este método vacío.
+        // =========================
+        // NPC 1
+        // =========================
+        Zona zona1 = grafo.getZona(5);
+
+        if (zona1 != null && zona1.esValida(4, 9)) {
+
+            Celda celda1 = zona1.getCelda(4, 9);
+
+            if (celda1 != null && !celda1.isOcupada()) {
+
+                NPC npc1 = new NPC(
+                        "Mercader",
+                        TipoNPC.COMERCIANTE
+                );
+
+                npc1.setSprite("/entidades/NPC_1.png");
+
+                celda1.setNpc(npc1);
+            }
+        }
+
+        // =========================
+        // NPC 2
+        // =========================
+        Zona zona2 = grafo.getZona(6);
+
+        if (zona2 != null && zona2.esValida(13,1)) {
+
+            Celda celda2 = zona2.getCelda(13, 1);
+
+            if (celda2 != null && !celda2.isOcupada()) {
+
+                NPC npc2 = new NPC(
+                        "Sirena",
+                        TipoNPC.ALDEANO
+                );
+
+                npc2.setSprite("/entidades/NPC_2.png");
+
+                celda2.setNpc(npc2);
+            }
+        }
+
+        // =========================
+        // NPC 3
+        // =========================
+        Zona zona3 = grafo.getZona(7);
+
+        if (zona3 != null && zona3.esValida(5, 8)) {
+
+            Celda celda3 = zona3.getCelda(5, 8);
+
+            if (celda3 != null && !celda3.isOcupada()) {
+
+                NPC npc3 = new NPC(
+                        "Guardia",
+                        TipoNPC.ALDEANO
+                );
+
+                npc3.setSprite("/entidades/NPC_3.png");
+
+                celda3.setNpc(npc3);
+            }
+        }
     }
 
     // ============================================================
@@ -446,5 +509,4 @@ public class Partida {
     public UIRenderer getUi() {
         return ui;
     }
-
 }
