@@ -3,7 +3,7 @@ package jueguito.juegopracticafinal.Modelo.Entidades;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 
 public abstract class  Entidad {
-    protected Estadisticas estadisticas;
+    public Estadisticas estadisticas;
     protected Posicion posicion;
     protected String nombre;
 
@@ -51,7 +51,7 @@ public abstract class  Entidad {
     }
 
     public void recibirAtaque(int puntos){
-        if(estadisticas != null){
+        if (estadisticas != null){
             estadisticas.recibirAtaque(puntos);
         }
     }

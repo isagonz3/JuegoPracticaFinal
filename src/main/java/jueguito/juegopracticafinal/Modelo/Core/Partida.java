@@ -70,14 +70,21 @@ public class Partida {
     }
 
     public void terminarTurno() {
-        jugador.getInventario().avanzarTurno();
 
         if (estadoActual != EstadoJuego.EN_CURSO) return;
-        moverEnemigos(); atacarJugador();
+
+        moverEnemigos();
+        atacarJugador();
+
         zonaActual.setCountTurnos(zonaActual.getCountTurnos() + 1);
         turnoActual++;
+
+        jugador.getInventario().avanzarTurno();
+
         if (checkDerrota() || checkVictoria()) return;
+
         log.registrar("--- Turno " + turnoActual + " ---");
+
         iniciarTurno();
     }
 
@@ -151,21 +158,61 @@ public class Partida {
     //Lógica de combates
 
     public ResultadoCombate atacarEnemigo(Enemigo e) {
+
         if (estadoActual != EstadoJuego.EN_CURSO) return null;
-        if (!e.estarVivo()) return new ResultadoCombate(0,0,false,"Ya derrotado");
-        int hit = Math.max(0, (int)(jugador.getAtaqueTotal()*Math.random()*2) - jugador.getDefensaTotal());
+
+        if (!e.estarVivo()) {
+            return new ResultadoCombate(0, 0, false, "Ya derrotado");
+        }
+
+        int ataque = jugador.getAtaqueTotal();
+        int defensa = e.getDefensaTotal();
+
+        double aleatorio = Math.random();
+
+        int hit = Math.max(
+                0,
+                (int) (ataque * (aleatorio * 2) - defensa)
+        );
+
         e.recibirAtaque(hit);
         e.setAtacado(true);
-        if (!e.estarVivo()) { zonaActual.getCelda(e.getPosicion().getRow(),e.getPosicion().getCol()).setEntidad(null); log.registrar("Has derrotado a "+e.getNombre()+"!!"); }
-        else log.registrar("Has atacado a "+e.getNombre()+", recibe "+hit+" de dano");
-        return new ResultadoCombate(hit, e.getEstadisticas().getVidaActual(), !e.estarVivo(), "");
+
+        if (!e.estarVivo()) {
+            zonaActual.getCelda(
+                    e.getPosicion().getRow(),
+                    e.getPosicion().getCol()
+            ).setEntidad(null);
+
+            log.registrar("Has derrotado a " + e.getNombre() + "!!");
+        } else {
+            log.registrar("Has atacado a " + e.getNombre() + ", recibe " + hit + " de daño");
+        }
+
+        return new ResultadoCombate(
+                hit,
+                e.getEstadisticas().getVidaActual(),
+                !e.estarVivo(),
+                ""
+        );
     }
 
     public boolean atacarDireccion(int row, int col) {
+
         if (estadoActual != EstadoJuego.EN_CURSO) return false;
-        Celda c = zonaActual.getCelda(jugador.getPosicion().getRow()+row, jugador.getPosicion().getCol()+col);
-        if (c==null || !c.tieneEntidad() || !(c.getEntidad() instanceof Enemigo)) { log.registrar("No hay enemigos por aqui"); return false; }
-        atacarEnemigo((Enemigo)c.getEntidad()); return true;
+
+        Celda c = zonaActual.getCelda(
+                jugador.getPosicion().getRow() + row,
+                jugador.getPosicion().getCol() + col
+        );
+
+        if (c == null || !c.tieneEntidad() || !(c.getEntidad() instanceof Enemigo)) {
+            log.registrar("No hay enemigos por aqui");
+            return false;
+        }
+
+        atacarEnemigo((Enemigo) c.getEntidad());
+        return true;
     }
 
     //Lógica de movimiento y ataques de enemigos
@@ -348,15 +395,35 @@ public class Partida {
     }
 
     private void atacarJugador() {
+
         Posicion pj = jugador.getPosicion();
+
         for (int i = 0; i < zonaActual.getRows(); i++) {
             for (int j = 0; j < zonaActual.getCols(); j++) {
+
                 Celda c = zonaActual.getCelda(i, j);
+
                 if (!(c.getEntidad() instanceof Enemigo e) || !e.estarVivo()) continue;
+
                 if (!c.esAdyacente(zonaActual.getCelda(pj.getRow(), pj.getCol()))) continue;
-                int hit = (int) Math.max(0, e.getAtaqueTotal() * Math.random() * 2 - jugador.getDefensaTotal());
+
+                int ataque = e.getAtaqueTotal();
+                int defensa = jugador.getDefensaTotal();
+                int defensaEscudo = jugador.getDefensaEscudo();
+
+                double aleatorio = Math.random();
+
+                int hit = Math.max(
+                        0,
+                        (int) (ataque * (aleatorio * 2) - defensa)
+                );
+
                 jugador.recibirAtaque(hit);
-                log.registrar("Has sido atacado por " + e.getNombre() + ", recibes " + hit + " de dano");
+
+                log.registrar(
+                        "Has sido atacado por " + e.getNombre() +
+                                ", recibes " + hit + " de daño"
+                );
             }
         }
     }
@@ -608,10 +675,13 @@ public class Partida {
 
         if (o.getVidaBonus() > 0) {
             jugador.getEstadisticas().curarVida(o.getVidaBonus());
+            log.registrar("Recuperas " + o.getVidaBonus() + " de vida");
         }
+
 
         if (o.getAtaqueBonus() > 0) {
             jugador.getEstadisticas().aumentarAtaque(o.getAtaqueBonus());
+            log.registrar("Aumentas " + o.getAtaqueBonus() + " de ataque");
         }
 
         if (o.getDefensaBonus() > 0) {
@@ -621,12 +691,6 @@ public class Partida {
         if (o.getRangoBonus() > 0) {
             jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus());
         }
-
-        // duración 2 turnos
-        o.setDuracionTurnos(2);
-        o.resetTurnos();
-
-        jugador.getInventario().registrarUsado(o);
 
         if (o.objetoGastado()) {
             jugador.getInventario().removeObjeto(o);

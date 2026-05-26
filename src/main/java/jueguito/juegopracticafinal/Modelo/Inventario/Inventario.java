@@ -162,12 +162,9 @@ public class Inventario {
 
             if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
 
-                // ❌ SOLO SE ELIMINA DEL EQUIPAMIENTO
                 objetosEquipados.delete(o);
                 i--;
 
-                // ❌ NO volver al inventario (ESTO era el bug)
-                // NO hacer: objetos.add(o);
             }
         }
     }

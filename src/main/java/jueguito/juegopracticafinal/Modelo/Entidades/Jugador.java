@@ -79,6 +79,12 @@ public class Jugador extends Entidad{
     }
 
 
+    public int getDefensaEscudo() {
+        Objeto escudo = inventario.getEquipado(SlotEquipable.ESCUDO);
+        return (escudo != null) ? escudo.getDefensaBonus() : 0;
+    }
+
+
     @Override
     public int getAtaqueTotal(){
         return estadisticas.getAtaqueBase() + bonusAtaqueEq;
