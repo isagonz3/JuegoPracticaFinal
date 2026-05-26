@@ -1,4 +1,4 @@
-package jueguito.juegopracticafinal.Modelo.Vista;
+package jueguito.juegopracticafinal.Vista;
 
 import javafx.scene.image.Image;
 

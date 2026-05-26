@@ -7,7 +7,7 @@ import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.Modelo.Turno.ResultadoCombate;
-import jueguito.juegopracticafinal.Modelo.Vista.UIRenderer;
+import jueguito.juegopracticafinal.Vista.UIRenderer;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;

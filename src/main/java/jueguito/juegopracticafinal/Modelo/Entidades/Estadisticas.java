@@ -7,7 +7,7 @@ public class Estadisticas {
     private int defensaBase;
     private int rangoMov;
     private int puntosMovDisponibles;
-    private Estadisticas estadisticas;
+
 
     public Estadisticas(int vidaMax, int ataqueBase, int defensaBase, int rangoMov) {
         this.vidaMax = vidaMax;
@@ -107,14 +107,6 @@ public class Estadisticas {
 
     public void aumentarRangoMov(int bonus){
         this.rangoMov += bonus;
-    }
-
-    public void recibirAtaque(int puntos){
-        if (estadisticas != null){
-            estadisticas.recibirAtaque(puntos);
-        }
-
-        aplicarAtaque(puntos, 0);
     }
 
     private void aplicarAtaque(int ataque, int reduccionDefensaExtra) {
