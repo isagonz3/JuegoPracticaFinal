@@ -80,6 +80,7 @@ public class PartidaMovimiento {
             partida.cambiarZona(destino.getPuerta());
         }
 
+        partida.setMovimientoRealizado(true);
         return true;
     }
 
@@ -298,11 +299,7 @@ public class PartidaMovimiento {
                     if (pjCelda != null &&
                             zonaActual.getCelda(i, j).esAdyacente(pjCelda)) {
 
-                        int hit = (int)Math.max(
-                                0,
-                                e.getAtaqueTotal() * Math.random() * 2
-                                        - jugador.getDefensaTotal()
-                        );
+                        int hit = PartidaObjetosYCombate.calcularHit(e.getAtaqueTotal(),jugador.getDefensaTotal());
 
                         jugador.recibirAtaque(hit);
 

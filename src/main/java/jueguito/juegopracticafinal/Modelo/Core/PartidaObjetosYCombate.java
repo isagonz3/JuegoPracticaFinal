@@ -30,6 +30,12 @@ public class PartidaObjetosYCombate {
     // COMBATE
     // ============================================================
 
+    //Calcular el daño con la formula dada
+
+    public static int calcularHit(int ataque, int defensa) {
+        return Math.max(0, (int)(ataque * (Math.random() * 2) - defensa));
+    }
+
     public ResultadoCombate atacarEnemigo(Enemigo e) {
 
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
@@ -44,12 +50,7 @@ public class PartidaObjetosYCombate {
         int ataque = jugador.getAtaqueTotal();
         int defensa = e.getDefensaTotal();
 
-        double aleatorio = Math.random();
-
-        int hit = Math.max(
-                0,
-                (int) (ataque * (aleatorio * 2) - defensa)
-        );
+        int hit = calcularHit(ataque, defensa);
 
         e.recibirAtaque(hit);
         e.setAtacado(true);
@@ -83,6 +84,8 @@ public class PartidaObjetosYCombate {
         Jugador jugador = partida.getJugador();
         Zona zonaActual = partida.getZonaActual();
 
+        if (partida.isAccionRealizada()) { partida.getLog().registrar("Ya realizaste una acción este turno"); return false; }
+
         Celda c = zonaActual.getCelda(
                 jugador.getPosicion().getRow() + row,
                 jugador.getPosicion().getCol() + col
@@ -94,6 +97,7 @@ public class PartidaObjetosYCombate {
         }
 
         atacarEnemigo((Enemigo) c.getEntidad());
+        partida.setAccionRealizada(true);
         return true;
     }
 
@@ -117,12 +121,7 @@ public class PartidaObjetosYCombate {
                 int ataque = e.getAtaqueTotal();
                 int defensa = jugador.getDefensaTotal();
 
-                double aleatorio = Math.random();
-
-                int hit = Math.max(
-                        0,
-                        (int) (ataque * (aleatorio * 2) - defensa)
-                );
+                int hit = calcularHit(ataque, defensa);
 
                 jugador.recibirAtaque(hit);
 
@@ -197,10 +196,9 @@ public class PartidaObjetosYCombate {
         if (ok) {
             c.setObjeto(null);
             partida.getLog().registrar("Recogiste " + o.getNombre() + "!");
-
-            // ❌ ELIMINA O COMENTA ESTA LÍNEA QUE CAUSA EL NULLPOINTEREXCEPTION:
-            // partida.getUi().actualizarUI(partida);
-
+            if(partida.getUi() != null) {
+                partida.getUi().actualizarUI(partida);
+            }
             return true;
         }
 
