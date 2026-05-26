@@ -23,27 +23,23 @@ public class PartidaMovimiento {
 
     public boolean moverJugador(int row, int col) {
 
-        // 1. Validación de estado de partida
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
             return false;
 
         Zona zonaActual = partida.getZonaActual();
         Jugador jugador = partida.getJugador();
 
-        // 2. Obtener celda de destino y validar límites
         Celda destino = zonaActual.getCelda(row, col);
         if (destino == null) {
             partida.getLog().registrar("No puedes moverte aqui");
             return false;
         }
 
-        // 3. Comprobar colisiones (Filtro transitable y ocupado)
         if (!destino.isTransitable() || destino.isOcupada()) {
             partida.getLog().registrar("No puedes moverte a " + destino.getTipoCelda());
             return false;
         }
 
-        // 4. Calcular ruta y coste de puntos de movimiento (PM)
         Posicion actual = jugador.getPosicion();
         int coste = calcularDist(actual.getRow(), actual.getCol(), row, col, zonaActual);
 
@@ -57,25 +53,20 @@ public class PartidaMovimiento {
             return false;
         }
 
-        // 5. Consumir los puntos de movimiento del jugador
         if (!jugador.getEstadisticas().usarMovimiento(coste))
             return false;
 
-        // 6. Mover físicamente la entidad en la matriz del mapa
         zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
 
         jugador.moverA(new Posicion(row, col));
         destino.setEntidad(jugador);
 
-        // 🔥 NOTIFICACIÓN DE PASO: Informa la casilla de destino en el Log de la partida
         partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
 
-        // 7. RECOGIDA AUTOMÁTICA DE OBJETOS
         if (destino.tieneObjeto()) {
             partida.recogerObjeto(destino);
         }
 
-        // 8. Comprobar si la casilla además era una transición de zona (Puerta)
         if (destino.tienePuerta()) {
             partida.cambiarZona(destino.getPuerta());
         }
@@ -84,9 +75,8 @@ public class PartidaMovimiento {
         return true;
     }
 
-    // ============================================================
+
     // BFS PARA DISTANCIA
-    // ============================================================
 
     public int calcularDist(int r1, int c1, int r2, int c2, Zona z) {
 
@@ -128,9 +118,7 @@ public class PartidaMovimiento {
         return Integer.MAX_VALUE;
     }
 
-    // ============================================================
     // CELDAS ACCESIBLES
-    // ============================================================
 
     public Lista<Celda> getCeldasAccesibles() {
 
@@ -147,9 +135,7 @@ public class PartidaMovimiento {
         );
     }
 
-    // ============================================================
     // CAMINO MÍNIMO
-    // ============================================================
 
     public Lista<Celda> getCaminoMinimo(int dr, int dc) {
 
@@ -241,9 +227,8 @@ public class PartidaMovimiento {
 
             int bestDir = -1;
 
-            // ============================================================
+
             // SI FUE ATACADO
-            // ============================================================
 
             if (e.isAtacado()) {
 

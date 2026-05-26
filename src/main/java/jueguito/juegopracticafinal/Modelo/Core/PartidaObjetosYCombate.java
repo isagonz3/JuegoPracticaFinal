@@ -144,13 +144,12 @@ public class PartidaObjetosYCombate {
         Jugador jugador = partida.getJugador();
         Inventario inv = jugador.getInventario();
 
-        // Validaciones de seguridad (Si falla, NO pasa el turno, el jugador conserva su acción)
+
         if (o == null || o.getTipo() != TipoObjeto.USABLE || !inv.contiene(o)) {
             partida.getLog().registrar("No puedes usar este objeto o no lo tienes.");
             return false;
         }
 
-        // Aplicar efectos del objeto de tu base de datos
         if (!o.usarObjeto()) {
             partida.getLog().registrar("No se pudo usar el objeto.");
             return false;
@@ -170,7 +169,6 @@ public class PartidaObjetosYCombate {
         inv.getObjetosUsados().add(o);
         inv.removeObjeto(o);
 
-        // 🔥 AQUÍ SÍ: Uso exitoso = El turno termina automáticamente
         partida.terminarTurnoPublic();
         return true;
     }
@@ -396,7 +394,6 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                // 🔥 CORRECCIÓN: Validamos que sea transitable (un '0' real) y que no sea puerta
                 if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
                         && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearGema());
@@ -415,7 +412,6 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                // 🔥 CORRECCIÓN: Validamos que sea transitable (un '0' real) y que no sea puerta
                 if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
                         && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearObjetoRandom());
@@ -446,7 +442,6 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
-            // 🔥 CORRECCIÓN: No spawnear en puertas de forma aleatoria
             if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearGema());
@@ -467,7 +462,6 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
-            // 🔥 CORRECCIÓN: No spawnear en puertas de forma aleatoria
             if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearObjetoRandom());
