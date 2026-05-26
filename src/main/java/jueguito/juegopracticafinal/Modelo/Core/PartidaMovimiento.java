@@ -4,6 +4,7 @@ import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
+import jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.TADs.Cola;
 import jueguito.juegopracticafinal.TADs.Lista;
@@ -22,23 +23,27 @@ public class PartidaMovimiento {
 
     public boolean moverJugador(int row, int col) {
 
+        // 1. Validación de estado de partida
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
             return false;
 
         Zona zonaActual = partida.getZonaActual();
         Jugador jugador = partida.getJugador();
 
+        // 2. Obtener celda de destino y validar límites
         Celda destino = zonaActual.getCelda(row, col);
         if (destino == null) {
             partida.getLog().registrar("No puedes moverte aqui");
             return false;
         }
 
+        // 3. Comprobar colisiones (Filtro transitable y ocupado)
         if (!destino.isTransitable() || destino.isOcupada()) {
             partida.getLog().registrar("No puedes moverte a " + destino.getTipoCelda());
             return false;
         }
 
+        // 4. Calcular ruta y coste de puntos de movimiento (PM)
         Posicion actual = jugador.getPosicion();
         int coste = calcularDist(actual.getRow(), actual.getCol(), row, col, zonaActual);
 
@@ -52,19 +57,28 @@ public class PartidaMovimiento {
             return false;
         }
 
+        // 5. Consumir los puntos de movimiento del jugador
         if (!jugador.getEstadisticas().usarMovimiento(coste))
             return false;
 
+        // 6. Mover físicamente la entidad en la matriz del mapa
         zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
 
         jugador.moverA(new Posicion(row, col));
         destino.setEntidad(jugador);
 
-        if (destino.tienePuerta())
-            partida.cambiarZona(destino.getPuerta());
+        // 🔥 NOTIFICACIÓN DE PASO: Informa la casilla de destino en el Log de la partida
+        partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
 
-        if (destino.tieneObjeto())
+        // 7. RECOGIDA AUTOMÁTICA DE OBJETOS
+        if (destino.tieneObjeto()) {
             partida.recogerObjeto(destino);
+        }
+
+        // 8. Comprobar si la casilla además era una transición de zona (Puerta)
+        if (destino.tienePuerta()) {
+            partida.cambiarZona(destino.getPuerta());
+        }
 
         partida.setMovimientoRealizado(true);
         return true;
@@ -100,9 +114,12 @@ public class PartidaMovimiento {
 
                     Celda c = z.getCelda(nr, nc);
 
-                    if (c != null && c.isTransitable() && !c.isOcupada()) {
-                        visit[nr][nc] = true;
-                        cola.enqueue(new int[]{nr, nc, a[2] + 1});
+                    if (c != null && c.isTransitable()) {
+
+                        if ((nr == r2 && nc == c2) || !c.isOcupada()) {
+                            visit[nr][nc] = true;
+                            cola.enqueue(new int[]{nr, nc, a[2] + 1});
+                        }
                     }
                 }
             }
@@ -151,7 +168,27 @@ public class PartidaMovimiento {
 
     // ============================================================
     // MOVIMIENTO DE ENEMIGOS
-    // ============================================================
+    // ===========================================================
+
+    private boolean estaCercaDePuerta(Zona zona, int filaDestino, int colDestino) {
+        for (int i = 0; i < zona.getRows(); i++) {
+            for (int j = 0; j < zona.getCols(); j++) {
+                Celda celda = zona.getCelda(i, j);
+
+                // Filtramos por las celdas de tipo puerta o salida
+                if (celda != null && (celda.getTipoCelda() == TipoCelda.PUERTA || celda.getTipoCelda() == TipoCelda.SALIDA)) {
+
+                    int distFila = Math.abs(filaDestino - i);
+                    int distCol = Math.abs(colDestino - j);
+
+                    if (distFila <= 1 && distCol <= 1) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     public void moverEnemigos() {
 
@@ -228,6 +265,8 @@ public class PartidaMovimiento {
 
                         if (!ady.isTransitable() || ady.isOcupada()) continue;
 
+                        if (estaCercaDePuerta(zonaActual, nr, nc)) continue;
+
                         int dist = Math.abs(nr - pj.getRow()) +
                                 Math.abs(nc - pj.getCol());
 
@@ -297,6 +336,8 @@ public class PartidaMovimiento {
                 Celda ady = zonaActual.getCelda(nr, nc);
 
                 if (!ady.isTransitable() || ady.isOcupada()) continue;
+
+                if (estaCercaDePuerta(zonaActual, nr, nc)) continue;
 
                 int dist = Math.abs(nr - pj.getRow()) +
                         Math.abs(nc - pj.getCol());

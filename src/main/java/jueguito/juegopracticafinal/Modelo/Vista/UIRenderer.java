@@ -115,39 +115,39 @@ public class UIRenderer {
         }
     }
 
-    // ============================================================
-    // OBJETOS USADOS
-    // ============================================================
-
+// ============================================================
+// OBJETOS USADOS (CORREGIDO)
+// ============================================================
     private void actualizarUsados(Jugador j) {
-
         StringBuilder usados = new StringBuilder();
-
         Lista<Objeto> listaUsados = j.getInventario().getObjetosUsados();
 
+        // Recorremos TODA la lista y los vamos acumulando uno a uno
         for (int i = 0; i < listaUsados.getSize(); i++) {
-            usados.append("- ").append(listaUsados.get(i).getNombre()).append("\n");
-        }
-
-        objetosUsadosArea.setText(usados.toString());
-    }
-
-    // ============================================================
-    // OBJETOS EQUIPADOS
-    // ============================================================
-
-    private void actualizarEquipados(Jugador j) {
-
-        StringBuilder equip = new StringBuilder();
-
-        Objeto[] equipArray = j.getEquipamiento();
-
-        for (Objeto o : equipArray) {
-            if (o != null) {
-                equip.append(o.getNombre()).append("\n");
+            if (listaUsados.get(i) != null) {
+                usados.append("- ").append(listaUsados.get(i).getNombre()).append("\n");
             }
         }
 
+        // Al final, insertamos el texto completo con todos los objetos juntos
+        objetosUsadosArea.setText(usados.toString());
+    }
+
+// ============================================================
+// OBJETOS EQUIPADOS (CORREGIDO)
+// ============================================================
+    private void actualizarEquipados(Jugador j) {
+        StringBuilder equip = new StringBuilder();
+        Lista<Objeto> listaEquipados = j.getInventario().getObjetosEquipados();
+
+        // Recorremos TODA la lista de equipados acumulando los nombres
+        for (int i = 0; i < listaEquipados.getSize(); i++) {
+            if (listaEquipados.get(i) != null) {
+                equip.append("- ").append(listaEquipados.get(i).getNombre()).append("\n");
+            }
+        }
+
+        // Insertamos el texto completo en el cuadro blanco
         objetosEquipadosArea.setText(equip.toString());
     }
 }
