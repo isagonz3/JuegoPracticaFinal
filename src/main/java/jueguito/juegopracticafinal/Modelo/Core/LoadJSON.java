@@ -117,7 +117,7 @@ public class LoadJSON {
         Lista<EntradaLog> logs = partida.getLog().getEntradas();
         partidaData.entradasLog = new String[logs.getSize()];
         for (int i = 0; i < logs.getSize(); i++) {
-            partidaData.entradasLog[i] = logs.get(i).getMensaje();
+            partidaData.entradasLog[i] = logs.get(i).mensaje();
         }
 
         //Guardar zonas visitadas
@@ -210,7 +210,7 @@ public class LoadJSON {
                 String slotName = (partidaData.objetosSlot != null) ? partidaData.objetosSlot[i] : null;
 
                 Objeto o = new Objeto(nombre, tipo, atq, def, vida, rango, usos, "");
-                if (slotName != null) {
+                if (slotName != null && !slotName.isEmpty()) {
                     o.setSlot(SlotEquipable.valueOf(slotName));
                 }
                 jugador.getInventario().addObjeto(o);

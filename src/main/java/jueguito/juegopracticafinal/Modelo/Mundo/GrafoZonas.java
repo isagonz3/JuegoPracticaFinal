@@ -4,8 +4,8 @@ import jueguito.juegopracticafinal.TADs.Cola;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 public class GrafoZonas {
-    private Lista<Zona> zonas;
-    private Lista<Lista<Integer>> ady;
+    private final Lista<Zona> zonas;
+    private final Lista<Lista<Integer>> ady;
 
     public GrafoZonas() {
         this.zonas = new Lista<>();

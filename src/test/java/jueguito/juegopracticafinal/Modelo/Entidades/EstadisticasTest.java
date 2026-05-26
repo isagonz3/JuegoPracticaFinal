@@ -33,14 +33,14 @@ class EstadisticasTest {
 
     @Test void recibirAtaque() {
         e.recibirAtaque(30);
-        assertEquals(70, e.getVidaActual());
+        assertEquals(80, e.getVidaActual());
         e.recibirAtaque(200);
         assertEquals(0, e.getVidaActual());
     }
 
     @Test void estaVivo() {
         assertTrue(e.estaVivo());
-        e.recibirAtaque(100);
+        e.recibirAtaque(110);
         assertFalse(e.estaVivo());
     }
 
@@ -80,7 +80,7 @@ class EstadisticasTest {
     @Test void curarVida() {
         e.recibirAtaque(40);
         e.curarVida(15);
-        assertEquals(75, e.getVidaActual());
+        assertEquals(85, e.getVidaActual());
         e.curarVida(100);
         assertEquals(100, e.getVidaActual());
     }

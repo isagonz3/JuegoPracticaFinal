@@ -9,10 +9,10 @@ public class Zona {
    private String nombreZona;
    private int idZona;
    private Posicion spawnJugador;
-   private Lista<Posicion> spawnEnemigos;
-   private Lista<Posicion> spawnObjects;
-   private Lista<Posicion> spawnNPCs;
-   private Lista<Celda> puertas;
+   private final Lista<Posicion> spawnEnemigos;
+   private final Lista<Posicion> spawnObjects;
+   private final Lista<Posicion> spawnNPCs;
+   private final Lista<Celda> puertas;
    private int countTurnos;
    private boolean visitada;
 

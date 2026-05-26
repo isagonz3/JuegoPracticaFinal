@@ -5,7 +5,6 @@ import jueguito.juegopracticafinal.Modelo.Inventario.*;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
-import jueguito.juegopracticafinal.Modelo.NPC.Tradeo;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.Modelo.Turno.ResultadoCombate;
 import jueguito.juegopracticafinal.TADs.Lista;
@@ -179,7 +178,7 @@ class PartidaTest {
         e.setPosicion(new Posicion(2, 2));
         ResultadoCombate r = partida.atacarEnemigo(e);
         assertNotNull(r);
-        assertTrue(r.getHit() >= 0);
+        assertTrue(r.hit() >= 0);
     }
 
     @Test
@@ -188,8 +187,8 @@ class PartidaTest {
         Enemigo e = new Enemigo("Muerto", new Estadisticas(1, 1, 0, 1));
         e.recibirAtaque(100);
         ResultadoCombate r = partida.atacarEnemigo(e);
-        assertEquals(0, r.getHit());
-        assertFalse(r.isEnemigoKO());
+        assertEquals(0, r.hit());
+        assertFalse(r.enemigoKO());
     }
 
     @Test
@@ -289,7 +288,7 @@ class PartidaTest {
         c.setObjeto(new Objeto("Manzana", TipoObjeto.USABLE));
         assertTrue(partida.recogerObjeto(c));
         assertFalse(c.tieneObjeto());
-        assertTrue(partida.getJugador().getInventario().contiene(c.getObjeto()));
+        assertTrue(partida.getJugador().getInventario().containsObjeto("Manzana"));
     }
 
     @Test
@@ -364,7 +363,7 @@ class PartidaTest {
         Enemigo e = new Enemigo("Paco", new Estadisticas(10,1, 1, 1));
         e.setPosicion(new Posicion(pj.getRow(), pj.getCol() +1));
         partida.getZonaActual().getCelda(pj.getRow(), pj.getCol() +1).setEntidad(e);
-        partida.moverJugador(0,1);
+        assertTrue(partida.atacarDireccion(0, 1));
         assertTrue(partida.isAccionRealizada());
     }
 

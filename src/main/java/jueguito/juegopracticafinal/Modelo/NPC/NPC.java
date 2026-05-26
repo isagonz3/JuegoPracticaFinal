@@ -3,13 +3,14 @@ package jueguito.juegopracticafinal.Modelo.NPC;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 public class NPC {
-    private String nombre;
-    private TipoNPC tipo;
+    private final String nombre;
+    private final TipoNPC tipo;
     private Lista<String> dialogos;
-    private Lista<Tradeo> tradeos;
+    private final Lista<Tradeo> tradeos;
     private int dialogoActual;
 
     private String sprite;
+    private String infoGato;
 
     public NPC(String nombre, TipoNPC tipo) {
         this.nombre = nombre;
@@ -82,5 +83,17 @@ public class NPC {
 
     public void setSprite(String sprite) {
         this.sprite = sprite;
+    }
+
+    public boolean tieneInfoGato() {
+        return infoGato != null && !infoGato.isEmpty();
+    }
+
+    public String getInfoGato() {
+        return infoGato;
+    }
+
+    public void setInfoGato(String infoGato) {
+        this.infoGato = infoGato;
     }
 }

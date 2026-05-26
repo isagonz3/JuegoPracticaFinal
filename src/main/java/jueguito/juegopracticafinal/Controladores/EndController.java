@@ -31,7 +31,7 @@ public class EndController {
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < logs.getSize(); i++) {
-            sb.append(logs.get(i).getMensaje()).append("\n");
+            sb.append(logs.get(i).mensaje()).append("\n");
         }
         logFinal.setText(sb.toString());
 

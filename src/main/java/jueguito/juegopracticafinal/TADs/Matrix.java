@@ -1,10 +1,10 @@
 package jueguito.juegopracticafinal.TADs;
 
 public class Matrix<T> {
-    private int numRows;
-    private int numCols;
+    private final int numRows;
+    private final int numCols;
 
-    private Lista<Lista<T>> rows;
+    private final Lista<Lista<T>> rows;
 
     public Matrix(int numRows, int numCols) {
         if (numRows <= 0 || numCols <= 0) {
