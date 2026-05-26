@@ -11,16 +11,17 @@ import jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
+import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.Modelo.Turno.ResultadoCombate;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;
 
-public class PartidoObjetosYCombate {
+public class PartidaObjetosYCombate {
 
     private final Partida partida;
 
-    public PartidoObjetosYCombate(Partida partida) {
+    public PartidaObjetosYCombate(Partida partida) {
         this.partida = partida;
     }
 
@@ -138,7 +139,7 @@ public class PartidoObjetosYCombate {
 
     public boolean usarObjeto(Objeto o) {
 
-        if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
+        if (partida.getEstadoActual() != EstadoJuego.EN_CURSO)
             return false;
 
         if (!partida.isFaseJugadorActiva())
@@ -146,9 +147,16 @@ public class PartidoObjetosYCombate {
 
         Jugador jugador = partida.getJugador();
 
+        // SOLO objetos USABLES
+        if (o.getTipo() != TipoObjeto.USABLE) {
+            partida.getLog().registrar("No puedes usar este objeto");
+            return false;
+        }
+
         if (!jugador.getInventario().contiene(o))
             return false;
 
+        // Aplicar efectos
         if (!o.usarObjeto())
             return false;
 
@@ -166,18 +174,27 @@ public class PartidoObjetosYCombate {
 
         partida.getLog().registrar("Usaste " + o.getNombre());
 
-        if (o.objetoGastado()) {
-            jugador.getInventario().removeObjeto(o);
-        }
+        // DURACIÓN: 1 turno
+        o.setDuracionTurnos(1);
+        o.resetTurnos();
+
+        // MOVER A OBJETOS USADOS
+        jugador.getInventario().getObjetosUsados().add(o);
+
+        // ELIMINAR DEL INVENTARIO SIEMPRE
+        jugador.getInventario().removeObjeto(o);
+
+        // ACTUALIZAR UI YA MISMO
+        partida.getUi().actualizarUI(partida);
 
         partida.terminarTurnoPublic();
-
         return true;
     }
 
+
     public boolean recogerObjeto(Celda c) {
 
-        if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
+        if (partida.getEstadoActual() != EstadoJuego.EN_CURSO)
             return false;
 
         if (!c.tieneObjeto())
@@ -196,15 +213,20 @@ public class PartidoObjetosYCombate {
         if (ok) {
             c.setObjeto(null);
             partida.getLog().registrar("Recogiste " + o.getNombre() + "!");
+
+            partida.getUi().actualizarUI(partida);
+
             return true;
         }
 
         return false;
     }
 
+
+
     public boolean equiparObjeto(Objeto o, SlotEquipable s) {
 
-        if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
+        if (partida.getEstadoActual() != EstadoJuego.EN_CURSO)
             return false;
 
         if (!partida.isFaseJugadorActiva())
@@ -212,11 +234,16 @@ public class PartidoObjetosYCombate {
 
         Jugador jugador = partida.getJugador();
 
-        if (o == null || o.getSlot() == null)
+        // SOLO objetos EQUIPABLES
+        if (o.getTipo() != TipoObjeto.EQUIPABLE) {
+            partida.getLog().registrar("No puedes equipar este objeto");
             return false;
+        }
 
-        if (!o.getSlot().equals(s))
+        if (o.getSlot() == null || !o.getSlot().equals(s)) {
+            partida.getLog().registrar("Este objeto no se puede equipar en ese slot");
             return false;
+        }
 
         if (!jugador.getInventario().contiene(o))
             return false;
@@ -229,21 +256,28 @@ public class PartidoObjetosYCombate {
         }
 
         boolean ok = jugador.getInventario().equipar(o);
+        if (!ok) return false;
 
-        if (!ok)
-            return false;
-
-        jugador.getInventario().removeObjeto(o);
-
-        o.setDuracionTurnos(5);
+        // DURACIÓN: 3 turnos
+        o.setDuracionTurnos(3);
         o.resetTurnos();
+
+        // MOVER A OBJETOS USADOS/EQUIPADOS
+        jugador.getInventario().getObjetosUsados().add(o);
+
+        // ELIMINAR DEL INVENTARIO SIEMPRE
+        jugador.getInventario().removeObjeto(o);
 
         partida.getLog().registrar("Equipaste " + o.getNombre());
 
-        partida.terminarTurnoPublic();
+        // ACTUALIZAR UI YA MISMO
+        partida.getUi().actualizarUI(partida);
 
+        partida.terminarTurnoPublic();
         return true;
     }
+
+
 
     // ============================================================
     // NPC
@@ -365,9 +399,9 @@ public class PartidoObjetosYCombate {
     // ============================================================
     // SPAWN DE OBJETOS
     // ============================================================
-
     public void ponerObjetos(Zona zona) {
 
+        // Zonas donde NO spawnear objetos
         if (zona.getIdZona() == 0 ||
                 zona.getIdZona() == 5 ||
                 zona.getIdZona() == 9) {
@@ -376,73 +410,64 @@ public class PartidoObjetosYCombate {
 
         Lista<Posicion> spawns = zona.getSpawnObjetos();
 
+        int GEMAS = 2;
+        int ALEATORIOS = 3;
+
+        // ============================================================
+        // 1. SPAWNS FIJOS
+        // ============================================================
         if (spawns.getSize() > 0) {
 
-            for (int i = 0; i < spawns.getSize(); i++) {
+            int colocados = 0;
+
+            // Primero colocar GEMAS
+            for (int i = 0; i < spawns.getSize() && colocados < GEMAS; i++) {
 
                 Posicion pos = spawns.get(i);
 
-                if (!zona.esValida(pos.getRow(), pos.getCol()))
-                    continue;
+                if (!zona.esValida(pos.getRow(), pos.getCol())) continue;
+
+                Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
+
+                if (celda != null && !celda.isOcupada() && !celda.tieneObjeto()) {
+                    celda.setObjeto(crearGema());
+                    colocados++;
+                }
+            }
+
+            // Luego colocar OBJETOS ALEATORIOS
+            int colocadosAleatorios = 0;
+
+            for (int i = 0; i < spawns.getSize() && colocadosAleatorios < ALEATORIOS; i++) {
+
+                Posicion pos = spawns.get(i);
+
+                if (!zona.esValida(pos.getRow(), pos.getCol())) continue;
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
                 if (celda != null && !celda.isOcupada() && !celda.tieneObjeto()) {
                     celda.setObjeto(crearObjetoRandom());
+                    colocadosAleatorios++;
                 }
             }
 
-            asegurarMinimoGemas(zona, 3);
+            // Asegurar mínimo de gemas
+            asegurarMinimoGemas(zona, GEMAS);
             return;
         }
 
-        int cantidad = get().objetos.min +
-                (int) (Math.random() * (get().objetos.max - get().objetos.min + 1));
+        // ============================================================
+        // 2. SPAWN ALEATORIO (si no hay spawns fijos)
+        // ============================================================
 
-        for (int i = 0; i < cantidad; i++) {
+        // Primero GEMAS
+        int colocadasGemas = 0;
 
-            for (int intentos = 0; intentos < 50; intentos++) {
+        while (colocadasGemas < GEMAS) {
 
-                int fila = (int) (Math.random() * zona.getRows());
-                int col = (int) (Math.random() * zona.getCols());
-
-                Celda celda = zona.getCelda(fila, col);
-
-                if (celda == null) continue;
-                if (!celda.isTransitable()) continue;
-                if (celda.isOcupada()) continue;
-                if (celda.tieneObjeto()) continue;
-                if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
-
-                celda.setObjeto(crearObjetoRandom());
-                break;
-            }
-        }
-
-        asegurarMinimoGemas(zona, 2);
-    }
-
-    public void asegurarMinimoGemas(Zona zona, int minimo) {
-
-        int contador = 0;
-
-        for (int i = 0; i < zona.getRows(); i++) {
-            for (int j = 0; j < zona.getCols(); j++) {
-
-                Celda celda = zona.getCelda(i, j);
-
-                if (celda != null &&
-                        celda.tieneObjeto() &&
-                        "Gema".equals(celda.getObjeto().getNombre())) {
-                    contador++;
-                }
-            }
-        }
-
-        while (contador < minimo) {
-
-            int fila = (int) (Math.random() * zona.getRows());
-            int col = (int) (Math.random() * zona.getCols());
+            int fila = (int)(Math.random() * zona.getRows());
+            int col = (int)(Math.random() * zona.getCols());
 
             Celda celda = zona.getCelda(fila, col);
 
@@ -451,61 +476,64 @@ public class PartidoObjetosYCombate {
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
 
-            celda.setObjeto(new Objeto(
-                    "Gema",
-                    TipoObjeto.NPC,
-                    0, 0, 0, 0,
-                    1,
-                    "Gema"
-            ));
-
-            contador++;
+            celda.setObjeto(crearGema());
+            colocadasGemas++;
         }
+
+        // Luego OBJETOS ALEATORIOS
+        int colocadosAleatorios = 0;
+
+        while (colocadosAleatorios < ALEATORIOS) {
+
+            int fila = (int)(Math.random() * zona.getRows());
+            int col = (int)(Math.random() * zona.getCols());
+
+            Celda celda = zona.getCelda(fila, col);
+
+            if (celda == null) continue;
+            if (!celda.isTransitable()) continue;
+            if (celda.isOcupada()) continue;
+            if (celda.tieneObjeto()) continue;
+
+            celda.setObjeto(crearObjetoRandom());
+            colocadosAleatorios++;
+        }
+
+        asegurarMinimoGemas(zona, GEMAS);
     }
 
-    public Objeto crearObjetoRandom() {
 
-        double r = Math.random();
+    private Objeto crearGema() {
+        return new Objeto(
+                "Gema",
+                TipoObjeto.NPC,
+                0, 0, 0, 0,
+                1,
+                "Gema"
+        );
+    }
 
-        if (r < 0.5) {
-            return new Objeto(
-                    "Gema",
-                    TipoObjeto.NPC,
-                    0, 0, 0, 0,
-                    1,
-                    "Gema"
-            );
+    private Objeto crearObjetoRandom() {
+
+        double r = Math.random(); // 0.0 a 1.0
+
+        if (r < 0.50) {
+            return crearGema();
         }
 
         if (r < 0.65) {
-
-            Objeto o = new Objeto(
-                    "Espada",
-                    TipoObjeto.EQUIPABLE,
-                    3, 0, 0, 0,
-                    99,
-                    "Espada"
-            );
-
+            Objeto o = new Objeto("Espada", TipoObjeto.EQUIPABLE, 3, 0, 0, 0, 99, "Espada");
             o.setSlot(SlotEquipable.ARMA);
             return o;
         }
 
-        if (r < 0.8) {
-
-            Objeto o = new Objeto(
-                    "Escudo",
-                    TipoObjeto.EQUIPABLE,
-                    0, 2, 0, 0,
-                    99,
-                    "Escudo"
-            );
-
+        if (r < 0.80) {
+            Objeto o = new Objeto("Escudo", TipoObjeto.EQUIPABLE, 0, 2, 0, 0, 99, "Escudo");
             o.setSlot(SlotEquipable.ESCUDO);
             return o;
         }
 
-        int tipo = (int) (Math.random() * 3);
+        int tipo = (int)(Math.random() * 3);
 
         return switch (tipo) {
             case 0 -> new Objeto("Pocion de vida", TipoObjeto.USABLE, 0, 0, 5, 0, 1, "Cura 5");
@@ -513,4 +541,42 @@ public class PartidoObjetosYCombate {
             default -> new Objeto("Pocion de defensa", TipoObjeto.USABLE, 0, 1, 0, 0, 1, "+1 def");
         };
     }
+
+    private void asegurarMinimoGemas(Zona zona, int minimo) {
+
+        int contador = 0;
+
+        // Contar gemas existentes
+        for (int i = 0; i < zona.getRows(); i++) {
+            for (int j = 0; j < zona.getCols(); j++) {
+
+                Celda celda = zona.getCelda(i, j);
+
+                if (celda != null &&
+                        celda.tieneObjeto() &&
+                        "Gema".equalsIgnoreCase(celda.getObjeto().getNombre())) {
+
+                    contador++;
+                }
+            }
+        }
+
+        // Añadir gemas hasta llegar al mínimo
+        while (contador < minimo) {
+
+            int fila = (int)(Math.random() * zona.getRows());
+            int col = (int)(Math.random() * zona.getCols());
+
+            Celda celda = zona.getCelda(fila, col);
+
+            if (celda == null) continue;
+            if (!celda.isTransitable()) continue;
+            if (celda.isOcupada()) continue;
+            if (celda.tieneObjeto()) continue;
+
+            celda.setObjeto(crearGema());
+            contador++;
+        }
+    }
+
 }

@@ -80,17 +80,19 @@ public class JuegoControllerAcciones {
         if (partida.moverJugador(pos.getRow() + ctrl.getBaseRow(),
                 pos.getCol() + ctrl.getBaseCol())) {
 
-            ctrl.actualizarUI();
-            ctrl.renderMapa();
             partida.findGato();
+
+            ctrl.getUiRenderer().actualizarUI(partida);
+            ctrl.getMapaRenderer().render(partida);
         }
     }
 
     private void atacarTecla() {
 
         partida.atacarDireccion(ctrl.getBaseRow(), ctrl.getBaseCol());
-        ctrl.actualizarUI();
-        ctrl.renderMapa();
+
+        ctrl.getUiRenderer().actualizarUI(partida);
+        ctrl.getMapaRenderer().render(partida);
     }
 
     // ============================================================
@@ -103,7 +105,7 @@ public class JuegoControllerAcciones {
 
         if (ataqueRealizado) {
             partida.getLog().registrar("Ya has realizado un ataque en este turno.");
-            ctrl.actualizarUI();
+            ctrl.getUiRenderer().actualizarUI(partida);
             return;
         }
 
@@ -115,7 +117,7 @@ public class JuegoControllerAcciones {
 
         if (!zona.esValida(filaObjetivo, colObjetivo)) {
             partida.getLog().registrar("No hay ningún objetivo en esa dirección.");
-            ctrl.actualizarUI();
+            ctrl.getUiRenderer().actualizarUI(partida);
             return;
         }
 
@@ -126,7 +128,7 @@ public class JuegoControllerAcciones {
                 !(celdaObjetivo.getEntidad() instanceof Enemigo)) {
 
             partida.getLog().registrar("No hay enemigos para atacar.");
-            ctrl.actualizarUI();
+            ctrl.getUiRenderer().actualizarUI(partida);
             return;
         }
 
@@ -148,8 +150,8 @@ public class JuegoControllerAcciones {
 
         ataqueRealizado = true;
 
-        ctrl.actualizarUI();
-        ctrl.renderMapa();
+        ctrl.getUiRenderer().actualizarUI(partida);
+        ctrl.getMapaRenderer().render(partida);
 
         int vidaJugadorAntes = partida.getJugador().getEstadisticas().getVidaActual();
 
@@ -168,8 +170,8 @@ public class JuegoControllerAcciones {
 
         ataqueRealizado = false;
 
-        ctrl.actualizarUI();
-        ctrl.renderMapa();
+        ctrl.getUiRenderer().actualizarUI(partida);
+        ctrl.getMapaRenderer().render(partida);
     }
 
     // ============================================================
@@ -180,8 +182,8 @@ public class JuegoControllerAcciones {
 
         NPC npc = partida.interactNPC();
 
-        ctrl.actualizarUI();
-        ctrl.renderMapa();
+        ctrl.getUiRenderer().actualizarUI(partida);
+        ctrl.getMapaRenderer().render(partida);
 
         if (npc == null) {
             ctrl.getLogArea().appendText("No hay nadie cerca...\n");
@@ -243,7 +245,7 @@ public class JuegoControllerAcciones {
         ctrl.getLogArea().appendText("Coste: " + coste + " gemas\n");
         ctrl.getLogArea().appendText(item + " comprado\n");
 
-        ctrl.actualizarUI();
+        ctrl.getUiRenderer().actualizarUI(partida);
     }
 
     // ============================================================
@@ -266,7 +268,7 @@ public class JuegoControllerAcciones {
             return;
         }
 
-        ctrl.actualizarUI();
-        ctrl.renderMapa();
+        ctrl.getUiRenderer().actualizarUI(partida);
+        ctrl.getMapaRenderer().render(partida);
     }
 }

@@ -7,6 +7,7 @@ import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.Modelo.Turno.ResultadoCombate;
+import jueguito.juegopracticafinal.Modelo.Vista.UIRenderer;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;
@@ -27,12 +28,14 @@ public class Partida {
 
     // Nuevos módulos
     private PartidaMovimiento movimiento;
-    private PartidoObjetosYCombate objetosYCombate;
+    private PartidaObjetosYCombate objetosYCombate;
+    private UIRenderer ui;
+
 
     public Partida(GrafoZonas grafo) {
         this.grafo = grafo;
         this.movimiento = new PartidaMovimiento(this);
-        this.objetosYCombate = new PartidoObjetosYCombate(this);
+        this.objetosYCombate = new PartidaObjetosYCombate(this);
     }
 
     // ============================================================
@@ -436,4 +439,12 @@ public class Partida {
     public void setGato(Gato gato) {
         this.gato = gato;
     }
+    public void setUi(UIRenderer ui) {
+        this.ui = ui;
+    }
+
+    public UIRenderer getUi() {
+        return ui;
+    }
+
 }
