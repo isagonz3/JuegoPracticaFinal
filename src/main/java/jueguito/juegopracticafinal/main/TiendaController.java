@@ -32,11 +32,12 @@ public class TiendaController {
     }
 
     private void comprarBarca() {
-        juegoController.comprar("barca", 5);
+        juegoController.getAcciones().comprar("Barca", 5);
     }
 
     private void comprarMapa() {
-        juegoController.comprar("mapa", 3);
+        juegoController.getAcciones().comprar("Mapa", 3);
+
     }
 
     private void cerrarTienda() {
