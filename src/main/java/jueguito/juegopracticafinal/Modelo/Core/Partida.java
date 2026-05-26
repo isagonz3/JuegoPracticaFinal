@@ -40,10 +40,6 @@ public class Partida {
         this.objetosYCombate = new PartidaObjetosYCombate(this);
     }
 
-    // ============================================================
-    // INICIO DE PARTIDA
-    // ============================================================
-
     public void iniciar() {
         Zona zi = grafo.getZona(get().zona.zonaInicial);
         if (zi == null) {
@@ -92,10 +88,6 @@ public class Partida {
 
         log.registrar("INICIANDO PARTIDA \n Bienvenido. Estas en el Interior de tu Casa");
     }
-
-    // ============================================================
-    // TURNOS
-    // ============================================================
 
     public void iniciarTurno() {
         if (estadoActual != EstadoJuego.EN_CURSO) return;
@@ -159,9 +151,6 @@ public class Partida {
         return false;
     }
 
-    // ============================================================
-    // CAMBIO DE ZONA
-    // ============================================================
 
     public void cambiarZona(Puerta puerta) {
 
@@ -308,9 +297,6 @@ public class Partida {
         return -1;
     }
 
-    // ============================================================
-    // DELEGACIÓN DE MÉTODOS A LOS MÓDULOS
-    // ============================================================
 
     public boolean moverJugador(int row, int col) {
         return movimiento.moverJugador(row, col);
@@ -348,13 +334,6 @@ public class Partida {
         return objetosYCombate.interactNPC();
     }
 
-    public boolean interactuarGato() {
-        return objetosYCombate.interactuarGato();
-    }
-
-    // ============================================================
-    // UTILIDADES INTERNAS
-    // ============================================================
 
     private Posicion findSpawn(Zona zona) {
         for (int i = 0; i < zona.getRows(); i++)
@@ -424,9 +403,7 @@ public class Partida {
     }
 
     private void colocarNPCsFijos() {
-        // =========================
-        // NPC 1
-        // =========================
+
         Zona zona1 = grafo.getZona(5);
 
         if (zona1 != null && zona1.esValida(4, 9)) {
@@ -446,9 +423,6 @@ public class Partida {
             }
         }
 
-        // =========================
-        // NPC 2
-        // =========================
         Zona zona2 = grafo.getZona(6);
 
         if (zona2 != null && zona2.esValida(13,1)) {

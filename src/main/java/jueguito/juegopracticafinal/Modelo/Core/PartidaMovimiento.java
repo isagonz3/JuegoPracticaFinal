@@ -23,57 +23,23 @@ public class PartidaMovimiento {
 
     public boolean moverJugador(int row, int col) {
 
-        // 1. Validación de estado de partida
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
             return false;
 
         Zona zonaActual = partida.getZonaActual();
         Jugador jugador = partida.getJugador();
 
-        // 2. Obtener celda de destino y validar límites
         Celda destino = zonaActual.getCelda(row, col);
         if (destino == null) {
             partida.getLog().registrar("No puedes moverte aqui");
             return false;
         }
 
-        // 3. Comprobar colisiones (Filtro transitable y ocupado)
         if (!destino.isTransitable() || destino.isOcupada()) {
             partida.getLog().registrar("No puedes moverte a " + destino.getTipoCelda());
             return false;
         }
 
-        // ============================================================
-        // 🌊 RESTRICCIÓN DE TERRENO: CASILLAS DE AGUA EN ZONA 6 (PIDE BARCA)
-        // ============================================================
-        if (zonaActual.getIdZona() == 6) {
-            // Comprobamos si la casilla de destino es una de las que requieren Barca
-            if ((row == 6 && col == 0) || (row == 6 && col == 1) || (row == 6 && col == 2) ||
-                    (row == 7 && col == 3) || (row == 8 && col == 4) || (row == 9 && col == 5) ||
-                    (row == 10 && col == 6) || (row == 10 && col == 7) || (row == 11 && col == 8) ||
-                    (row == 12 && col == 8) || (row == 13 && col == 9) || (row == 14 && col == 10)) {
-
-                boolean tieneBarca = false;
-                jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
-
-                // Buscamos la Barca en la mochila
-                for (int i = 0; i < inv.size(); i++) {
-                    if (inv.getObjeto(i) != null && "Barca".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
-                        tieneBarca = true;
-                        break;
-                    }
-                }
-
-                // 🔥 CORRECCIÓN: Si no tiene el ítem, muestra "Movimiento restringido"
-                if (!tieneBarca) {
-                    partida.getLog().registrar("Movimiento restringido");
-                    return false;
-                }
-            }
-        }
-        // ============================================================
-
-        // 4. Calcular ruta y coste de puntos de movimiento (PM)
         Posicion actual = jugador.getPosicion();
         int coste = calcularDist(actual.getRow(), actual.getCol(), row, col, zonaActual);
 
@@ -87,25 +53,20 @@ public class PartidaMovimiento {
             return false;
         }
 
-        // 5. Consumir los puntos de movimiento del jugador
         if (!jugador.getEstadisticas().usarMovimiento(coste))
             return false;
 
-        // 6. Mover físicamente la entidad en la matriz del mapa
         zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
 
         jugador.moverA(new Posicion(row, col));
         destino.setEntidad(jugador);
 
-        // 7. NOTIFICACIÓN DE PASO
         partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
 
-        // 8. RECOGIDA AUTOMÁTICA DE OBJETOS
         if (destino.tieneObjeto()) {
             partida.recogerObjeto(destino);
         }
 
-        // 9. Comprobar si la casilla además era una transición de zona (Puerta)
         if (destino.tienePuerta()) {
             partida.cambiarZona(destino.getPuerta());
         }
@@ -113,9 +74,8 @@ public class PartidaMovimiento {
         return true;
     }
 
-    // ============================================================
+
     // BFS PARA DISTANCIA
-    // ============================================================
 
     public int calcularDist(int r1, int c1, int r2, int c2, Zona z) {
 
@@ -157,9 +117,7 @@ public class PartidaMovimiento {
         return Integer.MAX_VALUE;
     }
 
-    // ============================================================
     // CELDAS ACCESIBLES
-    // ============================================================
 
     public Lista<Celda> getCeldasAccesibles() {
 
@@ -176,9 +134,7 @@ public class PartidaMovimiento {
         );
     }
 
-    // ============================================================
     // CAMINO MÍNIMO
-    // ============================================================
 
     public Lista<Celda> getCaminoMinimo(int dr, int dc) {
 
@@ -270,9 +226,8 @@ public class PartidaMovimiento {
 
             int bestDir = -1;
 
-            // ============================================================
+
             // SI FUE ATACADO
-            // ============================================================
 
             if (e.isAtacado()) {
 
