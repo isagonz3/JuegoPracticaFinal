@@ -2,6 +2,7 @@ package jueguito.juegopracticafinal.Modelo.Core;
 
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
+import jueguito.juegopracticafinal.Modelo.Inventario.Inventario;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Inventario.TipoObjeto;
@@ -178,13 +179,13 @@ public class PartidaObjetosYCombate {
         o.setDuracionTurnos(1);
         o.resetTurnos();
 
-        // MOVER A OBJETOS USADOS
+        // MOVER A USADOS
         jugador.getInventario().getObjetosUsados().add(o);
 
-        // ELIMINAR DEL INVENTARIO SIEMPRE
+        // ELIMINAR DEL INVENTARIO
         jugador.getInventario().removeObjeto(o);
 
-        // ACTUALIZAR UI YA MISMO
+        // ACTUALIZAR UI
         partida.getUi().actualizarUI(partida);
 
         partida.terminarTurnoPublic();
@@ -233,6 +234,7 @@ public class PartidaObjetosYCombate {
             return false;
 
         Jugador jugador = partida.getJugador();
+        Inventario inv = jugador.getInventario();
 
         // SOLO objetos EQUIPABLES
         if (o.getTipo() != TipoObjeto.EQUIPABLE) {
@@ -240,42 +242,43 @@ public class PartidaObjetosYCombate {
             return false;
         }
 
+        // Debe coincidir el slot
         if (o.getSlot() == null || !o.getSlot().equals(s)) {
             partida.getLog().registrar("Este objeto no se puede equipar en ese slot");
             return false;
         }
 
-        if (!jugador.getInventario().contiene(o))
+        // Debe estar en inventario
+        if (!inv.contiene(o))
             return false;
 
-        Objeto actual = jugador.getInventario().getEquipado(s);
-
-        if (actual != null) {
-            partida.getLog().registrar("Ya tienes un " + s + " equipado");
+        // Intentar equipar según tu Inventario
+        boolean ok = inv.equipar(o);
+        if (!ok) {
+            partida.getLog().registrar("No se puede equipar este objeto");
             return false;
         }
-
-        boolean ok = jugador.getInventario().equipar(o);
-        if (!ok) return false;
 
         // DURACIÓN: 3 turnos
         o.setDuracionTurnos(3);
         o.resetTurnos();
 
-        // MOVER A OBJETOS USADOS/EQUIPADOS
-        jugador.getInventario().getObjetosUsados().add(o);
+        // AÑADIR A LISTA DE EQUIPADOS
+        inv.getObjetosEquipados().add(o);
 
-        // ELIMINAR DEL INVENTARIO SIEMPRE
-        jugador.getInventario().removeObjeto(o);
+        // ELIMINAR DEL INVENTARIO
+        inv.removeObjeto(o);
 
         partida.getLog().registrar("Equipaste " + o.getNombre());
 
-        // ACTUALIZAR UI YA MISMO
+        // ACTUALIZAR UI INMEDIATAMENTE
         partida.getUi().actualizarUI(partida);
 
         partida.terminarTurnoPublic();
         return true;
     }
+
+
 
 
 
