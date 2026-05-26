@@ -138,7 +138,7 @@ public class LoadJSON {
                 Celda celda = zActual.getCelda(r, c);
                 if (celda != null && celda.getEntidad() instanceof Enemigo e && e.estarVivo()) {
                     enemigos.add(
-                            e.getNombre() + "-" + e.getEstadisticas().getVidaActual() + "-" + e.getEstadisticas().getAtaqueBase() + "-" + e.getEstadisticas().getDefensaBase() + "-" + r + c
+                            e.getNombre() + "|" + e.getEstadisticas().getVidaActual() + "|" + e.getEstadisticas().getAtaqueBase() + "|" + e.getEstadisticas().getDefensaBase() + "|" + r + "|" + c
                     );
                 }
             }

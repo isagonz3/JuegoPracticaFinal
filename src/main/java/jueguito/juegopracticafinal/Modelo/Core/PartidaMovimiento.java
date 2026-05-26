@@ -186,9 +186,7 @@ public class PartidaMovimiento {
         // Copiar enemigos vivos
         for (int i = 0; i < zonaActual.getRows(); i++) {
             for (int j = 0; j < zonaActual.getCols(); j++) {
-
                 Celda c = zonaActual.getCelda(i, j);
-
                 if (c != null &&
                         c.getEntidad() instanceof Enemigo e &&
                         e.estarVivo()) {
@@ -218,10 +216,10 @@ public class PartidaMovimiento {
                 continue;
 
             int[][] dirs = {
-                    {-1,0},
-                    {1,0},
-                    {0,-1},
-                    {0,1}
+                    {-1, 0},
+                    {1, 0},
+                    {0, -1},
+                    {0, 1}
             };
 
             int bestDir = -1;
@@ -231,7 +229,7 @@ public class PartidaMovimiento {
 
             if (e.isAtacado()) {
 
-                int decision = (int)(Math.random() * 2);
+                int decision = (int) (Math.random() * 2);
 
                 // HUIR
                 if (decision == 0) {
@@ -283,9 +281,8 @@ public class PartidaMovimiento {
                     if (pjCelda != null &&
                             zonaActual.getCelda(i, j).esAdyacente(pjCelda)) {
 
-                        int hit = PartidaObjetosYCombate.calcularHit(e.getAtaqueTotal(),jugador.getDefensaTotal());
-
-                        jugador.recibirAtaque(hit);
+                        int hit = PartidaObjetosYCombate.calcularHit(e.getAtaqueTotal(), jugador.getDefensaTotal());
+                        jugador.getEstadisticas().restarVidaDirecta(hit);
 
                         partida.getLog().registrar(
                                 e.getNombre() +
@@ -308,41 +305,31 @@ public class PartidaMovimiento {
             if (zonaActual.getCelda(i, j).esAdyacente(pjCelda))
                 continue;
 
-            int bestDist = Integer.MAX_VALUE;
+            Lista<Celda> camino = zonaActual.getCaminoMinimo(i, j, pj.getRow(), pj.getCol());
+            if (camino.getSize() >= 2) {
 
-            for (int d = 0; d < 4; d++) {
+                Celda siguiente = camino.get(1);
 
-                int nr = i + dirs[d][0];
-                int nc = j + dirs[d][1];
+                int nr = siguiente.getRow();
+                int nc = siguiente.getCol();
 
-                if (!zonaActual.esValida(nr, nc)) continue;
+                if (!estaCercaDePuerta(zonaActual, nr, nc)) {
 
-                Celda ady = zonaActual.getCelda(nr, nc);
+                    Celda celdaDestino = zonaActual.getCelda(nr, nc);
 
-                if (!ady.isTransitable() || ady.isOcupada()) continue;
+                    if (celdaDestino != null &&
+                            celdaDestino.isTransitable() &&
+                            !celdaDestino.isOcupada()) {
 
-                if (estaCercaDePuerta(zonaActual, nr, nc)) continue;
+                        zonaActual.getCelda(i, j).setEntidad(null);
 
-                int dist = Math.abs(nr - pj.getRow()) +
-                        Math.abs(nc - pj.getCol());
+                        e.moverA(new Posicion(nr, nc));
 
-                if (dist < bestDist) {
-                    bestDist = dist;
-                    bestDir = d;
+                        zonaActual.getCelda(nr, nc).setEntidad(e);
+                    }
                 }
             }
-
-            if (bestDir < 0)
-                continue;
-
-            int nr = i + dirs[bestDir][0];
-            int nc = j + dirs[bestDir][1];
-
-            zonaActual.getCelda(i, j).setEntidad(null);
-
-            e.moverA(new Posicion(nr, nc));
-
-            zonaActual.getCelda(nr, nc).setEntidad(e);
         }
+
     }
 }

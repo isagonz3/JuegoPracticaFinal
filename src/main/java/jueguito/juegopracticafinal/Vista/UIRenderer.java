@@ -1,4 +1,4 @@
-package jueguito.juegopracticafinal.Modelo.Vista;
+package jueguito.juegopracticafinal.Vista;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
