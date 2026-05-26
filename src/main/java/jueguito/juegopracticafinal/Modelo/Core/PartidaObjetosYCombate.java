@@ -121,10 +121,13 @@ public class PartidaObjetosYCombate {
                 int ataque = e.getAtaqueTotal();
                 int defensa = jugador.getDefensaTotal();
 
+                // 1. Calculamos el daño mitigado por la defensa una sola vez
                 int hit = calcularHit(ataque, defensa);
 
-                jugador.recibirAtaque(hit);
+                // 2. 🔥 Cambiamos recibirAtaque por nuestro nuevo método directo
+                jugador.getEstadisticas().restarVidaDirecta(hit);
 
+                // 3. El Log ahora mostrará exactamente lo que ha bajado en la barra azul
                 partida.getLog().registrar(
                         "Has sido atacado por " + e.getNombre() +
                                 ", recibes " + hit + " de daño"
@@ -132,7 +135,6 @@ public class PartidaObjetosYCombate {
             }
         }
     }
-
     // ============================================================
     // OBJETOS
     // ============================================================
