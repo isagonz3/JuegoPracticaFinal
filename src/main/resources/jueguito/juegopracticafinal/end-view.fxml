@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="jueguito.juegopracticafinal.main.EndController"
+            fx:controller="jueguito.juegopracticafinal.Controladores.EndController"
             prefHeight="576" prefWidth="960">
 
     <Label fx:id="resultadoLabel" layoutX="50" layoutY="40"

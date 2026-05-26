@@ -1,6 +1,7 @@
-package jueguito.juegopracticafinal.main;
+package jueguito.juegopracticafinal.Controladores.Juego;
 
 import javafx.scene.input.KeyEvent;
+import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Inventario.Inventario;

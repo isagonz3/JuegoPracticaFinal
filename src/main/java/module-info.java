@@ -13,11 +13,15 @@ module jueguito.juegopracticafinal {
     requires com.google.gson;
     requires ch.qos.logback.classic;
 
-    exports jueguito.juegopracticafinal.main;
-    opens jueguito.juegopracticafinal.main to javafx.fxml;
+    exports jueguito.juegopracticafinal.Controladores;
+    opens jueguito.juegopracticafinal.Controladores to javafx.fxml;
     exports jueguito.juegopracticafinal.Modelo.Mundo to com.google.gson;
     exports jueguito.juegopracticafinal.Modelo.Core to com.google.gson;
     opens jueguito.juegopracticafinal.Modelo.Core to com.google.gson;
+    opens jueguito.juegopracticafinal.App to javafx.fxml;
+    exports jueguito.juegopracticafinal.App;
+    exports jueguito.juegopracticafinal.Controladores.Juego;
+    opens jueguito.juegopracticafinal.Controladores.Juego to javafx.fxml;
 
 
 }

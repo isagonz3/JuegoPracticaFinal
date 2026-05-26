@@ -1,4 +1,4 @@
-package jueguito.juegopracticafinal.main;
+package jueguito.juegopracticafinal.Controladores.Juego;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Core.LoadJSON;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;

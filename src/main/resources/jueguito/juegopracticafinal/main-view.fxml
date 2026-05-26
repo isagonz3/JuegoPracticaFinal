@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="jueguito.juegopracticafinal.main.JuegoController"
+            fx:controller="jueguito.juegopracticafinal.Controladores.Juego.JuegoController"
             prefHeight="576" prefWidth="960">
 
     <padding>

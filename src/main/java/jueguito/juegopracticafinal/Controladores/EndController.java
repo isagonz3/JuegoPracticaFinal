@@ -1,10 +1,11 @@
-package jueguito.juegopracticafinal.main;
+package jueguito.juegopracticafinal.Controladores;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
+import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
 import jueguito.juegopracticafinal.TADs.Lista;
 

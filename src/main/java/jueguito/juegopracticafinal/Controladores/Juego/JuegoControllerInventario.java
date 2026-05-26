@@ -1,4 +1,4 @@
-package jueguito.juegopracticafinal.main;
+package jueguito.juegopracticafinal.Controladores.Juego;
 
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;

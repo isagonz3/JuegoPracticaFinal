@@ -1,9 +1,10 @@
-package jueguito.juegopracticafinal.main;
+package jueguito.juegopracticafinal.Controladores;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
+import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Core.LoadJSON;
 import jueguito.juegopracticafinal.Modelo.Core.MapaLoader;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;

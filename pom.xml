@@ -168,7 +168,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>jueguito.juegopracticafinal/jueguito.juegopracticafinal.main.Launcher
+                            <mainClass>jueguito.juegopracticafinal/jueguito.juegopracticafinal.App.Launcher
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

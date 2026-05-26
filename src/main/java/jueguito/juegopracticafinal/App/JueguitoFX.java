@@ -1,4 +1,4 @@
-package jueguito.juegopracticafinal.main;
+package jueguito.juegopracticafinal.App;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
 import jueguito.juegopracticafinal.TADs.Lista;
+import jueguito.juegopracticafinal.Controladores.EndController;
+import jueguito.juegopracticafinal.Controladores.Juego.JuegoController;
+import jueguito.juegopracticafinal.Controladores.MenuController;
 
 import java.io.IOException;
 

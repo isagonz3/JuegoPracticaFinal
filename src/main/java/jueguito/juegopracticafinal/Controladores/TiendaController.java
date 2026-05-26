@@ -1,8 +1,8 @@
-package jueguito.juegopracticafinal.main;
+package jueguito.juegopracticafinal.Controladores;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import jueguito.juegopracticafinal.Controladores.Juego.JuegoController;
 
 public class TiendaController {
 
