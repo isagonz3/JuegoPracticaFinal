@@ -13,6 +13,8 @@ public class Objeto {
     private String descripcion;
     private int turnosActivos = 0;
     private int duracionTurnos = -1;
+    private static int contador = 0;
+    private int id;
 
     private int cantidad = 1;
 
@@ -31,6 +33,9 @@ public class Objeto {
     }
 
     public Objeto(String nombre, TipoObjeto tipo, int ataqueBonus, int defensaBonus, int vidaBonus, int rangoBonus, int usosMax, String descripcion) {
+
+        this.id = contador++;
+
         this.nombre = nombre;
         this.tipo = tipo;
         this.ataqueBonus = ataqueBonus;
@@ -40,6 +45,10 @@ public class Objeto {
         this.usosMax = usosMax;
         this.usosRestantes = usosMax;
         this.descripcion = descripcion;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNombre() {

@@ -606,7 +606,6 @@ public class Partida {
         boolean usado = o.usarObjeto();
         if (!usado) return false;
 
-        // efectos del objeto
         if (o.getVidaBonus() > 0) {
             jugador.getEstadisticas().curarVida(o.getVidaBonus());
         }
@@ -623,14 +622,12 @@ public class Partida {
             jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus());
         }
 
-        // configurar duración (2 turnos)
+        // duración 2 turnos
         o.setDuracionTurnos(2);
         o.resetTurnos();
 
-        // registrar en usados
         jugador.getInventario().registrarUsado(o);
 
-        // si se agota su uso interno
         if (o.objetoGastado()) {
             jugador.getInventario().removeObjeto(o);
         }
@@ -673,13 +670,31 @@ public class Partida {
 
         if (!jugador.getInventario().contiene(o)) return false;
 
+        if (jugador.getInventario().getObjetosEquipados().getSize() >= 2) {
+            log.registrar("No puedes equipar más objetos");
+            return false;
+        }
+
+        for (int i = 0; i < jugador.getInventario().getObjetosEquipados().getSize(); i++) {
+
+            Objeto equipado = jugador.getInventario().getObjetosEquipados().get(i);
+
+            if (equipado.getSlot() == o.getSlot()) {
+                log.registrar("Ya tienes un " + s + " equipado");
+                return false;
+            }
+        }
+
         boolean ok = jugador.getInventario().equipar(o);
 
         if (!ok) return false;
 
-        // configurar duración (5 turnos)
         o.setDuracionTurnos(5);
         o.resetTurnos();
+
+        jugador.getInventario().removeObjeto(o);
+
+        log.registrar("Equipaste " + o.getNombre());
 
         return true;
     }

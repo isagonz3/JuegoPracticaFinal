@@ -2,116 +2,46 @@ package jueguito.juegopracticafinal.Modelo.Inventario;
 
 import jueguito.juegopracticafinal.TADs.Lista;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class Inventario {
 
     private Lista<Objeto> objetos;
     private int sizeInventario;
 
-    // 🟦 NUEVO: usados
     private Lista<Objeto> objetosUsados;
+    private Lista<Objeto> objetosEquipados;
 
-    // 🟩 NUEVO: equipados
-    private Map<SlotEquipable, Objeto> objetosEquipados;
-
-
+    // =========================
+    // CONSTRUCTOR
+    // =========================
     public Inventario() {
         this.objetos = new Lista<>();
-        this.sizeInventario = 10;
-
-        // 🆕 INIT
         this.objetosUsados = new Lista<>();
-        this.objetosEquipados = new HashMap<>();
+        this.objetosEquipados = new Lista<>();
+        this.sizeInventario = 10;
     }
 
     public Inventario(int size) {
         this.objetos = new Lista<>();
-        this.sizeInventario = size;
-
-        // 🆕 INIT
         this.objetosUsados = new Lista<>();
-        this.objetosEquipados = new HashMap<>();
+        this.objetosEquipados = new Lista<>();
+        this.sizeInventario = size;
     }
 
     // =========================
-    // AÑADIR OBJETO (SIN STACK)
+    // INVENTARIO BASE
     // =========================
     public boolean addObjeto(Objeto objeto) {
 
-        if (objetos.getSize() >= sizeInventario) {
-            return false;
-        }
+        if (objetos.getSize() >= sizeInventario) return false;
 
         objetos.add(objeto);
         return true;
     }
 
-    // =========================
-    // ELIMINAR OBJETO
-    // =========================
     public boolean removeObjeto(Objeto objeto) {
         return objetos.delete(objeto) != null;
     }
 
-    // =========================
-    // CONTIENE OBJETO
-    // =========================
-    public boolean containsObjeto(String nombre) {
-
-        for (int i = 0; i < objetos.getSize(); i++) {
-
-            if (objetos.get(i).getNombre().equalsIgnoreCase(nombre)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    public boolean contiene(Objeto objeto) {
-
-        for (int i = 0; i < objetos.getSize(); i++) {
-
-            if (objetos.get(i).equals(objeto)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    // =========================
-    // GET POR ÍNDICE
-    // =========================
-    public Objeto getObjeto(int index) {
-        return objetos.get(index);
-    }
-
-    // =========================
-    // BUSCAR OBJETO
-    // =========================
-    public Objeto findObjeto(String nombre) {
-
-        for (int i = 0; i < objetos.getSize(); i++) {
-
-            Objeto o = objetos.get(i);
-
-            if (o.getNombre().equalsIgnoreCase(nombre)) {
-                return o;
-            }
-        }
-
-        return null;
-    }
-
-    // =========================
-    // SIZE
-    // =========================
     public int size() {
         return objetos.getSize();
     }
@@ -128,14 +58,21 @@ public class Inventario {
         return objetos;
     }
 
-    public void setSizeInventario(int size) {
-        this.sizeInventario = size;
+    public Objeto getObjeto(int index) {
+        return objetos.get(index);
     }
 
+    public boolean contiene(Objeto objeto) {
 
-    // =====================================================
-    // 🆕🆕🆕 LO QUE TE FALTABA (AÑADIDO SIN ROMPER NADA)
-    // =====================================================
+        for (int i = 0; i < objetos.getSize(); i++) {
+
+            if (objetos.get(i).getId() == objeto.getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     // =========================
     // USADOS
@@ -149,31 +86,54 @@ public class Inventario {
     }
 
     // =========================
-    // EQUIPAMIENTO
+    // EQUIPADOS (SIN MAP)
     // =========================
     public boolean equipar(Objeto o) {
 
-        if (o == null) return false;
+        if (o == null || o.getSlot() == null) return false;
 
-        SlotEquipable slot = o.getSlot();
-        if (slot == null) return false;
+        // máximo 2 equipados
+        if (objetosEquipados.getSize() >= 2) return false;
 
-        objetosEquipados.put(slot, o);
+        // solo 1 por tipo (ARMA / ESCUDO)
+        for (int i = 0; i < objetosEquipados.getSize(); i++) {
+
+            Objeto equipado = objetosEquipados.get(i);
+
+            if (equipado.getSlot() == o.getSlot()) {
+                return false;
+            }
+        }
+
+        objetosEquipados.add(o);
         return true;
     }
 
-    public void desequipar(SlotEquipable slot) {
-        objetosEquipados.remove(slot);
+    public void desequipar(Objeto o) {
+        objetosEquipados.delete(o);
     }
 
-    public Objeto getEquipado(SlotEquipable slot) {
-        return objetosEquipados.get(slot);
-    }
-
-    public Map<SlotEquipable, Objeto> getObjetosEquipados() {
+    public Lista<Objeto> getObjetosEquipados() {
         return objetosEquipados;
     }
 
+    public Objeto getEquipado(SlotEquipable slot) {
+
+        for (int i = 0; i < objetosEquipados.getSize(); i++) {
+
+            Objeto o = objetosEquipados.get(i);
+
+            if (o.getSlot() == slot) {
+                return o;
+            }
+        }
+
+        return null;
+    }
+
+    // =========================
+    // TURNOS
+    // =========================
     public void avanzarTurno() {
 
         // =========================
@@ -187,36 +147,42 @@ public class Inventario {
 
             if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
                 objetosUsados.delete(o);
-                i--; // MUY IMPORTANTE: ajustar índice
+                i--;
             }
         }
 
         // =========================
         // OBJETOS EQUIPADOS (5 turnos)
         // =========================
-        List<SlotEquipable> aEliminar = new java.util.ArrayList<>();
+        for (int i = 0; i < objetosEquipados.getSize(); i++) {
 
-        for (Map.Entry<SlotEquipable, Objeto> e : objetosEquipados.entrySet()) {
-
-            Objeto o = e.getValue();
+            Objeto o = objetosEquipados.get(i);
 
             o.incrementarTurno();
 
             if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
-                aEliminar.add(e.getKey());
+
+                // ❌ SOLO SE ELIMINA DEL EQUIPAMIENTO
+                objetosEquipados.delete(o);
+                i--;
+
+                // ❌ NO volver al inventario (ESTO era el bug)
+                // NO hacer: objetos.add(o);
+            }
+        }
+    }
+
+    public Objeto findObjeto(String nombre) {
+
+        for (int i = 0; i < objetos.getSize(); i++) {
+
+            Objeto o = objetos.get(i);
+
+            if (o.getNombre().equalsIgnoreCase(nombre)) {
+                return o;
             }
         }
 
-        // eliminar después del loop (evita ConcurrentModificationException)
-        for (SlotEquipable s : aEliminar) {
-
-            Objeto o = objetosEquipados.get(s);
-
-            objetosEquipados.remove(s);
-
-            if (o != null) {
-                objetos.delete(o);
-            }
-        }
+        return null;
     }
 }
