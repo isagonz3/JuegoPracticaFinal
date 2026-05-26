@@ -2,7 +2,7 @@ package jueguito.juegopracticafinal.Modelo.Log;
 
 import jueguito.juegopracticafinal.TADs.Lista;
 
-public class LogSistema {
+public class LogMovimiento {
 
     private final Lista<EntradaLog> entradas = new Lista<>();
 

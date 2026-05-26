@@ -2,7 +2,7 @@ package jueguito.juegopracticafinal.Modelo.Core;
 
 import jueguito.juegopracticafinal.Modelo.Entidades.*;
 import jueguito.juegopracticafinal.Modelo.Inventario.*;
-import jueguito.juegopracticafinal.Modelo.Log.LogSistema;
+import jueguito.juegopracticafinal.Modelo.Log.LogMovimiento;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
@@ -19,7 +19,7 @@ public class Partida {
     private Zona zonaActual;
     private int idZonaActual;
     private EstadoJuego estadoActual = EstadoJuego.EN_CURSO;
-    private LogSistema log = new LogSistema();
+    private LogMovimiento log = new LogMovimiento();
     private int turnoActual;
     private int idZonaGato = -1;
     private boolean gatoEncontrado;
@@ -53,7 +53,6 @@ public class Partida {
                 new Estadisticas(get().jugador.vidaMax, get().jugador.ataqueBase, get().jugador.defensaBase, get().jugador.rangoMov),
                 spawn);
 
-        jugador.setLog(log);
         zonaActual.getCelda(spawn.getRow(), spawn.getCol()).setEntidad(jugador);
 
         gato = new Gato("Gatiko",
@@ -1026,7 +1025,7 @@ public class Partida {
     public void setIdZonaActual(int id) { idZonaActual=id; zonaActual=grafo.getZona(id); }
     public EstadoJuego getEstadoActual() { return estadoActual; }
     public void setEstadoActual(EstadoJuego e) { estadoActual=e; }
-    public LogSistema getLog() { return log; }
+    public LogMovimiento getLog() { return log; }
     public int getTurnoActual() { return turnoActual; }
     public void setTurnoActual(int t) { turnoActual=t; }
     public boolean isGatoEncontrado() { return gatoEncontrado; }
