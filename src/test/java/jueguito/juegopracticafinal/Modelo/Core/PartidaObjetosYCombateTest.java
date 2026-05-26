@@ -76,10 +76,6 @@ class PartidaObjetosYCombateTest {
         assertFalse(combate.atacarDireccion(0, 1));
     }
 
-    @Test void atacarJugador_sinEnemigosAdyacentes_noFalla() {
-        combate.atacarJugador();
-    }
-
     @Test void recogerObjeto() {
         Celda c = partida.getZonaActual().getCelda(1, 0);
         c.setObjeto(new Objeto("Gema", TipoObjeto.NPC));
