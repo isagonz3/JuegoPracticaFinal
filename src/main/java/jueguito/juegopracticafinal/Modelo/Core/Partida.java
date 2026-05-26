@@ -70,6 +70,8 @@ public class Partida {
     }
 
     public void terminarTurno() {
+        jugador.getInventario().avanzarTurno();
+
         if (estadoActual != EstadoJuego.EN_CURSO) return;
         moverEnemigos(); atacarJugador();
         zonaActual.setCountTurnos(zonaActual.getCountTurnos() + 1);
@@ -604,34 +606,33 @@ public class Partida {
         boolean usado = o.usarObjeto();
         if (!usado) return false;
 
-        // efectos
+        // efectos del objeto
         if (o.getVidaBonus() > 0) {
             jugador.getEstadisticas().curarVida(o.getVidaBonus());
-            log.registrar("Usaste " + o.getNombre() + ": +" + o.getVidaBonus() + " vida");
         }
 
         if (o.getAtaqueBonus() > 0) {
             jugador.getEstadisticas().aumentarAtaque(o.getAtaqueBonus());
-            log.registrar("Usaste " + o.getNombre() + ": +" + o.getAtaqueBonus() + " ataque");
         }
 
         if (o.getDefensaBonus() > 0) {
             jugador.getEstadisticas().aumentarDefensa(o.getDefensaBonus());
-            log.registrar("Usaste " + o.getNombre() + ": +" + o.getDefensaBonus() + " defensa");
         }
 
         if (o.getRangoBonus() > 0) {
             jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus());
-            log.registrar("Usaste " + o.getNombre() + ": +" + o.getRangoBonus() + " rango");
         }
 
-        // registrar uso
+        // configurar duración (2 turnos)
+        o.setDuracionTurnos(2);
+        o.resetTurnos();
+
+        // registrar en usados
         jugador.getInventario().registrarUsado(o);
 
-        // eliminar si se gastó
+        // si se agota su uso interno
         if (o.objetoGastado()) {
             jugador.getInventario().removeObjeto(o);
-            log.registrar(o.getNombre() + " gastado!");
         }
 
         return true;
@@ -665,18 +666,22 @@ public class Partida {
         if (estadoActual != EstadoJuego.EN_CURSO) return false;
 
         if (o == null) return false;
-        if (o.getSlot() != s) return false;
+
+        if (o.getSlot() == null) return false;
+
+        if (!o.getSlot().equals(s)) return false;
 
         if (!jugador.getInventario().contiene(o)) return false;
 
         boolean ok = jugador.getInventario().equipar(o);
 
-        if (ok) {
-            log.registrar("Equipaste " + o.getNombre() + "!");
-            return true;
-        }
+        if (!ok) return false;
 
-        return false;
+        // configurar duración (5 turnos)
+        o.setDuracionTurnos(5);
+        o.resetTurnos();
+
+        return true;
     }
 
     public NPC interactNPC() {

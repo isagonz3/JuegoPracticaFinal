@@ -173,4 +173,50 @@ public class Inventario {
     public Map<SlotEquipable, Objeto> getObjetosEquipados() {
         return objetosEquipados;
     }
+
+    public void avanzarTurno() {
+
+        // =========================
+        // OBJETOS USADOS (2 turnos)
+        // =========================
+        for (int i = 0; i < objetosUsados.getSize(); i++) {
+
+            Objeto o = objetosUsados.get(i);
+
+            o.incrementarTurno();
+
+            if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
+                objetosUsados.delete(o);
+                i--; // MUY IMPORTANTE: ajustar índice
+            }
+        }
+
+        // =========================
+        // OBJETOS EQUIPADOS (5 turnos)
+        // =========================
+        List<SlotEquipable> aEliminar = new java.util.ArrayList<>();
+
+        for (Map.Entry<SlotEquipable, Objeto> e : objetosEquipados.entrySet()) {
+
+            Objeto o = e.getValue();
+
+            o.incrementarTurno();
+
+            if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
+                aEliminar.add(e.getKey());
+            }
+        }
+
+        // eliminar después del loop (evita ConcurrentModificationException)
+        for (SlotEquipable s : aEliminar) {
+
+            Objeto o = objetosEquipados.get(s);
+
+            objetosEquipados.remove(s);
+
+            if (o != null) {
+                objetos.delete(o);
+            }
+        }
+    }
 }

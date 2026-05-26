@@ -243,7 +243,16 @@ public class JuegoController {
     }
 
     private void configEventos(){
-        terminarTurnoBtn.setOnAction(e -> terminaTurno());
+        terminarTurnoBtn.setOnAction(e -> {
+
+            partida.terminarTurno();
+
+            actualizarInventario();
+            actualizarInventarioExtra();
+
+            renderMapa();
+            actualizarUI();
+        });
         guardarBtn.setOnAction(e -> guardaPartida());
         inventarioList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) { objetoSeleccionado = null; return; }

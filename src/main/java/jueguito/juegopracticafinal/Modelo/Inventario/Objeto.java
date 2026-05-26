@@ -11,6 +11,8 @@ public class Objeto {
     private int usosMax;
     private int usosRestantes;
     private String descripcion;
+    private int turnosActivos = 0;
+    private int duracionTurnos = -1;
 
     private int cantidad = 1;
 
@@ -90,6 +92,26 @@ public class Objeto {
 
     public String getDescripcion() {
         return descripcion;
+    }
+
+    public int getTurnosActivos() {
+        return turnosActivos;
+    }
+
+    public void incrementarTurno() {
+        turnosActivos++;
+    }
+
+    public void resetTurnos() {
+        turnosActivos = 0;
+    }
+
+    public void setDuracionTurnos(int duracion) {
+        this.duracionTurnos = duracion;
+    }
+
+    public int getDuracionTurnos() {
+        return duracionTurnos;
     }
 
     public boolean isConsumible() {
