@@ -38,7 +38,6 @@ public class PartidaMovimiento {
         }
 
         // 3. Comprobar colisiones (Filtro transitable y ocupado)
-        // Recuerda que 'destino.isOcupada()' solo debe devolver true si hay un ENEMIGO, no si hay un objeto.
         if (!destino.isTransitable() || destino.isOcupada()) {
             partida.getLog().registrar("No puedes moverte a " + destino.getTipoCelda());
             return false;
@@ -68,10 +67,12 @@ public class PartidaMovimiento {
         jugador.moverA(new Posicion(row, col));
         destino.setEntidad(jugador);
 
-        // 🔥 7. RECOGIDA AUTOMÁTICA DE OBJETOS (Ubicada en el orden correcto)
-        // Recoge el objeto en cuanto el jugador planta el pie en la celda
+        // 🔥 NOTIFICACIÓN DE PASO: Informa la casilla de destino en el Log de la partida
+        partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
+
+        // 7. RECOGIDA AUTOMÁTICA DE OBJETOS
         if (destino.tieneObjeto()) {
-            partida.recogerObjeto(destino); // Llama a tu método (añade a mochila, limpia suelo y refresca UI)
+            partida.recogerObjeto(destino);
         }
 
         // 8. Comprobar si la casilla además era una transición de zona (Puerta)
