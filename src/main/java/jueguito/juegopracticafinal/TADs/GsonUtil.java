@@ -55,7 +55,7 @@ public class GsonUtil {
     public static <T> void imprimirToStringDesdeArchivo(String rutaArchivo, Class<T> clase) {
         T objeto = cargarObjetoDesdeArchivo(rutaArchivo, clase);
         if (objeto!=null) {
-            System.out.println(objeto.toString());
+            System.out.println(objeto);
         } else {
             throw new RuntimeException("No se pudo leer el fichero: "+rutaArchivo);
         }

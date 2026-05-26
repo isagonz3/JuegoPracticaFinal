@@ -28,10 +28,6 @@ public class JuegoControllerAcciones {
         this.app = app;
     }
 
-    // ============================================================
-    // MANEJO DE TECLAS
-    // ============================================================
-
     public void manejarTecla(KeyEvent event) {
 
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return;
@@ -129,14 +125,12 @@ public class JuegoControllerAcciones {
 
         if (celdaObjetivo == null ||
                 !celdaObjetivo.tieneEntidad() ||
-                !(celdaObjetivo.getEntidad() instanceof Enemigo)) {
+                !(celdaObjetivo.getEntidad() instanceof Enemigo enemigo)) {
 
             partida.getLog().registrar("No hay enemigos para atacar.");
             ctrl.getUiRenderer().actualizarUI(partida);
             return;
         }
-
-        Enemigo enemigo = (Enemigo) celdaObjetivo.getEntidad();
 
         int vidaAntes = enemigo.getEstadisticas().getVidaActual();
 

@@ -3,7 +3,7 @@ package jueguito.juegopracticafinal.TADs;
 
 public class Grafo {
 
-    private Nodo[] nodos;
+    private final Nodo[] nodos;
     private static final int MAX_ZONAS = 11;
 
 

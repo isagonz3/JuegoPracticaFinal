@@ -1,5 +1,5 @@
 package jueguito.juegopracticafinal.Modelo.Inventario;
 
 public enum TipoObjeto {
-    USABLE, EQUIPABLE, LLAVE, NPC,
+    USABLE, EQUIPABLE, CONSUMIBLE, LLAVE, NPC, MAPA,
 }

@@ -89,7 +89,7 @@ public class UIRenderer {
         Lista<EntradaLog> entradas = partida.getLog().getEntradas();
 
         for (int i = ultimoLogIndex; i < entradas.getSize(); i++) {
-            logArea.appendText(entradas.get(i).getMensaje() + "\n");
+            logArea.appendText(entradas.get(i).mensaje() + "\n");
         }
 
         ultimoLogIndex = entradas.getSize();

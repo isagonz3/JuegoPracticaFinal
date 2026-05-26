@@ -16,15 +16,19 @@ public class Objeto {
     private static int contador = 0;
     private int id;
 
-    private int cantidad = 1;
+    private final int cantidad = 1;
 
     public Objeto() {
         this.nombre = "Objeto";
-        this.tipo = TipoObjeto.USABLE;
+        this.tipo = TipoObjeto.CONSUMIBLE;
         this.slot = null;
         this.usosMax = 1;
         this.usosRestantes = 1;
         this.descripcion = "";
+    }
+
+    public Objeto(String nombre) {
+        this(nombre, TipoObjeto.CONSUMIBLE);
     }
 
     public Objeto(String nombre, TipoObjeto tipo) {
@@ -124,7 +128,7 @@ public class Objeto {
     }
 
     public boolean isConsumible() {
-        return this.tipo == TipoObjeto.USABLE || this.tipo == TipoObjeto.LLAVE;
+        return this.tipo == TipoObjeto.LLAVE || this.tipo == TipoObjeto.CONSUMIBLE;
     }
 
     public boolean usarObjeto() {

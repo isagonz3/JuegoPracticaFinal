@@ -8,7 +8,7 @@ class EntradaLogTest {
 
     @Test void constructor() {
         EntradaLog e = new EntradaLog("Mensaje de prueba");
-        assertEquals("Mensaje de prueba", e.getMensaje());
+        assertEquals("Mensaje de prueba", e.mensaje());
     }
 
     @Test void toStringDevuelveMensaje() {
@@ -25,8 +25,8 @@ class LogSistemaTest {
         log.registrar("Entrada 2");
         Lista<EntradaLog> entradas = log.getEntradas();
         assertEquals(2, entradas.getSize());
-        assertEquals("Entrada 1", entradas.get(0).getMensaje());
-        assertEquals("Entrada 2", entradas.get(1).getMensaje());
+        assertEquals("Entrada 1", entradas.get(0).mensaje());
+        assertEquals("Entrada 2", entradas.get(1).mensaje());
     }
 
     @Test void getUltimaEntrada() {

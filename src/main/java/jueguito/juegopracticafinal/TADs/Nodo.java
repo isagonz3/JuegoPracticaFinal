@@ -2,10 +2,11 @@ package jueguito.juegopracticafinal.TADs;
 
 public class Nodo {
 
-    private int id;
-    private String nombre;
-    private int rows, cols;
-    private Lista<Integer> adyacentes;
+    private final int id;
+    private final String nombre;
+    private final int rows;
+    private final int cols;
+    private final Lista<Integer> adyacentes;
 
     public Nodo(int id, String nombre, int rows, int cols) {
         this.id = id;

@@ -83,7 +83,7 @@ public abstract class  Entidad {
     @Override
     public String toString() {
         if(estadisticas != null) {
-            return nombre + " " + estadisticas.toString();
+            return nombre + " " + estadisticas;
         }
         return " ";
     }

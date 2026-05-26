@@ -95,7 +95,7 @@ class LoadJSONTest {
         assertNotNull(cargada);
         Celda celda = cargada.getZonaActual().getCelda(2, 2);
         assertTrue(celda.tieneEntidad());
-        assertTrue(celda.getEntidad() instanceof Enemigo);
+        assertInstanceOf(Enemigo.class, celda.getEntidad());
     }
 
     @Test void guardarYCargar_conObjetoConBonus(@TempDir Path tempDir) {

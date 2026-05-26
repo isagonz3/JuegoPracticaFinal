@@ -4,11 +4,11 @@ import jueguito.juegopracticafinal.TADs.Lista;
 
 public class Inventario {
 
-    private Lista<Objeto> objetos;
+    private final Lista<Objeto> objetos;
     private int sizeInventario;
 
-    private Lista<Objeto> objetosUsados;
-    private Lista<Objeto> objetosEquipados;
+    private final Lista<Objeto> objetosUsados;
+    private final Lista<Objeto> objetosEquipados;
 
     // =========================
     // CONSTRUCTOR
@@ -52,6 +52,18 @@ public class Inventario {
 
     public boolean inventarioVacio() {
         return objetos.isEmpty();
+    }
+
+    public boolean containsObjeto(String nombre) {
+        return findObjeto(nombre) != null;
+    }
+
+    public int getSizeInventario() {
+        return sizeInventario;
+    }
+
+    public void setSizeInventario(int sizeInventario) {
+        this.sizeInventario = sizeInventario;
     }
 
     public Lista<Objeto> getObjetos() {

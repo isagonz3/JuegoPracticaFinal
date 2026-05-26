@@ -1,7 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Entidades;
 
 import jueguito.juegopracticafinal.Modelo.Inventario.*;
-import jueguito.juegopracticafinal.Modelo.Log.LogSistema;
+import jueguito.juegopracticafinal.Modelo.Log.LogMovimiento;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,11 +85,11 @@ class JugadorTest {
         j.getInventario().addObjeto(espada2);
         j.equipar(espada2, SlotEquipable.ARMA);
         assertEquals(20, j.getAtaqueTotal());
-        assertTrue(j.getInventario().containsObjeto("Espada1"));
+        assertNotNull(j.getInventario().findObjeto("Espada1"));
     }
 
     @Test void equiparNoEquipableFalla() {
-        Objeto pocion = new Objeto("Pocion", TipoObjeto.CONSUMIBLE);
+        Objeto pocion = new Objeto("Pocion", TipoObjeto.USABLE);
         j.getInventario().addObjeto(pocion);
         assertFalse(j.equipar(pocion, SlotEquipable.ARMA));
     }
@@ -114,7 +114,7 @@ class JugadorTest {
     }
 
     @Test void log() {
-        LogSistema log = new LogSistema();
+        LogMovimiento log = new LogMovimiento();
         j.setLog(log);
         assertEquals(log, j.getLog());
         log.registrar("test");

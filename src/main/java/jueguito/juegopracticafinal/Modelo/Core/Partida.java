@@ -16,11 +16,11 @@ public class Partida {
 
     private Jugador jugador;
     private Gato gato;
-    private GrafoZonas grafo;
+    private final GrafoZonas grafo;
     private Zona zonaActual;
     private int idZonaActual;
     private EstadoJuego estadoActual = EstadoJuego.EN_CURSO;
-    private LogMovimiento log = new LogMovimiento();
+    private final LogMovimiento log = new LogMovimiento();
     private int turnoActual;
     private int idZonaGato = -1;
     private boolean gatoEncontrado;
@@ -28,11 +28,9 @@ public class Partida {
     private boolean movimientoRealizado = false;
     private boolean accionRealizada = false;
 
-    // Nuevos módulos
-    private PartidaMovimiento movimiento;
-    private PartidaObjetosYCombate objetosYCombate;
+    private final PartidaMovimiento movimiento;
+    private final PartidaObjetosYCombate objetosYCombate;
     private UIRenderer ui;
-
 
     public Partida(GrafoZonas grafo) {
         this.grafo = grafo;
@@ -158,7 +156,9 @@ public class Partida {
         if (estadoActual != EstadoJuego.EN_CURSO) return;
         if (!faseJugadorActiva) return;
 
-        int nid, dr, dc;
+        int nid;
+        int dr;
+        int dc;
 
         if (puerta.getZonaOrigen() == idZonaActual) {
             nid = puerta.getZonaDestino();
@@ -177,9 +177,6 @@ public class Partida {
             return;
         }
 
-        // ============================================================
-        // BLOQUEO DE SEGURIDAD: DE ZONA 7 A ZONA 8 SE NECESITA LLAVE
-        // ============================================================
         if (idZonaActual == 7 && nid == 8) {
 
             boolean tieneLlave = false;
@@ -201,7 +198,7 @@ public class Partida {
 
             log.registrar("Usaste la Llave para abrir el gran portón a la Zona 8...");
         }
-        // ============================================================
+
 
         if (nz.getCountTurnos() == 0) {
             objetosYCombate.poblarZona(nz);
@@ -299,7 +296,9 @@ public class Partida {
 
 
     public boolean moverJugador(int row, int col) {
-        return movimiento.moverJugador(row, col);
+        boolean result = movimiento.moverJugador(row, col);
+        if (result) movimientoRealizado = true;
+        return result;
     }
 
     public Lista<Celda> getCeldasAccesibles() {
@@ -332,6 +331,10 @@ public class Partida {
 
     public NPC interactNPC() {
         return objetosYCombate.interactNPC();
+    }
+
+    public boolean interactuarGato() {
+        return findGato();
     }
 
 
@@ -492,6 +495,7 @@ public class Partida {
     public void setMovimientoRealizado(boolean b) { this.movimientoRealizado = b; }
     public boolean isAccionRealizada() { return accionRealizada; }
     public void setAccionRealizada(boolean b) { this.accionRealizada = b; }
+
     public GrafoZonas getGrafoZonas() {
         return grafo;
     }

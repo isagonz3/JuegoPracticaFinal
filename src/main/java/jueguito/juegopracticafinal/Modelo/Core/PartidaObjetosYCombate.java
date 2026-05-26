@@ -224,18 +224,11 @@ public class PartidaObjetosYCombate {
             return false;
         }
 
-        // Intentar equipar en el inventario
-        boolean ok = inv.equipar(o);
-        if (!ok) {
+        // Intentar equipar en el jugador
+        if (!jugador.equipar(o, s)) {
             partida.getLog().registrar("No se puede equipar este objeto.");
             return false;
         }
-
-        // Configurar la duración del objeto
-        o.setDuracionTurnos(4);
-        o.resetTurnos();
-
-        inv.removeObjeto(o);
 
         partida.getLog().registrar("Equipaste " + o.getNombre());
 
