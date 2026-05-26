@@ -84,6 +84,8 @@ public class PartidaObjetosYCombate {
         Jugador jugador = partida.getJugador();
         Zona zonaActual = partida.getZonaActual();
 
+        if (partida.isAccionRealizada()) { partida.getLog().registrar("Ya realizaste una acción este turno"); return false; }
+
         Celda c = zonaActual.getCelda(
                 jugador.getPosicion().getRow() + row,
                 jugador.getPosicion().getCol() + col
@@ -95,6 +97,7 @@ public class PartidaObjetosYCombate {
         }
 
         atacarEnemigo((Enemigo) c.getEntidad());
+        partida.setAccionRealizada(true);
         return true;
     }
 

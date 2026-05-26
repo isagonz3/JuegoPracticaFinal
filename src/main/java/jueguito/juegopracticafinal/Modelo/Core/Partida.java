@@ -25,6 +25,8 @@ public class Partida {
     private int idZonaGato = -1;
     private boolean gatoEncontrado;
     private boolean faseJugadorActiva = true;
+    private boolean movimientoRealizado = false;
+    private boolean accionRealizada = false;
 
     // Nuevos módulos
     private PartidaMovimiento movimiento;
@@ -104,6 +106,8 @@ public class Partida {
                 .setPuntosMovDisponibles(jugador.getRangoTotal());
 
         log.registrar("--- Turno " + turnoActual + " ---");
+        movimientoRealizado = false;
+        accionRealizada = false;
     }
 
     public void terminarTurno() {
@@ -226,6 +230,9 @@ public class Partida {
 
         zonaActual.setCountTurnos(zonaActual.getCountTurnos() + 1);
         turnoActual++;
+
+        movimientoRealizado = false;
+        accionRealizada = false;
 
         jugador.getInventario().avanzarTurno();
 
@@ -414,6 +421,14 @@ public class Partida {
     public int getTurnoActual() {
         return turnoActual;
     }
+    public boolean isMovimientoRealizado() { return movimientoRealizado; }
+    public void setMovimientoRealizado(boolean b) { this.movimientoRealizado = b; }
+    public boolean isAccionRealizada() { return accionRealizada; }
+    public void setAccionRealizada(boolean b) { this.accionRealizada = b; }
+    public GrafoZonas getGrafoZonas() {
+        return grafo;
+    }
+
 
 
     public void setIdZonaActual(int idZonaActual) {

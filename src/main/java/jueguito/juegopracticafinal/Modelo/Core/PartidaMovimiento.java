@@ -28,6 +28,8 @@ public class PartidaMovimiento {
         Zona zonaActual = partida.getZonaActual();
         Jugador jugador = partida.getJugador();
 
+        if (partida.isMovimientoRealizado()) { partida.getLog().registrar("Ya te has movido este turno"); return false; }
+
         Celda destino = zonaActual.getCelda(row, col);
         if (destino == null) {
             partida.getLog().registrar("No puedes moverte aqui");
@@ -66,6 +68,7 @@ public class PartidaMovimiento {
         if (destino.tieneObjeto())
             partida.recogerObjeto(destino);
 
+        partida.setMovimientoRealizado(true);
         return true;
     }
 
@@ -259,11 +262,7 @@ public class PartidaMovimiento {
                     if (pjCelda != null &&
                             zonaActual.getCelda(i, j).esAdyacente(pjCelda)) {
 
-                        int hit = (int)Math.max(
-                                0,
-                                e.getAtaqueTotal() * Math.random() * 2
-                                        - jugador.getDefensaTotal()
-                        );
+                        int hit = PartidaObjetosYCombate.calcularHit(e.getAtaqueTotal(),jugador.getDefensaTotal());
 
                         jugador.recibirAtaque(hit);
 

@@ -2,6 +2,7 @@ package jueguito.juegopracticafinal.Modelo.Core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Estadisticas;
 import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
@@ -42,6 +43,15 @@ public class LoadJSON {
         int turnoActual;
         String estadoActual;
         String[] entradasLog;
+        boolean[] zonasVisitadas;
+        String[] enemigosJson;
+        int[] objetosTipo;
+        int[] objetosAtqBonus;
+        int[] objetosDefBonus;
+        int[] objetosVidaBonus;
+        int[] objetosRangoBonus;
+        int[] objetosUsos;
+        String[] objetosSlot;
     }
 
     public static void guardarPartida(Partida partida,String ruta){
@@ -57,10 +67,38 @@ public class LoadJSON {
         partidaData.posRow = jugador.getPosicion().getRow();
         partidaData.posCol = jugador.getPosicion().getCol();
 
-        partidaData.objetosInventario = new String[jugador.getInventario().size()];
-        for (int i = 0; i < jugador.getInventario().size(); i++) {
-            partidaData.objetosInventario[i] = jugador.getInventario().getObjeto(i).getNombre();
+        //Guardar objetos del inventario
+
+        int numObj = jugador.getInventario().size();
+
+        partidaData.objetosInventario = new String[numObj];
+        partidaData.objetosTipo = new int[numObj];
+        partidaData.objetosAtqBonus = new int[numObj];
+        partidaData.objetosDefBonus = new int[numObj];
+        partidaData.objetosVidaBonus = new int[numObj];
+        partidaData.objetosRangoBonus = new int[numObj];
+        partidaData.objetosUsos = new int[numObj];
+        partidaData.objetosSlot = new String[numObj];
+
+
+        for (int i = 0; i < numObj; i++) {
+            Objeto o = jugador.getInventario().getObjeto(i);
+            partidaData.objetosInventario[i] = o.getNombre();
+            partidaData.objetosTipo[i] = o.getTipo().ordinal();
+            partidaData.objetosAtqBonus[i] = o.getAtaqueBonus();
+            partidaData.objetosDefBonus[i] = o.getDefensaBonus();
+            partidaData.objetosVidaBonus[i] = o.getVidaBonus();
+            partidaData.objetosRangoBonus[i] = o.getRangoBonus();
+            partidaData.objetosUsos[i] = o.getUsosRestantes();
+            if(o.getSlot() != null){
+                partidaData.objetosSlot[i] = o.getSlot().name();
+            }
+            else{
+                partidaData.objetosSlot[i] = "";
+            }
         }
+
+        //Guardar objetos en equipamiento
 
         partidaData.objetosEquipamiento = new String[2];
         for(int i = 0; i < 2; i++){
@@ -81,6 +119,35 @@ public class LoadJSON {
         partidaData.entradasLog = new String[logs.getSize()];
         for(int i = 0; i <  logs.getSize(); i++){
             partidaData.entradasLog[i] = logs.get(i).getMensaje();
+        }
+
+        //Guardar zonas visitadas
+
+        int numZonas = Configuracion.get().zona.numZonas;
+        partidaData.zonasVisitadas = new boolean[numZonas];
+        for(int i = 0; i < numZonas; i++){
+            Zona z = partida.getGrafoZonas().getZona(i);
+            partidaData.zonasVisitadas[i] = (z != null && z.isVisitada());
+        }
+
+        //Guardar enemigos en zona actual
+
+        Zona zActual = partida.getZonaActual();
+        Lista<String> enemigos = new Lista<>();
+        for(int r = 0; r < zActual.getRows(); r++){
+            for(int c = 0; c < zActual.getCols(); c++){
+                Celda celda = zActual.getCelda(r, c);
+                if(celda != null && celda.getEntidad() instanceof Enemigo e && e.estarVivo()){
+                    enemigos.add(
+                            e.getNombre() + "-" + e.getEstadisticas().getVidaActual() + "-" + e.getEstadisticas().getAtaqueBase() + "-" + e.getEstadisticas().getDefensaBase() + "-" + r + c
+                    );
+                }
+            }
+        }
+
+        partidaData.enemigosJson = new String[enemigos.getSize()];
+        for(int i = 0; i < enemigos.getSize(); i++){
+            partidaData.enemigosJson[i] = enemigos.get(i);
         }
 
         try (FileWriter w = new FileWriter(ruta)) {

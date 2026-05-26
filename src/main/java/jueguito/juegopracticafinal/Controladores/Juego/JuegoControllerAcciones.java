@@ -62,6 +62,10 @@ public class JuegoControllerAcciones {
                 moverTecla();
                 break;
 
+            case E: case TAB:
+                terminarTurno();
+                break;
+
             case SPACE: case ENTER:
                 atacarTecla();
                 break;
@@ -196,7 +200,6 @@ public class JuegoControllerAcciones {
         }
 
         ctrl.getLogArea().appendText(npc.getNombre() + ": " + npc.hablar() + "\n");
-        terminarTurno();
     }
 
     private void abrirTienda(NPC npc) {
