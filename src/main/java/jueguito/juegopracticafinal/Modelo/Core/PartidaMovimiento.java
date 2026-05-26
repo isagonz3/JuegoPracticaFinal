@@ -43,6 +43,36 @@ public class PartidaMovimiento {
             return false;
         }
 
+        // ============================================================
+        // 🌊 RESTRICCIÓN DE TERRENO: CASILLAS DE AGUA EN ZONA 6 (PIDE BARCA)
+        // ============================================================
+        if (zonaActual.getIdZona() == 6) {
+            // Comprobamos si la casilla de destino es una de las que requieren Barca
+            if ((row == 6 && col == 0) || (row == 6 && col == 1) || (row == 6 && col == 2) ||
+                    (row == 7 && col == 3) || (row == 8 && col == 4) || (row == 9 && col == 5) ||
+                    (row == 10 && col == 6) || (row == 10 && col == 7) || (row == 11 && col == 8) ||
+                    (row == 12 && col == 8) || (row == 13 && col == 9) || (row == 14 && col == 10)) {
+
+                boolean tieneBarca = false;
+                jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
+
+                // Buscamos la Barca en la mochila
+                for (int i = 0; i < inv.size(); i++) {
+                    if (inv.getObjeto(i) != null && "Barca".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
+                        tieneBarca = true;
+                        break;
+                    }
+                }
+
+                // 🔥 CORRECCIÓN: Si no tiene el ítem, muestra "Movimiento restringido"
+                if (!tieneBarca) {
+                    partida.getLog().registrar("Movimiento restringido");
+                    return false;
+                }
+            }
+        }
+        // ============================================================
+
         // 4. Calcular ruta y coste de puntos de movimiento (PM)
         Posicion actual = jugador.getPosicion();
         int coste = calcularDist(actual.getRow(), actual.getCol(), row, col, zonaActual);
@@ -67,20 +97,19 @@ public class PartidaMovimiento {
         jugador.moverA(new Posicion(row, col));
         destino.setEntidad(jugador);
 
-        // 🔥 NOTIFICACIÓN DE PASO: Informa la casilla de destino en el Log de la partida
+        // 7. NOTIFICACIÓN DE PASO
         partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
 
-        // 7. RECOGIDA AUTOMÁTICA DE OBJETOS
+        // 8. RECOGIDA AUTOMÁTICA DE OBJETOS
         if (destino.tieneObjeto()) {
             partida.recogerObjeto(destino);
         }
 
-        // 8. Comprobar si la casilla además era una transición de zona (Puerta)
+        // 9. Comprobar si la casilla además era una transición de zona (Puerta)
         if (destino.tienePuerta()) {
             partida.cambiarZona(destino.getPuerta());
         }
 
-        partida.setMovimientoRealizado(true);
         return true;
     }
 
