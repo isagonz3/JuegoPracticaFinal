@@ -3,7 +3,7 @@ package jueguito.juegopracticafinal.Modelo.Entidades;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 
 public abstract class  Entidad {
-    public Estadisticas estadisticas;
+    protected Estadisticas estadisticas;
     protected Posicion posicion;
     protected String nombre;
 

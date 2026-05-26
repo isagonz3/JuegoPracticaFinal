@@ -218,7 +218,7 @@ public class JuegoControllerAcciones {
 
     public void comprar(String item, int coste) {
 
-        Inventario inv = partida.getJugador().inventario;
+        Inventario inv = partida.getJugador().getInventario();
 
         int gemas = 0;
 
