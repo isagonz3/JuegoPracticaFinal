@@ -16,7 +16,7 @@ public class Objeto {
 
     public Objeto() {
         this.nombre = "Objeto";
-        this.tipo = TipoObjeto.CONSUMIBLE;
+        this.tipo = TipoObjeto.USABLE;
         this.slot = null;
         this.usosMax = 1;
         this.usosRestantes = 1;
@@ -93,7 +93,7 @@ public class Objeto {
     }
 
     public boolean isConsumible() {
-        return this.tipo == TipoObjeto.CONSUMIBLE || this.tipo == TipoObjeto.LLAVE;
+        return this.tipo == TipoObjeto.USABLE || this.tipo == TipoObjeto.LLAVE;
     }
 
     public boolean usarObjeto() {
@@ -113,7 +113,6 @@ public class Objeto {
         copia.slot = this.slot;
         return copia;
     }
-
 
     @Override
     public String toString() {

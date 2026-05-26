@@ -78,6 +78,7 @@ public class Jugador extends Entidad{
         }
     }
 
+
     @Override
     public int getAtaqueTotal(){
         return estadisticas.getAtaqueBase() + bonusAtaqueEq;

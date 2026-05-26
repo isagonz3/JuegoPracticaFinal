@@ -130,7 +130,7 @@ public class LoadJSON {
         for (int i = 0; i < partidaData.objetosInventario.length; i++){
             if(partidaData.objetosInventario[i] != null){
                 jugador.getInventario().addObjeto(
-                        new Objeto(partidaData.objetosInventario[i], TipoObjeto.CONSUMIBLE)
+                        new Objeto(partidaData.objetosInventario[i], TipoObjeto.USABLE)
                 );
             }
         }

@@ -42,7 +42,7 @@ public class JuegoController {
     @FXML private TextArea logArea;
     @FXML private GridPane mapaGrid;
     @FXML private Button terminarTurnoBtn, guardarBtn;
-    @FXML private ListView<String> inventarioList;
+    @FXML private ListView<Objeto> inventarioList;
     @FXML private Button usarBtn, equiparBtn;
     @FXML private Button atacarBtn;
     @FXML private Button interactuarBtn;
@@ -50,7 +50,8 @@ public class JuegoController {
     @FXML private Button comprarBarcaBtn;
     @FXML private Button comprarMapaBtn;
     @FXML private Button salirTiendaBtn;
-
+    @FXML private TextArea objetosUsadosArea;
+    @FXML private TextArea objetosEquipadosArea;
 
     private Partida partida;
     private JueguitoFX app;
@@ -237,7 +238,7 @@ public class JuegoController {
         inventarioList.getItems().clear();
         Jugador jug = partida.getJugador();
         for (int i = 0; i < jug.getInventario().size(); i++) {
-            inventarioList.getItems().add(jug.getInventario().getObjeto(i).toString());
+            inventarioList.getItems().add(jug.getInventario().getObjeto(i));
         }
     }
 
@@ -246,28 +247,46 @@ public class JuegoController {
         guardarBtn.setOnAction(e -> guardaPartida());
         inventarioList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) { objetoSeleccionado = null; return; }
-            objetoSeleccionado = partida.getJugador().getInventario().findObjeto(newVal);
+            objetoSeleccionado = partida.getJugador().getInventario().findObjeto(String.valueOf(newVal));
         });
 
         usarBtn.setOnAction(e -> {
+
             if (objetoSeleccionado == null) return;
+
             if (partida.usarObjeto(objetoSeleccionado)) {
+
                 renderMapa();
+
                 actualizarUI();
+
+                actualizarInventario();
+
+                actualizarInventarioExtra();
             }
         });
 
         equiparBtn.setOnAction(e -> {
+
             if (objetoSeleccionado == null) return;
+
             SlotEquipable slot = objetoSeleccionado.getSlot();
+
             if (slot == null) {
                 partida.getLog().registrar("Este objeto no es equipable");
                 actualizarUI();
                 return;
             }
+
             if (partida.equiparObjeto(objetoSeleccionado, slot)) {
+
                 renderMapa();
+
                 actualizarUI();
+
+                actualizarInventario();
+
+                actualizarInventarioExtra();
             }
         });
 
@@ -364,6 +383,57 @@ public class JuegoController {
         logArea.appendText(item + " comprado\n");
 
         actualizarUI();
+    }
+
+
+    private void actualizarInventario() {
+
+        inventarioList.getItems().clear();
+
+        for (int i = 0; i < partida.getJugador().getInventario().getObjetos().getSize(); i++) {
+
+            Objeto o = partida.getJugador().getInventario().getObjetos().get(i);
+
+            inventarioList.getItems().add(o);
+        }
+    }
+
+    private void actualizarInventarioExtra() {
+
+        String usados = "";
+
+        for (int i = 0;
+             i < partida.getJugador().getInventario().getObjetosUsados().getSize();
+             i++) {
+
+            Objeto o = partida.getJugador()
+                    .getInventario()
+                    .getObjetosUsados()
+                    .get(i);
+
+            usados += "- " + o.getNombre() + "\n";
+        }
+
+        String equipados = "";
+
+        Objeto arma = partida.getJugador()
+                .getInventario()
+                .getEquipado(SlotEquipable.ARMA);
+
+        Objeto escudo = partida.getJugador()
+                .getInventario()
+                .getEquipado(SlotEquipable.ESCUDO);
+
+        if (arma != null) {
+            equipados += arma.getNombre() + "\n";
+        }
+
+        if (escudo != null) {
+            equipados += escudo.getNombre() + "\n";
+        }
+
+        objetosUsadosArea.setText(usados);
+        objetosEquipadosArea.setText(equipados);
     }
 
 

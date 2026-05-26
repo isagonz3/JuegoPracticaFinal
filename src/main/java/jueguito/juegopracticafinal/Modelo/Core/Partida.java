@@ -407,8 +407,6 @@ public class Partida {
         return -1;
     }
 
-    private boolean zonasPermitidas(int id) { for (int z:get().gato.zonasPermitidas) if (z==id) return true; return false; }
-
     // Métodos para cambiar de zona (habitacion)
 
     public void cambiarZona(Puerta puerta) {
@@ -533,7 +531,7 @@ public class Partida {
 
             celda.setObjeto(new Objeto(
                     "Gema",
-                    TipoObjeto.CONSUMIBLE,
+                    TipoObjeto.NPC,
                     0, 0, 0, 0,
                     1,
                     "Gema"
@@ -551,7 +549,7 @@ public class Partida {
             // 50% Gema (base)
             return new Objeto(
                     "Gema",
-                    TipoObjeto.CONSUMIBLE,
+                    TipoObjeto.NPC,
                     0, 0, 0, 0,
                     1,
                     "Gema"
@@ -588,9 +586,9 @@ public class Partida {
         int tipo = (int)(Math.random() * 3);
 
         return switch (tipo) {
-            case 0 -> new Objeto("Pocion de vida", TipoObjeto.CONSUMIBLE, 0, 0, 5, 0, 1, "Cura 5");
-            case 1 -> new Objeto("Pocion de ataque", TipoObjeto.CONSUMIBLE, 2, 0, 0, 5, 1, "+2 atk +5 rango");
-            default -> new Objeto("Pocion de defensa", TipoObjeto.CONSUMIBLE, 0, 1, 0, 0, 1, "+1 def");
+            case 0 -> new Objeto("Pocion de vida", TipoObjeto.USABLE, 0, 0, 5, 0, 1, "Cura 5");
+            case 1 -> new Objeto("Pocion de ataque", TipoObjeto.USABLE, 2, 0, 0, 5, 1, "+2 atk +5 rango");
+            default -> new Objeto("Pocion de defensa", TipoObjeto.USABLE, 0, 1, 0, 0, 1, "+1 def");
         };
     }
 
@@ -598,28 +596,86 @@ public class Partida {
     // Acciones que puede hacer el jugador
 
     public boolean usarObjeto(Objeto o) {
-        if (estadoActual!=EstadoJuego.EN_CURSO) return false;
-        if (o.objetoGastado()) { jugador.getInventario().removeObjeto(o); log.registrar(o.getNombre()+" gastado!"); return false; }
-        if (o.getVidaBonus()>0) { jugador.getEstadisticas().curarVida(o.getVidaBonus()); log.registrar("Usaste "+o.getNombre()+": +"+o.getVidaBonus()+" vida"); }
-        if (o.getAtaqueBonus()>0) { jugador.getEstadisticas().aumentarAtaque(o.getAtaqueBonus()); log.registrar("Usaste "+o.getNombre()+": +"+o.getAtaqueBonus()+" ataque"); }
-        if (o.getDefensaBonus()>0) { jugador.getEstadisticas().aumentarDefensa(o.getDefensaBonus()); log.registrar("Usaste "+o.getNombre()+": +"+o.getDefensaBonus()+" defensa"); }
-        if (o.getRangoBonus()>0) { jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus()); log.registrar("Usaste "+o.getNombre()+": +"+o.getRangoBonus()+" rango"); }
-        o.usarObjeto();
-        if (o.objetoGastado()) { jugador.getInventario().removeObjeto(o); log.registrar(o.getNombre()+" gastado!"); }
+
+        if (estadoActual != EstadoJuego.EN_CURSO) return false;
+
+        if (!jugador.getInventario().contiene(o)) return false;
+
+        boolean usado = o.usarObjeto();
+        if (!usado) return false;
+
+        // efectos
+        if (o.getVidaBonus() > 0) {
+            jugador.getEstadisticas().curarVida(o.getVidaBonus());
+            log.registrar("Usaste " + o.getNombre() + ": +" + o.getVidaBonus() + " vida");
+        }
+
+        if (o.getAtaqueBonus() > 0) {
+            jugador.getEstadisticas().aumentarAtaque(o.getAtaqueBonus());
+            log.registrar("Usaste " + o.getNombre() + ": +" + o.getAtaqueBonus() + " ataque");
+        }
+
+        if (o.getDefensaBonus() > 0) {
+            jugador.getEstadisticas().aumentarDefensa(o.getDefensaBonus());
+            log.registrar("Usaste " + o.getNombre() + ": +" + o.getDefensaBonus() + " defensa");
+        }
+
+        if (o.getRangoBonus() > 0) {
+            jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus());
+            log.registrar("Usaste " + o.getNombre() + ": +" + o.getRangoBonus() + " rango");
+        }
+
+        // registrar uso
+        jugador.getInventario().registrarUsado(o);
+
+        // eliminar si se gastó
+        if (o.objetoGastado()) {
+            jugador.getInventario().removeObjeto(o);
+            log.registrar(o.getNombre() + " gastado!");
+        }
+
         return true;
     }
 
     public boolean recogerObjeto(Celda c) {
-        if (estadoActual!=EstadoJuego.EN_CURSO||!c.tieneObjeto()) return false;
-        if (jugador.getInventario().inventarioLleno()) { log.registrar("Inventario lleno!"); return false; }
-        Objeto o=c.getObjeto();
-        if (jugador.getInventario().addObjeto(o)) { c.setObjeto(null); log.registrar("Recogiste "+o.getNombre()+"!"); return true; }
+
+        if (estadoActual != EstadoJuego.EN_CURSO) return false;
+        if (!c.tieneObjeto()) return false;
+
+        Objeto o = c.getObjeto();
+
+        if (jugador.getInventario().inventarioLleno()) {
+            log.registrar("Inventario lleno!");
+            return false;
+        }
+
+        boolean ok = jugador.getInventario().addObjeto(o);
+
+        if (ok) {
+            c.setObjeto(null);
+            log.registrar("Recogiste " + o.getNombre() + "!");
+            return true;
+        }
+
         return false;
     }
 
     public boolean equiparObjeto(Objeto o, SlotEquipable s) {
-        if (estadoActual!=EstadoJuego.EN_CURSO) return false;
-        if (jugador.equipar(o,s)) { log.registrar("Equipaste "+o.getNombre()+"!"); return true; }
+
+        if (estadoActual != EstadoJuego.EN_CURSO) return false;
+
+        if (o == null) return false;
+        if (o.getSlot() != s) return false;
+
+        if (!jugador.getInventario().contiene(o)) return false;
+
+        boolean ok = jugador.getInventario().equipar(o);
+
+        if (ok) {
+            log.registrar("Equipaste " + o.getNombre() + "!");
+            return true;
+        }
+
         return false;
     }
 

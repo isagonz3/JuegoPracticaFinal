@@ -2,19 +2,39 @@ package jueguito.juegopracticafinal.Modelo.Inventario;
 
 import jueguito.juegopracticafinal.TADs.Lista;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Inventario {
 
     private Lista<Objeto> objetos;
     private int sizeInventario;
 
+    // 🟦 NUEVO: usados
+    private Lista<Objeto> objetosUsados;
+
+    // 🟩 NUEVO: equipados
+    private Map<SlotEquipable, Objeto> objetosEquipados;
+
+
     public Inventario() {
         this.objetos = new Lista<>();
         this.sizeInventario = 10;
+
+        // 🆕 INIT
+        this.objetosUsados = new Lista<>();
+        this.objetosEquipados = new HashMap<>();
     }
 
     public Inventario(int size) {
         this.objetos = new Lista<>();
         this.sizeInventario = size;
+
+        // 🆕 INIT
+        this.objetosUsados = new Lista<>();
+        this.objetosEquipados = new HashMap<>();
     }
 
     // =========================
@@ -45,6 +65,19 @@ public class Inventario {
         for (int i = 0; i < objetos.getSize(); i++) {
 
             if (objetos.get(i).getNombre().equalsIgnoreCase(nombre)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public boolean contiene(Objeto objeto) {
+
+        for (int i = 0; i < objetos.getSize(); i++) {
+
+            if (objetos.get(i).equals(objeto)) {
                 return true;
             }
         }
@@ -99,14 +132,45 @@ public class Inventario {
         this.sizeInventario = size;
     }
 
-    public int getSizeInventario() {
-        return sizeInventario;
+
+    // =====================================================
+    // 🆕🆕🆕 LO QUE TE FALTABA (AÑADIDO SIN ROMPER NADA)
+    // =====================================================
+
+    // =========================
+    // USADOS
+    // =========================
+    public void registrarUsado(Objeto o) {
+        objetosUsados.add(o);
+    }
+
+    public Lista<Objeto> getObjetosUsados() {
+        return objetosUsados;
     }
 
     // =========================
-    // CONTAR OBJETOS REALES
+    // EQUIPAMIENTO
     // =========================
-    public int contarObjetosReales() {
-        return objetos.getSize();
+    public boolean equipar(Objeto o) {
+
+        if (o == null) return false;
+
+        SlotEquipable slot = o.getSlot();
+        if (slot == null) return false;
+
+        objetosEquipados.put(slot, o);
+        return true;
+    }
+
+    public void desequipar(SlotEquipable slot) {
+        objetosEquipados.remove(slot);
+    }
+
+    public Objeto getEquipado(SlotEquipable slot) {
+        return objetosEquipados.get(slot);
+    }
+
+    public Map<SlotEquipable, Objeto> getObjetosEquipados() {
+        return objetosEquipados;
     }
 }

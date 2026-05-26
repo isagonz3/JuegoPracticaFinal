@@ -44,13 +44,13 @@
                 <Label text="TIENDA DEL COMERCIANTE"
                        style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" />
 
-                <Label text="🚤 Barca - 5 gemas"
+                <Label text="Barca - 5 gemas"
                        style="-fx-text-fill: white;" />
 
                 <Button fx:id="comprarBarcaBtn"
                         text="Comprar" />
 
-                <Label text="🗺️ Mapa - 3 gemas"
+                <Label text="Mapa - 3 gemas"
                        style="-fx-text-fill: white;" />
 
                 <Button fx:id="comprarMapaBtn"
@@ -118,6 +118,25 @@
                         HBox.hgrow="ALWAYS"/>
 
             </HBox>
+
+            <Label text="--- Estado de objetos ---"
+                   style="-fx-font-weight: bold;" />
+
+            <Label text="Objetos usados:" />
+
+            <TextArea fx:id="objetosUsadosArea"
+                      editable="false"
+                      wrapText="true"
+                      prefHeight="80"
+                      prefWidth="200" />
+
+            <Label text="Objetos equipados:" />
+
+            <TextArea fx:id="objetosEquipadosArea"
+                      editable="false"
+                      wrapText="true"
+                      prefHeight="80"
+                      prefWidth="200" />
 
             <Label text="--- Log ---"
                    style="-fx-font-weight: bold;" />
