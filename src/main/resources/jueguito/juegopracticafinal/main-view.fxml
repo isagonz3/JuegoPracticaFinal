@@ -11,7 +11,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
-
 <?import javafx.scene.layout.StackPane?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
@@ -22,13 +21,14 @@
         <Insets bottom="10" left="10" right="10" top="10"/>
     </padding>
 
+    <!-- ZONA SUPERIOR -->
     <top>
         <Label fx:id="zonaLabel" text="Zona: ?"
                style="-fx-font-size: 18; -fx-font-weight: bold;" />
     </top>
 
+    <!-- CENTRO: MAPA + TIENDA -->
     <center>
-
         <StackPane>
 
             <ScrollPane fitToWidth="true" fitToHeight="true">
@@ -62,92 +62,104 @@
             </VBox>
 
         </StackPane>
-
     </center>
 
+    <!-- DERECHA: DOS COLUMNAS -->
     <right>
-        <VBox spacing="10" minWidth="200">
 
-            <Label fx:id="turnoLabel" text="Turno: 0"
-                   style="-fx-font-size: 14;" />
+        <HBox spacing="20">
 
-            <Label fx:id="vidaLabel" text="Vida: 20/20" />
-            <ProgressBar fx:id="vidaBar" prefWidth="180" />
+            <!-- COLUMNA IZQUIERDA: turnos, vida, acciones, log -->
+            <VBox spacing="10" minWidth="200">
 
-            <Label text="--- Acciones ---"
-                   style="-fx-font-weight: bold;" />
+                <Label fx:id="turnoLabel" text="Turno: 0"
+                       style="-fx-font-size: 14;" />
 
-            <Button fx:id="terminarTurnoBtn"
-                    text="Terminar Turno"
-                    maxWidth="Infinity"/>
+                <Label fx:id="vidaLabel" text="Vida: 20/20" />
+                <ProgressBar fx:id="vidaBar" prefWidth="180" />
 
-            <Button fx:id="guardarBtn"
-                    text="Guardar Partida"
-                    maxWidth="Infinity"/>
+                <Label text="--- Acciones ---"
+                       style="-fx-font-weight: bold;" />
 
-            <HBox spacing="5">
+                <Button fx:id="terminarTurnoBtn"
+                        text="Terminar Turno"
+                        maxWidth="Infinity"/>
 
-                <Button fx:id="atacarBtn"
-                        text="Atacar"
-                        maxWidth="Infinity"
-                        HBox.hgrow="ALWAYS"/>
+                <Button fx:id="guardarBtn"
+                        text="Guardar Partida"
+                        maxWidth="Infinity"/>
 
-                <Button fx:id="interactuarBtn"
-                        text="Interactuar"
-                        maxWidth="Infinity"
-                        HBox.hgrow="ALWAYS"/>
-            </HBox>
+                <HBox spacing="5">
 
-            <Label text="--- Inventario ---"
-                   style="-fx-font-weight: bold;" />
+                    <Button fx:id="atacarBtn"
+                            text="Atacar"
+                            maxWidth="Infinity"
+                            HBox.hgrow="ALWAYS"/>
 
-            <ListView fx:id="inventarioList"
-                      prefHeight="120"
-                      prefWidth="200" />
+                    <Button fx:id="interactuarBtn"
+                            text="Interactuar"
+                            maxWidth="Infinity"
+                            HBox.hgrow="ALWAYS"/>
+                </HBox>
 
-            <HBox spacing="5">
+                <Label text="--- Log ---"
+                       style="-fx-font-weight: bold;" />
 
-                <Button fx:id="usarBtn"
-                        text="Usar"
-                        maxWidth="Infinity"
-                        HBox.hgrow="ALWAYS"/>
+                <TextArea fx:id="logArea"
+                          editable="false"
+                          wrapText="true"
+                          prefHeight="250"
+                          prefWidth="200" />
 
-                <Button fx:id="equiparBtn"
-                        text="Equipar"
-                        maxWidth="Infinity"
-                        HBox.hgrow="ALWAYS"/>
+            </VBox>
 
-            </HBox>
+            <!-- COLUMNA DERECHA: inventario, usar/equipar, estado -->
+            <VBox spacing="10" minWidth="200">
 
-            <Label text="--- Estado de objetos ---"
-                   style="-fx-font-weight: bold;" />
+                <Label text="--- Inventario ---"
+                       style="-fx-font-weight: bold;" />
 
-            <Label text="Objetos usados:" />
+                <ListView fx:id="inventarioList"
+                          prefHeight="120"
+                          prefWidth="200" />
 
-            <TextArea fx:id="objetosUsadosArea"
-                      editable="false"
-                      wrapText="true"
-                      prefHeight="80"
-                      prefWidth="200" />
+                <HBox spacing="5">
 
-            <Label text="Objetos equipados:" />
+                    <Button fx:id="usarBtn"
+                            text="Usar"
+                            maxWidth="Infinity"
+                            HBox.hgrow="ALWAYS"/>
 
-            <TextArea fx:id="objetosEquipadosArea"
-                      editable="false"
-                      wrapText="true"
-                      prefHeight="80"
-                      prefWidth="200" />
+                    <Button fx:id="equiparBtn"
+                            text="Equipar"
+                            maxWidth="Infinity"
+                            HBox.hgrow="ALWAYS"/>
 
-            <Label text="--- Log ---"
-                   style="-fx-font-weight: bold;" />
+                </HBox>
 
-            <TextArea fx:id="logArea"
-                      editable="false"
-                      wrapText="true"
-                      prefHeight="250"
-                      prefWidth="200" />
+                <Label text="--- Estado de objetos ---"
+                       style="-fx-font-weight: bold;" />
 
-        </VBox>
+                <Label text="Objetos usados:" />
+
+                <TextArea fx:id="objetosUsadosArea"
+                          editable="false"
+                          wrapText="true"
+                          prefHeight="80"
+                          prefWidth="200" />
+
+                <Label text="Objetos equipados:" />
+
+                <TextArea fx:id="objetosEquipadosArea"
+                          editable="false"
+                          wrapText="true"
+                          prefHeight="80"
+                          prefWidth="200" />
+
+            </VBox>
+
+        </HBox>
+
     </right>
 
 </BorderPane>
