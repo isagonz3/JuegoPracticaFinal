@@ -348,6 +348,10 @@ public class Partida {
         return objetosYCombate.interactNPC();
     }
 
+    public boolean interactuarGato() {
+        return objetosYCombate.interactuarGato();
+    }
+
     // ============================================================
     // UTILIDADES INTERNAS
     // ============================================================
@@ -551,4 +555,5 @@ public class Partida {
     public UIRenderer getUi() {
         return ui;
     }
+
 }

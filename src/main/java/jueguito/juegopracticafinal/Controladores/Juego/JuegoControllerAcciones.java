@@ -183,23 +183,30 @@ public class JuegoControllerAcciones {
     // ============================================================
 
     public void interactuarBoton() {
-
+        // 1. Intentar interactuar con NPC (si lo hay)
         NPC npc = partida.interactNPC();
+        if (npc != null) {
+            if (npc.getTipo() == TipoNPC.COMERCIANTE) {
+                abrirTienda(npc);
+            } else {
+                ctrl.getLogArea().appendText(npc.getNombre() + ": " + npc.hablar() + "\n");
+            }
+            // Si el NPC fue encontrado, no queremos ejecutar nada más
+            return;
+        }
 
+        // 2. Intentar interactuar con Gato (si lo hay)
+        // Esto solo se ejecutará si el NPC era null
+        if (partida.interactuarGato()) {
+            ctrl.getLogArea().appendText("¡Has rescatado al gato!\n");
+        } else {
+            // Solo si no había ni NPC ni Gato
+            ctrl.getLogArea().appendText("No hay nadie ni nada con lo que interactuar...\n");
+        }
+
+        // Refrescamos pantalla al terminar
         ctrl.getUiRenderer().actualizarUI(partida);
         ctrl.getMapaRenderer().render(partida);
-
-        if (npc == null) {
-            ctrl.getLogArea().appendText("No hay nadie cerca...\n");
-            return;
-        }
-
-        if (npc.getTipo() == TipoNPC.COMERCIANTE) {
-            abrirTienda(npc);
-            return;
-        }
-
-        ctrl.getLogArea().appendText(npc.getNombre() + ": " + npc.hablar() + "\n");
     }
 
     private void abrirTienda(NPC npc) {

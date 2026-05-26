@@ -1,6 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Core;
 
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
+import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
 import jueguito.juegopracticafinal.Modelo.Inventario.Inventario;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
@@ -556,5 +557,54 @@ public class PartidaObjetosYCombate {
             case 1 -> new Objeto("Pocion de ataque", TipoObjeto.USABLE, 2, 0, 0, 5, 1, "+2 atk +5 rango");
             default -> new Objeto("Pocion de defensa", TipoObjeto.USABLE, 0, 1, 0, 0, 1, "+1 def");
         };
+    }
+
+
+    public boolean interactuarGato() {
+        if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
+            return false;
+
+        Jugador jugador = partida.getJugador();
+        Zona zonaActual = partida.getZonaActual();
+        Posicion pj = jugador.getPosicion();
+        Celda celdaJugador = zonaActual.getCelda(pj.getRow(), pj.getCol());
+
+        // Buscamos al Gato en las celdas adyacentes
+        for (int i = pj.getRow() - 1; i <= pj.getRow() + 1; i++) {
+            for (int j = pj.getCol() - 1; j <= pj.getCol() + 1; j++) {
+
+                if (!zonaActual.esValida(i, j)) continue;
+                Celda c = zonaActual.getCelda(i, j);
+
+                if (c.getEntidad() instanceof Gato) {
+                    // 1. Creamos el objeto para el inventario basado en la entidad Gato
+                    Objeto objetoGato = new Objeto(
+                            "Gato",
+                            TipoObjeto.USABLE,
+                            0, 0, 0, 0, 1,
+                            "El gato rescatado"
+                    );
+
+                    // 2. Intentar añadir al inventario
+                    if (jugador.getInventario().addObjeto(objetoGato)) {
+                        // 3. Eliminamos la entidad Gato del mapa (esto hará que desaparezca el PNG)
+                        c.setEntidad(null);
+
+                        // 4. Marcamos en partida que el gato fue encontrado
+                        partida.setGatoEncontrado(true);
+
+                        partida.getLog().registrar("¡Has rescatado al Gato!");
+                        if(partida.getUi() != null) partida.getUi().actualizarUI(partida);
+                        return true;
+                    } else {
+                        partida.getLog().registrar("¡Inventario lleno!");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        partida.getLog().registrar("No hay ningún gato cerca.");
+        return false;
     }
 }
