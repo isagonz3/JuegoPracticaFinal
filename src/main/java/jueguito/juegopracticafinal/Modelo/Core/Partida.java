@@ -24,6 +24,12 @@ public class Partida {
     private int idZonaGato = -1;
     private boolean gatoEncontrado;
 
+
+
+    private boolean faseJugadorActiva = true;
+
+
+
     public Partida(GrafoZonas grafo) { this.grafo = grafo; }
 
     //Iniciar partida
@@ -64,26 +70,38 @@ public class Partida {
 
     //Lógica del sistema de turnos
 
+
+
     public void iniciarTurno() {
+
         if (estadoActual != EstadoJuego.EN_CURSO) return;
-        jugador.getEstadisticas().setPuntosMovDisponibles(jugador.getRangoTotal());
+
+        faseJugadorActiva = true;
+
+        jugador.getEstadisticas()
+                .setPuntosMovDisponibles(jugador.getRangoTotal());
+
+        log.registrar("--- Turno " + turnoActual + " ---");
     }
+
+
+
 
     public void terminarTurno() {
 
         if (estadoActual != EstadoJuego.EN_CURSO) return;
 
+        faseJugadorActiva = false;
+
         moverEnemigos();
         atacarJugador();
+
+        jugador.getInventario().avanzarTurno();
 
         zonaActual.setCountTurnos(zonaActual.getCountTurnos() + 1);
         turnoActual++;
 
-        jugador.getInventario().avanzarTurno();
-
         if (checkDerrota() || checkVictoria()) return;
-
-        log.registrar("--- Turno " + turnoActual + " ---");
 
         iniciarTurno();
     }
@@ -479,26 +497,93 @@ public class Partida {
     // Métodos para cambiar de zona (habitacion)
 
     public void cambiarZona(Puerta puerta) {
-        if (puerta==null) return;
+
+        if (puerta == null) return;
+        if (estadoActual != EstadoJuego.EN_CURSO) return;
+        if (!faseJugadorActiva) return;
+
         int nid, dr, dc;
-        if (puerta.getZonaOrigen()==idZonaActual) { nid=puerta.getZonaDestino(); dr=puerta.getYDestino(); dc=puerta.getXDestino(); }
-        else { nid=puerta.getZonaOrigen(); dr=puerta.getYOrigen(); dc=puerta.getXOrigen(); }
-        Zona nz=grafo.getZona(nid);
-        if (nz==null) { log.registrar("Esta puerta no lleva a ninguna zona conocida"); return; }
-        if (nz.getCountTurnos()==0) { poblarZona(nz); ponerObjetos(nz); }
-        if (nid==get().zona.zonaCastillo&&!gatoEncontrado) { log.registrar("DETENGAN AL INTRUSO!: Has entrado al castillo sin el gato"); estadoActual=EstadoJuego.DERROTA; return; }
-        zonaActual.getCelda(jugador.getPosicion().getRow(),jugador.getPosicion().getCol()).setEntidad(null);
-        if (!nz.isVisitada()) { turnoActual=Math.max(0,turnoActual-1); log.registrar("Has descubierto una nueva zona!"); }
-        nz.setVisitada(true); idZonaActual=nid; zonaActual=nz;
-        dr=Math.min(Math.max(dr,0),nz.getRows()-1); dc=Math.min(Math.max(dc,0),nz.getCols()-1);
-        jugador.moverA(new Posicion(dr,dc)); nz.getCelda(dr,dc).setEntidad(jugador);
-        if (gatoEncontrado) {
-            Celda cg=zonaActual.getCelda(gato.getPosicion().getRow(),gato.getPosicion().getCol());
-            if (cg!=null) cg.setEntidad(null);
-            for (int[] d:new int[][]{{1,0},{-1,0},{0,1},{0,-1}}) { int cr=dr+d[0],cc=dc+d[1];
-                if (nz.esValida(cr,cc)) { Celda c=nz.getCelda(cr,cc); if (c!=null&&c.isTransitable()&&!c.isOcupada()) { gato.moverA(new Posicion(cr,cc)); c.setEntidad(gato); idZonaGato=nid; log.registrar("El gato te ha seguido"); break; } } }
+
+        if (puerta.getZonaOrigen() == idZonaActual) {
+            nid = puerta.getZonaDestino();
+            dr = puerta.getYDestino();
+            dc = puerta.getXDestino();
+        } else {
+            nid = puerta.getZonaOrigen();
+            dr = puerta.getYOrigen();
+            dc = puerta.getXOrigen();
         }
-        log.registrar("Has entrado en: "+nz.getNombreZona());
+
+        Zona nz = grafo.getZona(nid);
+
+        if (nz == null) {
+            log.registrar("Esta puerta no lleva a ninguna zona conocida");
+            return;
+        }
+
+        // =========================
+        // SPAWN DE ZONA SI ES NUEVA
+        // =========================
+        if (nz.getCountTurnos() == 0) {
+            poblarZona(nz);
+            ponerObjetos(nz);
+        }
+
+        // =========================
+        // RESTRICCIÓN HISTORIA
+        // =========================
+        if (nid == get().zona.zonaCastillo && !gatoEncontrado) {
+            log.registrar("DETENTE: has entrado sin el gato");
+            estadoActual = EstadoJuego.DERROTA;
+            return;
+        }
+
+        // =========================
+        // LIMPIAR CELDA ACTUAL
+        // =========================
+        zonaActual.getCelda(
+                jugador.getPosicion().getRow(),
+                jugador.getPosicion().getCol()
+        ).setEntidad(null);
+
+        // =========================
+        // MARCAR DESCUBRIMIENTO
+        // =========================
+        if (!nz.isVisitada()) {
+            log.registrar("Nueva zona descubierta!");
+        }
+
+        nz.setVisitada(true);
+
+        idZonaActual = nid;
+        zonaActual = nz;
+
+        dr = Math.min(Math.max(dr, 0), nz.getRows() - 1);
+        dc = Math.min(Math.max(dc, 0), nz.getCols() - 1);
+
+        jugador.moverA(new Posicion(dr, dc));
+        nz.getCelda(dr, dc).setEntidad(jugador);
+
+        log.registrar("Has entrado en: " + nz.getNombreZona());
+
+        accionCambioZona();
+    }
+
+    private void accionCambioZona() {
+
+        if (estadoActual != EstadoJuego.EN_CURSO) return;
+
+        zonaActual.setCountTurnos(zonaActual.getCountTurnos() + 1);
+        turnoActual++;
+
+        jugador.getInventario().avanzarTurno();
+
+        log.registrar("--- Turno " + turnoActual + " ---");
+
+        faseJugadorActiva = true;
+
+        jugador.getEstadisticas()
+                .setPuntosMovDisponibles(jugador.getRangoTotal());
     }
 
     // Colocar objetos en el mapa
@@ -667,34 +752,31 @@ public class Partida {
     public boolean usarObjeto(Objeto o) {
 
         if (estadoActual != EstadoJuego.EN_CURSO) return false;
+        if (!faseJugadorActiva) return false;
 
         if (!jugador.getInventario().contiene(o)) return false;
 
-        boolean usado = o.usarObjeto();
-        if (!usado) return false;
+        if (!o.usarObjeto()) return false;
 
-        if (o.getVidaBonus() > 0) {
+        if (o.getVidaBonus() > 0)
             jugador.getEstadisticas().curarVida(o.getVidaBonus());
-            log.registrar("Recuperas " + o.getVidaBonus() + " de vida");
-        }
 
-
-        if (o.getAtaqueBonus() > 0) {
+        if (o.getAtaqueBonus() > 0)
             jugador.getEstadisticas().aumentarAtaque(o.getAtaqueBonus());
-            log.registrar("Aumentas " + o.getAtaqueBonus() + " de ataque");
-        }
 
-        if (o.getDefensaBonus() > 0) {
+        if (o.getDefensaBonus() > 0)
             jugador.getEstadisticas().aumentarDefensa(o.getDefensaBonus());
-        }
 
-        if (o.getRangoBonus() > 0) {
+        if (o.getRangoBonus() > 0)
             jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus());
-        }
+
+        log.registrar("Usaste " + o.getNombre());
 
         if (o.objetoGastado()) {
             jugador.getInventario().removeObjeto(o);
         }
+
+        terminarTurno();
 
         return true;
     }
@@ -725,40 +807,32 @@ public class Partida {
     public boolean equiparObjeto(Objeto o, SlotEquipable s) {
 
         if (estadoActual != EstadoJuego.EN_CURSO) return false;
+        if (!faseJugadorActiva) return false;
 
-        if (o == null) return false;
-
-        if (o.getSlot() == null) return false;
-
+        if (o == null || o.getSlot() == null) return false;
         if (!o.getSlot().equals(s)) return false;
 
         if (!jugador.getInventario().contiene(o)) return false;
 
-        if (jugador.getInventario().getObjetosEquipados().getSize() >= 2) {
-            log.registrar("No puedes equipar más objetos");
+        Objeto actual = jugador.getInventario().getEquipado(s);
+
+        if (actual != null) {
+            log.registrar("Ya tienes un " + s + " equipado");
             return false;
-        }
-
-        for (int i = 0; i < jugador.getInventario().getObjetosEquipados().getSize(); i++) {
-
-            Objeto equipado = jugador.getInventario().getObjetosEquipados().get(i);
-
-            if (equipado.getSlot() == o.getSlot()) {
-                log.registrar("Ya tienes un " + s + " equipado");
-                return false;
-            }
         }
 
         boolean ok = jugador.getInventario().equipar(o);
 
         if (!ok) return false;
 
+        jugador.getInventario().removeObjeto(o);
+
         o.setDuracionTurnos(5);
         o.resetTurnos();
 
-        jugador.getInventario().removeObjeto(o);
-
         log.registrar("Equipaste " + o.getNombre());
+
+        terminarTurno();
 
         return true;
     }

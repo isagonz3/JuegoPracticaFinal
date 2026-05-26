@@ -82,7 +82,7 @@
                        style="-fx-font-weight: bold;" />
 
                 <Button fx:id="terminarTurnoBtn"
-                        text="Terminar Turno"
+                        text="No realizar acción"
                         maxWidth="Infinity"/>
 
                 <Button fx:id="guardarBtn"
