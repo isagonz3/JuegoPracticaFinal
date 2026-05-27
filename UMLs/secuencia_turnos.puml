@@ -1,0 +1,63 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+title Ciclo completo de turno
+
+participant JuegoController as JC
+participant Partida as P
+participant PartidaMovimiento as PM
+participant PartidaObjetosYCombate as PO
+participant Zona as Z
+participant Enemigo as E
+participant Jugador as J
+participant UIRenderer as UI
+participant MapaRenderer as MR
+
+== FASE JUGADOR ==
+JC -> P: iniciarTurno()
+P -> J: getEstadisticas().setPuntosMovDisponibles(rango)
+note right: jugador puede moverse\n1 mov + 1 acc por turno
+JC -> P: moverJugador(row, col)  (opcional)
+JC -> P: atacar/ usar/ equipar/ interactuar  (opcional)
+
+== FASE ENEMIGOS ==
+JC -> P: terminarTurno()
+P -> PM: moverEnemigos()
+loop por cada Enemigo vivo en zona
+  PM -> Z: getCaminoMinimo()  [BFS]
+  alt camino encontrado
+    PM -> E: moverA(nuevaPos)
+    PM -> Z: celdaNueva.setEntidad(e)
+    note right: enemigo avanza 1 paso\nhacia el jugador
+  else enemigo adyacente
+    note right: no se mueve,\natacar� despu�s
+  end
+end
+P -> PO: atacarJugador()
+loop por cada Enemigo adyacente
+  PO -> PO: calcularHit(atq, def)
+  PO -> J: getEstadisticas().restarVidaDirecta(hit)
+end
+
+== FIN DE TURNO ==
+P -> J: getInventario().avanzarTurno()
+P -> Z: countTurnos++
+P -> P: checkDerrota()
+alt vida <= 0
+  P -> P: estado = DERROTA
+else turnos >= maxTurnos
+  P -> P: estado = DERROTA
+end
+P -> P: checkVictoria()
+alt gatoEncontrado && en SALIDA del castillo
+  P -> P: estado = VICTORIA
+end
+alt partida sigue
+  P -> P: iniciarTurno()
+end
+JC -> UI: actualizarUI(partida)
+JC -> MR: render(partida)
+
+@enduml

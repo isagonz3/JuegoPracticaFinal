@@ -1,0 +1,95 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+title Ataque
+
+participant JuegoController as JC
+participant JuegoControllerAcciones as JCA
+participant Partida as P
+participant PartidaObjetosYCombate as PO
+participant PartidaMovimiento as PM
+participant Zona as Z
+participant Jugador as J
+participant Enemigo as E
+participant Celda as C
+participant UIRenderer as UI
+participant MapaRenderer as MR
+
+== ATAQUE JUGADOR ---> ENEMIGO ==
+JC -> JCA: atacarBoton()
+JCA -> P: getEstadoActual()
+alt estado != EN_CURSO
+  return
+end
+alt ataqueRealizado
+  JCA --> JC: "Ya atacaste este turno"
+  return
+end
+JCA -> P: getZonaActual()
+JCA -> J: getPosicion()
+JCA -> Z: getCelda(filaJugador+dir, colJugador+dir)
+alt celda sin entidad o no es Enemigo
+  JCA --> JC: "No hay enemigos"
+  return
+end
+JCA -> J: getVidaActual()  [vidaAntes]
+JCA -> P: atacarDireccion(dirRow, dirCol)
+P -> PO: atacarDireccion(dirRow, dirCol)
+PO -> Z: getCelda(jugador + direccion)
+PO -> E: getEntidad() instanceof Enemigo
+PO -> J: getAtaqueTotal()
+PO -> E: getDefensaTotal()
+PO -> PO: calcularHit(ataque, defensa)
+note right: HIT = max(0, ATQ*(random*2) - DEF)
+PO -> E: recibirAtaque(hit)
+PO -> E: setAtacado(true)
+alt enemigo muerto
+  PO -> Z: celdaEnemigo.setEntidad(null)
+  PO -> P: log "Has derrotado a..."
+else
+  PO -> P: log "Has atacado a... recibe hit de daño"
+end
+P --> JCA: ResultadoCombate
+JCA -> JCA: calcular daño real (vidaAntes - vidaDespues)
+JCA -> P: terminarTurno()
+note right: esto mueve enemigos\ny ejecuta su ataque
+JCA -> JCA: calcular daño recibido
+JCA -> UI: actualizarUI(partida)
+JCA -> MR: render(partida)
+
+
+== ATAQUE ENEMIGOS ---> JUGADOR ==
+
+P -> PM: moverEnemigos()
+loop por cada Enemigo vivo
+  alt enemigo adyacente al jugador
+    note right: no se mueve,\n ataca en atacarJugador()
+  else distancia > 10
+    note right: demasiado lejos,\n ignorar
+  else enemigo fue atacado este turno
+    alt 50% huir
+      PM -> PM: elegir direccion que maxime\n distancia al jugador
+      PM -> E: moverA(nuevaPos)
+    else 50% atacar
+      alt adyacente
+        PM -> PO: calcularHit(atqE, defJ)
+        note right: HIT ya incluye defensa del jugador
+        PM -> J: getEstadisticas().restarVidaDirecta(hit)
+        note right: restarVidaDirecta NO vuelve\na aplicar defensa
+        PM -> P: log "enemigo te ha atacado"
+      end
+    end
+    PM -> E: setAtacado(false)
+  else perseguir
+    PM -> Z: getCaminoMinimo(origen, destino)
+    note right: BFS real con Cola propia
+    alt camino con 2+ celdas
+      PM -> C: celdaActual.setEntidad(null)
+      PM -> E: moverA(siguiente celda del camino)
+      PM -> C: celdaNueva.setEntidad(e)
+    end
+  end
+end
+@enduml

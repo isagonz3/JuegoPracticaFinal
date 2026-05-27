@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+Jugador --> (Moverse por la zona)
+Jugador --> (Moverse entre zonas)
+Jugador --> (Recoger objeto)
+Jugador --> (Usar objeto)
+Jugador --> (Equipar objeto)
+Jugador --> (Atacar enemigo)
+Jugador --> (Interaccion con NPCs)
+Jugador --> (Encontrar gato)
+Sistema --> (Generar zonas)
+Sistema --> (Mover enemigos)
+Sistema --> (Calcular daño tras combate)
+Sistema --> (Control de turnos)
+Sistema --> (Condiciones Victoria/Derrota)
+Sistema --> (Persistencia de datos)
+Sistema --> (Registro de log)
+@enduml

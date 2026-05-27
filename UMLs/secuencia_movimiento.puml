@@ -1,0 +1,108 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+title Movimiento jugador
+
+participant JuegoController as JC
+participant Partida as P
+participant PartidaMovimiento as PM
+participant Zona as Z
+participant Jugador as J
+participant Celda as C
+participant PartidaObjetosYCombate as PO
+participant GrafoZonas as GZ
+participant Zona as Z_ORIG
+participant Zona as Z_DEST
+participant Inventario as I
+
+
+== MOVIMIENTO DE JUGADOR ==
+JC -> P: moverJugador(row, col)
+P -> PM: moverJugador(row, col)
+PM -> Z: getCelda(row, col)
+alt celda null o no transitable u ocupada
+  PM --> P: false
+  P --> JC: false
+  note right: "No puedes moverte aqui"
+end
+PM -> J: getPosicion()
+PM -> PM: calcularDist(origen, destino, zona)
+note right: BFS con Cola propia
+alt sin camino
+  PM --> P: false
+end
+PM -> J: getEstadisticas().getPuntosMovDisponibles()
+alt coste > PM disponibles
+  PM --> P: false
+end
+PM -> J: getEstadisticas().usarMovimiento(coste)
+PM -> Z: getCelda(origen).setEntidad(null)
+PM -> J: moverA(new Posicion(row, col))
+PM -> Z: getCelda(destino).setEntidad(jugador)
+PM -> P: true
+
+alt destino tiene objeto
+  P -> PO: recogerObjeto(destino)
+end
+
+alt destino tiene puerta
+  P -> P: cambiarZona(puerta)
+  note right: transicion entre zonas
+  P -> Z: getZona(destino)
+  alt zona no visitada
+    PO -> PO: poblarZona(nz)
+    PO -> PO: ponerObjetos(nz)
+  end
+  alt es castillo sin gato
+    P -> P: estado = DERROTA
+  end
+  P -> Z: celdaOrigen.setEntidad(null)
+  P -> J: moverA(posPuertaDestino)
+  P -> Z: celdaDestino.setEntidad(jugador)
+  P -> P: accionCambioZona()
+  note right: turno++ automatico
+end
+
+== CAMBIO ZONA MEDIANTE PUERTA ==
+P -> P: cambiarZona(puerta)
+P -> P: get puerta origen/destino
+P -> GZ: getZona(nid)
+alt zona no existe
+  P -> P: log "Puerta no lleva a ninguna zona"
+  return
+end
+
+alt origen == 7 && destino == 8
+  P -> I: buscar "Llave" en inventario
+  alt no tiene llave
+    P -> P: log "Puerta cerrada, necesitas llave"
+    return
+  end
+end
+
+alt zona destino no visitada (turnos == 0)
+  P -> PO: poblarZona(nz)
+  PO -> Z_DEST: spawn enemigos
+  P -> PO: ponerObjetos(nz)
+  PO -> Z_DEST: spawn objetos y gemas
+end
+
+alt destino es castillo && gato NO encontrado
+  P -> P: estado = DERROTA
+  P -> P: log "Has entrado sin el gato"
+  return
+end
+
+P -> Z_ORIG: celdaJugador.setEntidad(null)
+P -> Z_DEST: setVisitada(true)
+P -> P: idZonaActual = nid
+P -> P: zonaActual = nz
+P -> J: moverA(posPuertaDestino)
+P -> Z_DEST: celdaPuerta.setEntidad(jugador)
+P -> P: log "Has entrado en: " + nombreZona
+P -> P: accionCambioZona()
+note right: turnoActual++
+
+@enduml

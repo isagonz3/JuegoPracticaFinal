@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+title Inicio de partida
+
+actor "Jugador" as J
+participant MenuController as MC
+participant MapaLoader as ML
+participant GrafoZonas as GZ
+participant Partida as P
+participant Zona as Z
+participant Jugador as JU
+participant Gato as GA
+
+J -> MC: pulsa "Nueva Partida"
+MC -> ML: cargarZonas()
+ML -> ML: leer habitaciones.json
+ML --> MC: Lista<Zona>
+MC -> ML: cargarPuertas()
+ML -> ML: leer puertas.json
+ML --> MC: Lista<Puerta>
+MC -> GZ: new GrafoZonas()
+loop por cada Zona
+  MC -> GZ: addZona(zona)
+end
+MC -> ML: conectarPuertas(grafo, puertas)
+ML -> GZ: conectar(zonaOrigen, zonaDestino)
+MC -> P: new Partida(grafo)
+MC -> P: iniciar()
+P -> Z: getZona(zonaInicial)
+P -> Z: getSpawnJugador()
+alt spawn null
+  P -> P: findSpawn(zona)
+  P -> Z: setSpawnJugador(spawn)
+end
+P -> JU: new Jugador("NoLink", stats, spawn)
+P -> Z: getCelda(spawn).setEntidad(jugador)
+P -> GA: new Gato("Gatiko", stats)
+P -> P: colocarGatoFijo()
+P -> P: colocarLlaveFija()
+P -> P: colocarNPCsFijos()
+P --> MC: partida iniciada
+MC -> J: navega a irAJuego(partida)
+
+
+@enduml
