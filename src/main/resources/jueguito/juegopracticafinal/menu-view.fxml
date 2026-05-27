@@ -5,16 +5,30 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="jueguito.juegopracticafinal.Controladores.MenuController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
+<BorderPane prefHeight="576" prefWidth="960" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.Controladores.MenuController">
+   <top>
+       <Label contentDisplay="CENTER" style="-fx-font-size: 30; -fx-font-weight: bold;" text="A TAD of Adventure" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Fira Code Bold" size="12.0" />
+         </font>
+         <padding>
+            <Insets top="70.0" />
+         </padding>
+      </Label>
+   </top>
+    <center>
+        <VBox prefWidth="960">
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300" prefWidth="960" spacing="10.0" BorderPane.alignment="TOP_CENTER">
+            <Button fx:id="nuevaPartidaBtn" text="Nueva Partida" />
+            <Button fx:id="cargarPartidaBtn" text="Cargar Partida" />
+            <Button fx:id="salirBtn" text="Salir" />
+        </HBox>
+      <TextArea editable="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="500.0" text="                                                  &#10;                                                CONTROLES: W/S/A/D para moverte por el mapa" wrapText="true">
+         <font>
+            <Font name="Fira Code Retina" size="11.0" />
+         </font>
+      </TextArea>
+        </VBox>
+    </center>
 
-    <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="A TAD of Adventure">
-      <font>
-         <Font name="Roboto Light" size="12.0" />
-      </font></Label>
-    <Button fx:id="nuevaPartidaBtn" text="Nueva Partida" />
-    <Button fx:id="cargarPartidaBtn" text="Cargar Partida" />
-    <Button fx:id="salirBtn" text="Salir" />
-</VBox>
+</BorderPane>
