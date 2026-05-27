@@ -1,0 +1,205 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+left to right direction
+hide empty members
+
+class Configuracion
+class LoadJSON
+class Partida
+class PartidaMovimiento
+class PartidaObjetosYCombate
+class Enemigo
+abstract class Entidad
+class Estadisticas
+class Gato
+class Jugador
+class Inventario
+class Objeto
+enum SlotEquipable
+enum TipoObjeto
+record EntradaLog
+class LogMovimiento
+class LogSistema
+class Celda
+class GrafoZonas
+class Posicion
+class Puerta
+class PuertaData
+enum TipoCelda
+class Zona
+class ZonaData
+class NPC
+enum TipoNPC
+class Tradeo
+enum EstadoJuego
+record ResultadoCombate
+class MapaRenderer
+class UIRenderer
+class SpriteManager
+class MenuController
+class EndController
+class TiendaController
+class JuegoController
+class JuegoControllerAcciones
+class JuegoControllerInventario
+class JueguitoFX
+class Launcher
+
+rectangle Entidades {
+  Estadisticas *-- Entidad
+  Posicion *-- Entidad
+  Entidad <|-- Jugador
+  Entidad <|-- Enemigo
+  Entidad <|-- Gato
+  Jugador : +Inventario inventario\n+Objeto[2] equipamiento\n+int bonusAtaqueEq\n+int bonusDefensaEq\n+int bonusRangoEq
+  Enemigo : +boolean atacado
+  Gato : entidad invulnerable\nsin comportamientos propios
+}
+
+rectangle Mundo {
+  Matrix *-- Zona
+  Celda *-- Matrix : filas x columnas
+  TipoCelda <-- Celda
+  Puerta <-- Celda : puede contener
+  Entidad <-- Celda : puede contener
+  Objeto <-- Celda : puede contener
+  NPC <-- Celda : puede contener
+  GrafoZonas o-- Zona : lista de
+  Posicion --> Celda : coordenadas
+  Puerta --> PuertaData : se carga desde JSON
+  Zona --> ZonaData : se carga desde JSON
+  MapaLoader ..> GrafoZonas : crea e inicializa
+  MapaLoader ..> Zona : crea desde JSON (habitaciones.json)
+  MapaLoader ..> Puerta : crea desde JSON (puertas.json)
+  MapaLoader ..> GsonUtil : usa para deserializar
+  Zona : +getCeldasAccesibles() BFS\n+getCaminoMinimo() BFS\n+Lista<Celda> puertas\n+Lista<Posicion> spawnEnemigos, spawnObjects
+}
+
+rectangle Core {
+  Partida *-- Jugador
+  Partida *-- Gato
+  Partida *-- GrafoZonas
+  Partida *-- PartidaMovimiento
+  Partida *-- PartidaObjetosYCombate
+  Partida o-- EstadoJuego
+  Partida *-- LogMovimiento
+  PartidaMovimiento --> Partida
+  PartidaObjetosYCombate --> Partida
+  Configuracion <-- Partida : get().jugador, get().enemigos...
+  LoadJSON ..> Partida : guardarPartida() / cargarPartida()
+  LoadJSON --> Configuracion : lee numZonas
+  Partida : +Zona zonaActual\n+int turnoActual\n+int idZonaActual\n+boolean gatoEncontrado\n+boolean faseJugadorActiva\n+iniciar() / terminarTurno() / cambiarZona()
+}
+
+rectangle Inventario {
+  Inventario *-- Lista : objetos
+  Inventario *-- Lista : objetosUsados
+  Inventario *-- Lista : objetosEquipados
+  Objeto o-- TipoObjeto
+  Objeto o-- SlotEquipable
+  Inventario : +addObjeto() / removeObjeto()\n+usarObjeto() / equipar()\n+maxItems = 10
+}
+
+rectangle NPC {
+  NPC *-- Lista : dialogos
+  NPC *-- Lista : tradeos
+  NPC o-- TipoNPC
+  Tradeo o-- Objeto : pedido/ofrecido
+  NPC : +hablar() / comerciar()\n+tieneInfoGato()
+}
+
+rectangle Log {
+  LogMovimiento *-- Lista : entradas
+  LogMovimiento ..> EntradaLog : registrar()
+  LogSistema --> LogMovimiento : podría centralizar
+  LogMovimiento : +registrar(String)\n+getUltimaEntrada()
+  EntradaLog : record(String mensaje)
+}
+
+Partida ..> Celda : manipula en zonaActual
+PartidaMovimiento ..> Cola : usa para BFS
+PartidaMovimiento ..> Zona : getCeldasVecinas / getCaminoMinimo
+PartidaObjetosYCombate ..> Enemigo : atacar / poblar
+PartidaObjetosYCombate ..> NPC : interactNPC()
+
+
+MapaRenderer *-- GridPane : mapaGrid
+MapaRenderer *-- SpriteManager : sprites
+MapaRenderer ..> Partida : render(partida)
+MapaRenderer ..> Zona : zonaActual para dibujar
+MapaRenderer ..> ImageView : crea por celda
+MapaRenderer ..> WritableImage : recorta tiles
+MapaRenderer ..> PixelReader : lee fondo.png
+MapaRenderer : +render(Partida)\n+getEntidadSprite(Celda): ImageView
+
+UIRenderer *-- Label : zonaLabel, turnoLabel, vidaLabel
+UIRenderer *-- ProgressBar : vidaBar
+UIRenderer *-- TextArea : logArea
+UIRenderer *-- ListView : inventarioList
+UIRenderer *-- TextArea : objetosUsadosArea
+UIRenderer *-- TextArea : objetosEquipadosArea
+UIRenderer ..> Partida : actualizarUI(partida)
+UIRenderer ..> LogMovimiento : lee entradas
+UIRenderer ..> Inventario : lee objetos
+UIRenderer : +actualizarUI(Partida)\n+limpiarLog()\n-int ultimoLogIndex
+
+SpriteManager ..> Image : getSprite(ruta)
+SpriteManager : +getJugadorSprite()\n+getGatoSprite()\n+getEnemigoSprite()\n+getNPCSprite(nombre)\n+getObjetoSprite(nombre)\n+getZonaBackground(idZona)
+
+MenuController --> JueguitoFX : setApp()
+MenuController ..> MapaLoader : crearGrafo()
+MenuController ..> Partida : new + iniciar()
+MenuController ..> LoadJSON : cargarPartida()
+MenuController : -Button nuevaPartidaBtn\n-Button cargarPartidaBtn\n-Button salirBtn\n+crearGrafo(): GrafoZonas
+
+EndController --> JueguitoFX : volverAlMenu()
+EndController : -Label resultadoLabel\n-TextArea logFinal\n-Button volverBtn\n+inicializar(resultado, logs, app)
+
+TiendaController --> JuegoController : setJuegoController()
+TiendaController ..> JuegoControllerAcciones : comprar()
+TiendaController : -Button comprarBarcaBtn\n-Button comprarMapaBtn\n-Button salirBtn
+
+JuegoController --> Partida
+JuegoController --> JueguitoFX : app
+JuegoController *-- JuegoControllerAcciones
+JuegoController *-- JuegoControllerInventario
+JuegoController *-- MapaRenderer
+JuegoController *-- UIRenderer
+JuegoController *-- SpriteManager
+JuegoController : @FXML\n-GridPane mapaGrid\n-Label zonaLabel, turnoLabel, vidaLabel\n-ProgressBar vidaBar\n-TextArea logArea\n-ListView<Objeto> inventarioList\n-Button terminarTurnoBtn, guardarBtn\n-Button usarBtn, equiparBtn, atacarBtn\n-Button interactuarBtn\n-VBox tiendaPanel\n+inicializar(partida, app)\n+manejarTecla(event)
+
+JuegoControllerAcciones --> Partida
+JuegoControllerAcciones --> JuegoController
+JuegoControllerAcciones --> JueguitoFX : irAEnd()
+JuegoControllerAcciones : +manejarTecla() / moverTecla()\n+atacarTecla() / atacarBoton()\n+interactuarBoton() / terminarTurno()\n+comprar(item, coste) / cerrarTienda()
+
+JuegoControllerInventario --> Partida
+JuegoControllerInventario --> JuegoController
+JuegoControllerInventario : +seleccionarObjeto()\n+usarObjeto() / equiparObjeto()\n-verificarFinJuego()
+
+rectangle App {
+  Launcher ..> JueguitoFX : Application.launch()
+  Launcher : +main(String[])
+
+  JueguitoFX *-- Stage : stage principal
+  JueguitoFX ..> Scene : crea escenas
+  JueguitoFX ..> "menu-view.fxml" : FXMLLoader.load()
+  JueguitoFX ..> "main-view.fxml" : FXMLLoader.load()
+  JueguitoFX ..> "end-view.fxml" : FXMLLoader.load()
+  JueguitoFX --> MenuController : getController()
+  JueguitoFX --> JuegoController : getController()
+  JueguitoFX --> EndController : getController()
+  JueguitoFX : +start(Stage)\n+irAJuego(Partida)\n+irAEnd(resultado, logs)\n+volverAlMenu()
+}
+
+menuView --> MenuController : FXML carga
+mainView --> JuegoController : FXML carga
+endView --> EndController : FXML carga
+tiendaView --> TiendaController : FXML carga
+
+menuView : menu-view.fxml
+mainView : main-view.fxml
+endView : end-view.fxml
+tiendaView : tienda-view.fxml
+@enduml

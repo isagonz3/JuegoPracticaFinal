@@ -1,0 +1,33 @@
+@startuml
+'https://plantuml.com/class-diagram
+left to right direction
+hide empty members
+
+
+class MapaRenderer
+class UIRenderer
+class SpriteManager
+
+MapaRenderer *-- GridPane : mapaGrid
+MapaRenderer *-- SpriteManager : sprites
+MapaRenderer ..> Partida : render(partida)
+MapaRenderer ..> Zona : zonaActual para dibujar
+MapaRenderer ..> ImageView : crea por celda
+MapaRenderer ..> WritableImage : recorta tiles
+MapaRenderer ..> PixelReader : lee fondo.png
+MapaRenderer : +render(Partida)\n+getEntidadSprite(Celda): ImageView
+
+UIRenderer *-- Label : zonaLabel, turnoLabel, vidaLabel
+UIRenderer *-- ProgressBar : vidaBar
+UIRenderer *-- TextArea : logArea
+UIRenderer *-- ListView : inventarioList
+UIRenderer *-- TextArea : objetosUsadosArea
+UIRenderer *-- TextArea : objetosEquipadosArea
+UIRenderer ..> Partida : actualizarUI(partida)
+UIRenderer ..> LogMovimiento : lee entradas
+UIRenderer ..> Inventario : lee objetos
+UIRenderer : +actualizarUI(Partida)\n+limpiarLog()\n-int ultimoLogIndex
+
+SpriteManager ..> Image : getSprite(ruta)
+SpriteManager : +getJugadorSprite()\n+getGatoSprite()\n+getEnemigoSprite()\n+getNPCSprite(nombre)\n+getObjetoSprite(nombre)\n+getZonaBackground(idZona)
+@enduml

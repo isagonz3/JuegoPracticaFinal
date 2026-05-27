@@ -17,10 +17,6 @@ public class PartidaMovimiento {
         this.partida = partida;
     }
 
-    // ============================================================
-    // MOVIMIENTO DEL JUGADOR
-    // ============================================================
-
     public boolean moverJugador(int row, int col) {
 
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
@@ -75,8 +71,6 @@ public class PartidaMovimiento {
     }
 
 
-    // BFS PARA DISTANCIA
-
     public int calcularDist(int r1, int c1, int r2, int c2, Zona z) {
 
         boolean[][] visit = new boolean[z.getRows()][z.getCols()];
@@ -117,8 +111,6 @@ public class PartidaMovimiento {
         return Integer.MAX_VALUE;
     }
 
-    // CELDAS ACCESIBLES
-
     public Lista<Celda> getCeldasAccesibles() {
 
         Jugador jugador = partida.getJugador();
@@ -134,8 +126,6 @@ public class PartidaMovimiento {
         );
     }
 
-    // CAMINO MÍNIMO
-
     public Lista<Celda> getCaminoMinimo(int dr, int dc) {
 
         Jugador jugador = partida.getJugador();
@@ -150,10 +140,6 @@ public class PartidaMovimiento {
                 dr, dc
         );
     }
-
-    // ============================================================
-    // MOVIMIENTO DE ENEMIGOS
-    // ===========================================================
 
     private boolean estaCercaDePuerta(Zona zona, int filaDestino, int colDestino) {
         for (int i = 0; i < zona.getRows(); i++) {
@@ -225,8 +211,6 @@ public class PartidaMovimiento {
             int bestDir = -1;
 
 
-            // SI FUE ATACADO
-
             if (e.isAtacado()) {
 
                 int decision = (int) (Math.random() * 2);
@@ -273,7 +257,6 @@ public class PartidaMovimiento {
                     }
                 }
 
-                // ATACAR
                 else {
 
                     Celda pjCelda = zonaActual.getCelda(pj.getRow(), pj.getCol());

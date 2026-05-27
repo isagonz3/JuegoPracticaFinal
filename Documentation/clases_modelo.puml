@@ -1,0 +1,113 @@
+@startuml
+'https://plantuml.com/class-diagram
+hide empty members
+
+left to right direction
+class Configuracion
+class LoadJSON
+class Partida
+class PartidaMovimiento
+class PartidaObjetosYCombate
+class Enemigo
+abstract class Entidad
+class Estadisticas
+class Gato
+class Jugador
+class Inventario
+class Objeto
+enum SlotEquipable
+enum TipoObjeto
+record EntradaLog
+class LogMovimiento
+class LogSistema
+class Celda
+class GrafoZonas
+class Posicion
+class Puerta
+class PuertaData
+enum TipoCelda
+class Zona
+class ZonaData
+class NPC
+enum TipoNPC
+class Tradeo
+enum EstadoJuego
+record ResultadoCombate
+
+rectangle Entidades {
+  Estadisticas *-- Entidad
+  Posicion *-- Entidad
+  Entidad <|-- Jugador
+  Entidad <|-- Enemigo
+  Entidad <|-- Gato
+  Jugador : +Inventario inventario\n+Objeto[2] equipamiento\n+int bonusAtaqueEq\n+int bonusDefensaEq\n+int bonusRangoEq
+  Enemigo : +boolean atacado
+  Gato : entidad invulnerable\nsin comportamientos propios
+}
+
+rectangle Mundo {
+  Matrix *-- Zona
+  Celda *-- Matrix : filas x columnas
+  TipoCelda <-- Celda
+  Puerta <-- Celda : puede contener
+  Entidad <-- Celda : puede contener
+  Objeto <-- Celda : puede contener
+  NPC <-- Celda : puede contener
+  GrafoZonas o-- Zona : lista de
+  Posicion --> Celda : coordenadas
+  Puerta --> PuertaData : se carga desde JSON
+  Zona --> ZonaData : se carga desde JSON
+  MapaLoader ..> GrafoZonas : crea e inicializa
+  MapaLoader ..> Zona : crea desde JSON (habitaciones.json)
+  MapaLoader ..> Puerta : crea desde JSON (puertas.json)
+  MapaLoader ..> GsonUtil : usa para deserializar
+  Zona : +getCeldasAccesibles() BFS\n+getCaminoMinimo() BFS\n+Lista<Celda> puertas\n+Lista<Posicion> spawnEnemigos, spawnObjects
+}
+
+rectangle Core {
+  Partida *-- Jugador
+  Partida *-- Gato
+  Partida *-- GrafoZonas
+  Partida *-- PartidaMovimiento
+  Partida *-- PartidaObjetosYCombate
+  Partida o-- EstadoJuego
+  Partida *-- LogMovimiento
+  PartidaMovimiento --> Partida
+  PartidaObjetosYCombate --> Partida
+  Configuracion <-- Partida : get().jugador, get().enemigos...
+  LoadJSON ..> Partida : guardarPartida() / cargarPartida()
+  LoadJSON --> Configuracion : lee numZonas
+  Partida : +Zona zonaActual\n+int turnoActual\n+int idZonaActual\n+boolean gatoEncontrado\n+boolean faseJugadorActiva\n+iniciar() / terminarTurno() / cambiarZona()
+}
+
+rectangle Inventario {
+  Inventario *-- Lista : objetos
+  Inventario *-- Lista : objetosUsados
+  Inventario *-- Lista : objetosEquipados
+  Objeto o-- TipoObjeto
+  Objeto o-- SlotEquipable
+  Inventario : +addObjeto() / removeObjeto()\n+usarObjeto() / equipar()\n+maxItems = 10
+}
+
+rectangle NPC {
+  NPC *-- Lista : dialogos
+  NPC *-- Lista : tradeos
+  NPC o-- TipoNPC
+  Tradeo o-- Objeto : pedido/ofrecido
+  NPC : +hablar() / comerciar()\n+tieneInfoGato()
+}
+
+rectangle Log {
+  LogMovimiento *-- Lista : entradas
+  LogMovimiento ..> EntradaLog : registrar()
+  LogSistema --> LogMovimiento : podría centralizar
+  LogMovimiento : +registrar(String)\n+getUltimaEntrada()
+  EntradaLog : record(String mensaje)
+}
+
+Partida ..> Celda : manipula en zonaActual
+PartidaMovimiento ..> Cola : usa para BFS
+PartidaMovimiento ..> Zona : getCeldasVecinas / getCaminoMinimo
+PartidaObjetosYCombate ..> Enemigo : atacar / poblar
+PartidaObjetosYCombate ..> NPC : interactNPC()
+@enduml
