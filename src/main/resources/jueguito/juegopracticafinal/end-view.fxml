@@ -8,15 +8,12 @@
 
     <padding><Insets bottom="40" left="80" right="80" top="40" /></padding>
 
-    <!-- RESULTADO -->
     <Label fx:id="resultadoLabel" styleClass="end-title" text="Resultado" />
 
-    <!-- LOG COMPLETO -->
     <Label styleClass="label-muted" text="— REGISTRO DE LA PARTIDA —" />
 
     <TextArea fx:id="logFinal" editable="false" prefHeight="300" prefWidth="600" VBox.vgrow="ALWAYS" />
 
-    <!-- BOTÓN VOLVER -->
     <Button fx:id="volverBtn" styleClass="btn-menu" text="VOLVER AL MENÚ PRINCIPAL" />
 
 </VBox>

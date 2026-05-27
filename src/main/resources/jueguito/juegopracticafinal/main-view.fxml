@@ -20,7 +20,6 @@
                 <GridPane fx:id="mapaGrid" alignment="CENTER" hgap="0" style="-fx-background-color: transparent; -fx-grid-lines-visible: false;" vgap="0" />
             </ScrollPane>
 
-            <!-- TIENDA OVERLAY -->
             <VBox fx:id="tiendaPanel" alignment="CENTER" spacing="12" styleClass="bg-overlay, border-accent" visible="false">
 
                 <Label styleClass="label-title" text="TIENDA DEL COMERCIANTE" />

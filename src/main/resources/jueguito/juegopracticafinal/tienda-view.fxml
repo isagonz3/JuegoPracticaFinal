@@ -15,10 +15,8 @@
     <center>
         <VBox spacing="25" alignment="CENTER">
 
-            <!-- TÍTULO -->
             <Label text="🏪 TIENDA DEL COMERCIANTE" styleClass="label-title" />
 
-            <!-- PRODUCTO: BARCA -->
             <VBox spacing="8" alignment="CENTER" styleClass="product-card">
 
                 <Label text="🚤 Barca" styleClass="label-title" />
@@ -28,7 +26,6 @@
                         prefWidth="200" styleClass="btn-danger" />
             </VBox>
 
-            <!-- PRODUCTO: MAPA -->
             <VBox spacing="8" alignment="CENTER" styleClass="product-card">
 
                 <Label text="🗺 Mapa del tesoro" styleClass="label-title" />
@@ -38,7 +35,6 @@
                         prefWidth="200" styleClass="btn-primary" />
             </VBox>
 
-            <!-- SALIR -->
             <Button fx:id="salirBtn" text="Salir de la tienda"
                     prefWidth="200" styleClass="btn-purple" />
 

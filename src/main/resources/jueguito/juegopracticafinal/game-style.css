@@ -1,15 +1,9 @@
-/* ============================================
-   A TAD of Adventure - Game Stylesheet
-   Paleta: Lospec500 (versión más clara)
-   ============================================ */
 
-/* === CARGA DE FUENTE === */
 @font-face {
     font-family: 'PublicPixel';
     src: url('src/main/resources/jueguito/juegopracticafinal/fonts/PublicPixel.ttf');
 }
 
-/* === VARIABLES (Lospec500 claro) === */
 * {
     -color-bg:       #1e2030;
     -color-panel:    #3a2a45;
@@ -27,20 +21,20 @@
     -color-title:    #d8aaff;
 }
 
-/* === GLOBAL === */
+
 .root {
     -fx-background-color: -color-bg;
     -fx-font-family: 'Ascii Sector', 'Monospaced';
     -fx-font-size: 14;
 }
 
-/* === FONDOS === */
+
 .bg-dark    { -fx-background-color: -color-bg; }
 .bg-panel   { -fx-background-color: -color-panel; }
 .bg-input   { -fx-background-color: -color-input; }
 .bg-overlay { -fx-background-color: rgba(30, 32, 48, 0.90); }
 
-/* === BORDES === */
+
 .border-bottom { -fx-border-color: -color-border; -fx-border-width: 0 0 2 0; }
 .border-left   { -fx-border-color: -color-border; -fx-border-width: 0 0 0 2; }
 .border-accent { -fx-border-color: -color-accent; -fx-border-width: 2; }
@@ -48,7 +42,7 @@
 .radius-10 { -fx-background-radius: 6; -fx-border-radius: 6; }
 .radius-5  { -fx-background-radius: 4; }
 
-/* === ETIQUETAS === */
+
 .label {
     -fx-text-fill: -color-text;
 }
@@ -70,7 +64,7 @@
 .label-accent { -fx-text-fill: -color-accent; }
 .label-heal   { -fx-text-fill: -color-heal; }
 
-/* === BOTONES === */
+
 .button {
     -fx-background-radius: 4;
     -fx-cursor: hand;
@@ -113,7 +107,7 @@
     -fx-background-color: #b8608a;
 }
 
-/* === BOTÓN MENÚ === */
+
 .btn-menu {
     -fx-background-color: -color-purple;
     -fx-text-fill: -color-title;
@@ -129,7 +123,7 @@
     -fx-effect: dropshadow(gaussian, rgba(172, 40, 71, 0.7), 18, 0.5, 0, 0);
 }
 
-/* === SCROLLPANE === */
+
 .scroll-pane {
     -fx-background: transparent;
     -fx-background-color: transparent;
@@ -137,7 +131,7 @@
     -fx-padding: 0;
 }
 
-/* === PROGRESS BAR === */
+
 .progress-bar {
     -fx-accent: -color-heal;
     -fx-control-inner-background: -color-bg;
@@ -156,7 +150,7 @@
     -fx-background-color: -color-input;
 }
 
-/* === LISTVIEW === */
+
 .list-view {
     -fx-control-inner-background: -color-input;
     -fx-text-fill: -color-text;
@@ -177,7 +171,7 @@
     -fx-background-color: -color-border;
 }
 
-/* === CONTROLES === */
+
 .controls-area {
     -fx-control-inner-background: -color-panel;
     -fx-text-fill: -color-muted;
@@ -187,20 +181,20 @@
     -fx-padding: 10;
 }
 
-/* === END SCREEN === */
+
 .end-title {
     -fx-font-size: 36;
     -fx-text-fill: -color-gold;
 }
 
-/* === TÍTULO PRINCIPAL === */
+
 .menu-title {
     -fx-font-size: 48;
     -fx-text-fill: -color-attack;
-    -fx-effect: dropshadow(gaussian, rgba(236, 39, 63, 0.5), 15, 0.5, 0, 0);
+
 }
 
-/* === TIENDA: TARJETA DE PRODUCTO === */
+
 .product-card {
     -fx-padding: 15;
     -fx-background-color: -color-panel;
