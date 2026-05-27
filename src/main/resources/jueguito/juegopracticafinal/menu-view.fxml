@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="576" prefWidth="960" styleClass="bg-dark" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.Controladores.MenuController">
+<BorderPane prefHeight="576" prefWidth="960" styleClass="bg-dark, border-accent" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.Controladores.MenuController">
 
     <!-- TÍTULO -->
     <top>
@@ -24,7 +24,7 @@
 
     <!-- CONTROLES -->
     <bottom>
-        <TextArea editable="false" prefHeight="100" prefWidth="960" styleClass="controls-area" text="  CONTROLES:   W/A/S/D o ↑/←/↓/→ : Moverse   ESPACIO / ENTER    : Atacar en la dirección actual   E / TAB            : Terminar turno (no hacer nada)" />
+        <TextArea editable="false" prefHeight="100" prefWidth="960" styleClass="controls-area" text="  CONTROLES: W/A/S/D o ↑/←/↓/→ : Moverse.....ESPACIO / ENTER: Atacar en la dirección actual.....E / TAB: Terminar turno (no hacer nada)" />
     </bottom>
 
 </BorderPane>

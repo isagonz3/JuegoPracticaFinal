@@ -4,16 +4,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="576" prefWidth="960" styleClass="bg-dark" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.Controladores.Juego.JuegoController">
+<BorderPane prefHeight="576" prefWidth="960" stylesheets="@game-style.css" styleClass="bg-dark, border-accent"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.Controladores.Juego.JuegoController">
 
     <padding><Insets bottom="5" left="5" right="5" top="5" /></padding>
 
-    <!-- ZONA SUPERIOR -->
     <top>
-        <Label fx:id="zonaLabel" styleClass="label-title, border-bottom" text="Zona: ?" />
+        <Label fx:id="zonaLabel" styleClass="label-title" text="Zona: ?" textAlignment="JUSTIFY" />
     </top>
 
-    <!-- CENTRO: MAPA + TIENDA -->
     <center>
         <StackPane BorderPane.alignment="CENTER">
 
@@ -38,11 +37,9 @@
         </StackPane>
     </center>
 
-    <!-- DERECHA: PANEL DE CONTROL -->
     <right>
         <HBox spacing="12" styleClass="bg-panel, border-left">
 
-            <!-- COLUMNA 1: turno, vida, acciones, log -->
             <VBox maxWidth="178" prefWidth="178" spacing="8">
 
                 <Label fx:id="turnoLabel" styleClass="label-info, label-accent" text="Turno: 0" />
@@ -66,7 +63,6 @@
                 <TextArea fx:id="logArea" editable="false" prefHeight="280" prefWidth="178" wrapText="true" VBox.vgrow="ALWAYS" />
             </VBox>
 
-            <!-- COLUMNA 2: inventario, objetos -->
             <VBox maxWidth="178" prefWidth="178" spacing="8">
 
                 <Label style="-fx-padding: 5 0 0 0;" styleClass="label-muted" text="— INVENTARIO —" />
