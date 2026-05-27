@@ -1,105 +1,121 @@
-/* ============================================
-   A TAD of Adventure - Game Stylesheet
-   ============================================ */
+
+* {
+    -color-bg:       #f0edd4;
+    -color-panel:    #e0d8b8;
+    -color-input:    #d4cca8;
+    -color-border:   #7a8a5a;
+    -color-accent:   #b84a3a;
+    -color-attack:   #d4382a;
+    -color-heal:     #5a9e52;
+    -color-gold:     #c4962a;
+    -color-purple:   #7a5a8e;
+    -color-blue:     #3a7abe;
+    -color-teal:     #008b8b;
+    -color-text:     #2a3a1a;
+    -color-muted:    #6a7a5a;
+    -color-title:    #3a6a2a;
+}
 
 /* === GLOBAL === */
 .root {
-    -fx-background-color: #1a1a2e;
-    -fx-font-family: 'Monospaced';
+    -fx-background-color: -color-bg;
+    -fx-font-family: 'Consolas', 'Monospaced';
+    -fx-font-size: 16;
 }
 
 /* === FONDOS === */
-.bg-dark    { -fx-background-color: #1a1a2e; }
-.bg-panel   { -fx-background-color: #16213e; }
-.bg-input   { -fx-background-color: #0d1117; }
-.bg-overlay { -fx-background-color: rgba(0,0,0,0.85); }
+.bg-dark    { -fx-background-color: -color-bg; }
+.bg-panel   { -fx-background-color: -color-panel; }
+.bg-input   { -fx-background-color: -color-input; }
+.bg-overlay { -fx-background-color: rgba(42, 58, 26, 0.85); }
 
 /* === BORDES === */
-.border-bottom { -fx-border-color: #0f3460; -fx-border-width: 0 0 2 0; }
-.border-left   { -fx-border-color: #0f3460; -fx-border-width: 0 0 0 2; }
-.border-accent { -fx-border-color: #e94560; -fx-border-width: 2; }
-.border-muted  { -fx-border-color: #30363d; -fx-border-width: 1; }
-.radius-10 { -fx-background-radius: 10; -fx-border-radius: 10; }
-.radius-5  { -fx-background-radius: 5; }
+.border-bottom { -fx-border-color: -color-border; -fx-border-width: 0 0 2 0; }
+.border-left   { -fx-border-color: -color-border; -fx-border-width: 0 0 0 2; }
+.border-accent { -fx-border-color: -color-accent; -fx-border-width: 2; }
+.border-muted  { -fx-border-color: -color-border; -fx-border-width: 1; }
+.radius-10 { -fx-background-radius: 6; -fx-border-radius: 6; }
+.radius-5  { -fx-background-radius: 4; }
 
 /* === ETIQUETAS === */
 .label {
-    -fx-text-fill: #c9d1d9;
+    -fx-text-fill: -color-text;
 }
 .label-title {
-    -fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;
+    -fx-font-size: 22;
+    -fx-text-fill: -color-title;
 }
 .label-big {
-    -fx-font-size: 30; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;
+    -fx-font-size: 32;
+    -fx-text-fill: -color-title;
 }
 .label-info {
-    -fx-font-size: 14; -fx-font-weight: bold;
+    -fx-font-size: 16;
 }
 .label-muted {
-    -fx-text-fill: #8b949e; -fx-font-size: 11;
+    -fx-text-fill: -color-muted;
+    -fx-font-size: 13;
 }
-.label-accent {
-    -fx-text-fill: #e94560;
-}
-.label-heal {
-    -fx-text-fill: #4ecca3;
-}
+.label-accent { -fx-text-fill: -color-accent; }
+.label-heal   { -fx-text-fill: -color-heal; }
 
 /* === BOTONES === */
 .button {
-    -fx-background-radius: 5;
+    -fx-background-radius: 4;
     -fx-cursor: hand;
-    -fx-font-weight: bold;
     -fx-font-size: 14;
+    -fx-padding: 6 16;
 }
 .btn-danger {
-    -fx-background-color: #e94560;
+    -fx-background-color: -color-accent;
     -fx-text-fill: white;
 }
 .btn-danger:hover {
-    -fx-background-color: #c73650;
+    -fx-background-color: -color-attack;
 }
 .btn-primary {
-    -fx-background-color: #0f3460;
+    -fx-background-color: -color-blue;
     -fx-text-fill: white;
 }
 .btn-primary:hover {
-    -fx-background-color: #1a4a8a;
+    -fx-background-color: #4a8ad4;
 }
 .btn-success {
-    -fx-background-color: #4ecca3;
-    -fx-text-fill: #1a1a2e;
+    -fx-background-color: -color-heal;
+    -fx-text-fill: white;
 }
 .btn-success:hover {
-    -fx-background-color: #3db88e;
+    -fx-background-color: #7bcc6b;
 }
 .btn-warning {
-    -fx-background-color: #e9c46a;
-    -fx-text-fill: #1a1a2e;
+    -fx-background-color: -color-gold;
+    -fx-text-fill: white;
 }
 .btn-warning:hover {
-    -fx-background-color: #d4b15a;
+    -fx-background-color: #d4a83a;
 }
 .btn-purple {
-    -fx-background-color: #533483;
+    -fx-background-color: -color-purple;
     -fx-text-fill: white;
 }
 .btn-purple:hover {
-    -fx-background-color: #6a44a0;
-}
-.btn-menu {
-    -fx-background-color: #0f3460;
-    -fx-text-fill: white;
-    -fx-font-size: 18;
-    -fx-pref-width: 250;
-    -fx-pref-height: 50;
-}
-.btn-menu:hover {
-    -fx-background-color: #1a4a8a;
-    -fx-effect: dropshadow(gaussian, rgba(233,69,96,0.4), 10, 0.5, 0, 0);
+    -fx-background-color: #8a6a9e;
 }
 
-/* === SCROLLPANE (mapa) === */
+/* === BOTÓN MENÚ === */
+.btn-menu {
+    -fx-background-color: -color-purple;
+    -fx-text-fill: white;
+    -fx-font-size: 24;
+    -fx-pref-width: 300;
+    -fx-pref-height: 55;
+    -fx-background-radius: 4;
+}
+.btn-menu:hover {
+    -fx-background-color: -color-accent;
+}
+
+/* === SCROLLPANE === */
 .scroll-pane {
     -fx-background: transparent;
     -fx-background-color: transparent;
@@ -107,55 +123,78 @@
     -fx-padding: 0;
 }
 
-/* === PROGRESS BAR (vida) === */
+/* === PROGRESS BAR === */
 .progress-bar {
-    -fx-accent: #4ecca3;
-    -fx-control-inner-background: #1a1a2e;
+    -fx-accent: -color-heal;
+    -fx-control-inner-background: -color-input;
 }
 
 /* === TEXTAREA === */
 .text-area {
-    -fx-control-inner-background: #0d1117;
-    -fx-text-fill: #c9d1d9;
-    -fx-background-color: #0d1117;
-    -fx-border-color: #30363d;
+    -fx-control-inner-background: -color-input;
+    -fx-text-fill: -color-text;
+    -fx-background-color: -color-input;
+    -fx-border-color: -color-border;
     -fx-border-width: 1;
-    -fx-font-family: 'Consolas';
-    -fx-font-size: 11;
+    -fx-font-size: 13;
 }
 .text-area .content {
-    -fx-background-color: #0d1117;
+    -fx-background-color: -color-input;
 }
 
-/* === LISTVIEW (inventario) === */
+/* === LISTVIEW === */
 .list-view {
-    -fx-control-inner-background: #0d1117;
-    -fx-text-fill: #c9d1d9;
-    -fx-background-color: #0d1117;
-    -fx-border-color: #30363d;
+    -fx-control-inner-background: -color-input;
+    -fx-text-fill: -color-text;
+    -fx-background-color: -color-input;
+    -fx-border-color: -color-border;
     -fx-border-width: 1;
 }
 .list-view .list-cell {
-    -fx-background-color: #0d1117;
-    -fx-text-fill: #c9d1d9;
+    -fx-background-color: -color-input;
+    -fx-text-fill: -color-text;
+    -fx-font-size: 13;
 }
 .list-view .list-cell:selected {
-    -fx-background-color: #e94560;
+    -fx-background-color: -color-accent;
     -fx-text-fill: white;
 }
+.list-view .list-cell:hover {
+    -fx-background-color: -color-border;
+}
 
-/* === MENU: CONTROLES === */
+/* === CONTROLES === */
 .controls-area {
-    -fx-control-inner-background: #16213e;
-    -fx-text-fill: #8b949e;
-    -fx-background-color: #16213e;
+    -fx-control-inner-background: -color-panel;
+    -fx-text-fill: -color-muted;
+    -fx-background-color: -color-panel;
     -fx-border-color: transparent;
-    -fx-font-family: 'Consolas';
-    -fx-font-size: 12;
+    -fx-font-size: 13;
+    -fx-padding: 10;
 }
 
 /* === END SCREEN === */
 .end-title {
-    -fx-font-size: 36;
+    -fx-font-size: 32;
+    -fx-text-fill: -color-gold;
+}
+
+/* === TÍTULO PRINCIPAL === */
+.menu-title {
+    -fx-font-size: 42;
+    -fx-text-fill: -color-attack;
+}
+
+/* === TIENDA: TARJETA DE PRODUCTO === */
+.product-card {
+    -fx-padding: 15;
+    -fx-background-color: -color-panel;
+    -fx-border-color: -color-border;
+    -fx-border-width: 1;
+}
+
+/* === TIENDA === */
+.label-gold {
+    -fx-text-fill: -color-gold;
     -fx-font-weight: bold;
 }

@@ -4,27 +4,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="576" prefWidth="960" alignment="CENTER" spacing="20"
-      stylesheets="@game-style.css"
-      styleClass="bg-dark"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="jueguito.juegopracticafinal.Controladores.EndController">
+<VBox alignment="CENTER" prefHeight="576" prefWidth="960" spacing="20" styleClass="bg-dark" stylesheets="@game-style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="jueguito.juegopracticafinal.Controladores.EndController">
 
-    <padding><Insets top="40" left="80" right="80" bottom="40" /></padding>
+    <padding><Insets bottom="40" left="80" right="80" top="40" /></padding>
 
     <!-- RESULTADO -->
-    <Label fx:id="resultadoLabel" text="Resultado"
-           styleClass="end-title" />
+    <Label fx:id="resultadoLabel" styleClass="end-title" text="Resultado" />
 
     <!-- LOG COMPLETO -->
-    <Label text="— REGISTRO DE LA PARTIDA —"
-           styleClass="label-muted" />
+    <Label styleClass="label-muted" text="— REGISTRO DE LA PARTIDA —" />
 
-    <TextArea fx:id="logFinal" editable="false"
-              prefWidth="600" prefHeight="300" VBox.vgrow="ALWAYS" />
+    <TextArea fx:id="logFinal" editable="false" prefHeight="300" prefWidth="600" VBox.vgrow="ALWAYS" />
 
     <!-- BOTÓN VOLVER -->
-    <Button fx:id="volverBtn" text="VOLVER AL MENÚ PRINCIPAL"
-            styleClass="btn-menu" />
+    <Button fx:id="volverBtn" styleClass="btn-menu" text="VOLVER AL MENÚ PRINCIPAL" />
 
 </VBox>

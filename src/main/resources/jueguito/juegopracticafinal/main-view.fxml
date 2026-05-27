@@ -4,54 +4,35 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="576" prefWidth="960"
-            stylesheets="@game-style.css"
-            styleClass="bg-dark"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="jueguito.juegopracticafinal.Controladores.Juego.JuegoController">
+<BorderPane prefHeight="576" prefWidth="960" styleClass="bg-dark" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.Controladores.Juego.JuegoController">
 
     <padding><Insets bottom="5" left="5" right="5" top="5" /></padding>
 
     <!-- ZONA SUPERIOR -->
     <top>
-        <Label fx:id="zonaLabel" text="Zona: ?"
-               styleClass="label-title, border-bottom" />
+        <Label fx:id="zonaLabel" styleClass="label-title, border-bottom" text="Zona: ?" />
     </top>
 
     <!-- CENTRO: MAPA + TIENDA -->
     <center>
         <StackPane BorderPane.alignment="CENTER">
 
-            <ScrollPane fitToHeight="true" fitToWidth="true"
-                        hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED">
-                <GridPane fx:id="mapaGrid" alignment="CENTER"
-                          hgap="0" vgap="0"
-                          style="-fx-background-color: transparent;
-                                 -fx-grid-lines-visible: false;" />
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED">
+                <GridPane fx:id="mapaGrid" alignment="CENTER" hgap="0" style="-fx-background-color: transparent; -fx-grid-lines-visible: false;" vgap="0" />
             </ScrollPane>
 
             <!-- TIENDA OVERLAY -->
-            <VBox fx:id="tiendaPanel" alignment="CENTER" spacing="12"
-                  styleClass="bg-overlay, border-accent, radius-10"
-                  visible="false">
+            <VBox fx:id="tiendaPanel" alignment="CENTER" spacing="12" styleClass="bg-overlay, border-accent" visible="false">
 
-                <Label text="TIENDA DEL COMERCIANTE"
-                       style="-fx-font-size: 20; -fx-font-weight: bold;
-                              -fx-text-fill: #e94560;" />
+                <Label styleClass="label-title" text="TIENDA DEL COMERCIANTE" />
 
-                <Label text="Barca - 5 gemas"
-                       style="-fx-text-fill: #e0e0e0; -fx-font-size: 14;" />
-                <Button fx:id="comprarBarcaBtn" text="Comprar Barca"
-                        maxWidth="200" styleClass="btn-danger" />
+                <Label styleClass="label-muted" text="Barca - 5 gemas" />
+                <Button fx:id="comprarBarcaBtn" maxWidth="200" styleClass="btn-danger" text="Comprar Barca" />
 
-                <Label text="Mapa - 3 gemas"
-                       style="-fx-text-fill: #e0e0e0; -fx-font-size: 14;" />
-                <Button fx:id="comprarMapaBtn" text="Comprar Mapa"
-                        maxWidth="200" styleClass="btn-primary" />
+                <Label styleClass="label-muted" text="Mapa - 3 gemas" />
+                <Button fx:id="comprarMapaBtn" maxWidth="200" styleClass="btn-primary" text="Comprar Mapa" />
 
-                <Button fx:id="salirTiendaBtn" text="Salir de la tienda"
-                        maxWidth="200" styleClass="btn-purple" />
+                <Button fx:id="salirTiendaBtn" maxWidth="200" styleClass="btn-purple" text="Salir de la tienda" />
             </VBox>
 
         </StackPane>
@@ -59,73 +40,51 @@
 
     <!-- DERECHA: PANEL DE CONTROL -->
     <right>
-        <HBox spacing="12" styleClass="bg-panel, border-left"
-              style="-fx-padding: 10;">
+        <HBox spacing="12" styleClass="bg-panel, border-left">
 
             <!-- COLUMNA 1: turno, vida, acciones, log -->
             <VBox maxWidth="178" prefWidth="178" spacing="8">
 
-                <Label fx:id="turnoLabel" text="Turno: 0"
-                       styleClass="label-info, label-accent" />
+                <Label fx:id="turnoLabel" styleClass="label-info, label-accent" text="Turno: 0" />
 
-                <Label fx:id="vidaLabel" text="Vida: 20/20"
-                       styleClass="label-info, label-heal" />
+                <Label fx:id="vidaLabel" styleClass="label-info, label-heal" text="Vida: 20/20" />
                 <ProgressBar fx:id="vidaBar" prefWidth="170" />
 
-                <Label text="— ACCIONES —" styleClass="label-muted"
-                       style="-fx-padding: 5 0 0 0;" />
+                <Label style="-fx-padding: 5 0 0 0;" styleClass="label-muted" text="— ACCIONES —" />
 
-                <Button fx:id="terminarTurnoBtn" text="No realizar acción"
-                        maxWidth="Infinity" styleClass="btn-purple" />
+                <Button fx:id="terminarTurnoBtn" maxWidth="Infinity" styleClass="btn-purple" text="No realizar acción" />
 
-                <Button fx:id="guardarBtn" text="Guardar Partida"
-                        maxWidth="Infinity" styleClass="btn-primary" />
+                <Button fx:id="guardarBtn" maxWidth="Infinity" styleClass="btn-primary" text="Guardar Partida" />
 
                 <HBox spacing="5">
-                    <Button fx:id="atacarBtn" text="Atacar"
-                            maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                            styleClass="btn-danger" />
-                    <Button fx:id="interactuarBtn" text="Interactuar"
-                            maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                            styleClass="btn-success" />
+                    <Button fx:id="atacarBtn" maxWidth="Infinity" styleClass="btn-danger" text="Atacar" HBox.hgrow="ALWAYS" />
+                    <Button fx:id="interactuarBtn" maxWidth="Infinity" styleClass="btn-success" text="Interactuar" HBox.hgrow="ALWAYS" />
                 </HBox>
 
-                <Label text="— LOG —" styleClass="label-muted"
-                       style="-fx-padding: 5 0 0 0;" />
+                <Label style="-fx-padding: 5 0 0 0;" styleClass="label-muted" text="— LOG —" />
 
-                <TextArea fx:id="logArea" editable="false"
-                          prefHeight="280" prefWidth="178"
-                          wrapText="true" VBox.vgrow="ALWAYS" />
+                <TextArea fx:id="logArea" editable="false" prefHeight="280" prefWidth="178" wrapText="true" VBox.vgrow="ALWAYS" />
             </VBox>
 
             <!-- COLUMNA 2: inventario, objetos -->
             <VBox maxWidth="178" prefWidth="178" spacing="8">
 
-                <Label text="— INVENTARIO —" styleClass="label-muted"
-                       style="-fx-padding: 5 0 0 0;" />
+                <Label style="-fx-padding: 5 0 0 0;" styleClass="label-muted" text="— INVENTARIO —" />
 
-                <ListView fx:id="inventarioList"
-                          prefHeight="150" prefWidth="178" />
+                <ListView fx:id="inventarioList" prefHeight="150" prefWidth="178" />
 
                 <HBox spacing="5">
-                    <Button fx:id="usarBtn" text="Usar"
-                            maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                            styleClass="btn-success" />
-                    <Button fx:id="equiparBtn" text="Equipar"
-                            maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                            styleClass="btn-warning" />
+                    <Button fx:id="usarBtn" maxWidth="Infinity" styleClass="btn-success" text="Usar" HBox.hgrow="ALWAYS" />
+                    <Button fx:id="equiparBtn" maxWidth="Infinity" styleClass="btn-warning" text="Equipar" HBox.hgrow="ALWAYS" />
                 </HBox>
 
-                <Label text="— ESTADO OBJETOS —" styleClass="label-muted"
-                       style="-fx-padding: 5 0 0 0;" />
+                <Label style="-fx-padding: 5 0 0 0;" styleClass="label-muted" text="— ESTADO OBJETOS —" />
 
-                <Label text="Usados:" styleClass="label-muted" />
-                <TextArea fx:id="objetosUsadosArea" editable="false"
-                          prefHeight="70" prefWidth="178" wrapText="true" />
+                <Label styleClass="label-muted" text="Usados:" />
+                <TextArea fx:id="objetosUsadosArea" editable="false" prefHeight="70" prefWidth="178" wrapText="true" />
 
-                <Label text="Equipados:" styleClass="label-muted" />
-                <TextArea fx:id="objetosEquipadosArea" editable="false"
-                          prefHeight="70" prefWidth="178" wrapText="true" />
+                <Label styleClass="label-muted" text="Equipados:" />
+                <TextArea fx:id="objetosEquipadosArea" editable="false" prefHeight="70" prefWidth="178" wrapText="true" />
             </VBox>
 
         </HBox>

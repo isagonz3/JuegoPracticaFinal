@@ -14,6 +14,7 @@ import jueguito.juegopracticafinal.Controladores.MenuController;
 import java.io.IOException;
 
 public class JueguitoFX extends Application {
+
     private Stage stage;
 
     @Override

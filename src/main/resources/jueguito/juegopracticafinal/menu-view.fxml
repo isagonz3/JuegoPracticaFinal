@@ -1,50 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="576" prefWidth="960"
-            stylesheets="@game-style.css"
-            styleClass="bg-dark"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="jueguito.juegopracticafinal.Controladores.MenuController">
+<BorderPane prefHeight="576" prefWidth="960" styleClass="bg-dark" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.Controladores.MenuController">
 
     <!-- TÍTULO -->
     <top>
-        <VBox alignment="CENTER" spacing="20"
-              style="-fx-padding: 80 0 40 0;">
-            <Label text="A TAD of Adventure"
-                   style="-fx-font-size: 48; -fx-font-weight: bold;
-                          -fx-text-fill: #e94560;
-                          -fx-effect: dropshadow(gaussian, rgba(233,69,96,0.4), 15, 0.5, 0, 0);" />
-            <Label text="Un juego de Estructuras de Datos"
-                   style="-fx-font-size: 16; -fx-text-fill: #8b949e;" />
+        <VBox alignment="CENTER" spacing="20" style="-fx-padding: 80 0 40 0;">
+            <Label styleClass="menu-title" text="A TAD of Adventure" />
+            <Label styleClass="label-muted" text="Un juego de Estructuras de Datos" />
         </VBox>
     </top>
 
     <!-- BOTONES -->
     <center>
         <VBox alignment="CENTER" spacing="15">
-            <Button fx:id="nuevaPartidaBtn" text="NUEVA PARTIDA"
-                    styleClass="btn-menu" />
-            <Button fx:id="cargarPartidaBtn" text="CARGAR PARTIDA"
-                    styleClass="btn-menu" />
-            <Button fx:id="salirBtn" text="SALIR"
-                    styleClass="btn-menu"
-                    style="-fx-background-color: #533483;" />
+            <Button fx:id="nuevaPartidaBtn" styleClass="btn-menu" text="NUEVA PARTIDA" />
+            <Button fx:id="cargarPartidaBtn" styleClass="btn-menu" text="CARGAR PARTIDA" />
+            <Button fx:id="salirBtn" styleClass="btn-menu" text="SALIR" />
         </VBox>
     </center>
 
     <!-- CONTROLES -->
     <bottom>
-        <TextArea editable="false" prefHeight="100" prefWidth="960"
-                  styleClass="controls-area"
-                  text="  CONTROLES:
-  W/A/S/D o ↑/←/↓/→ : Moverse
-  ESPACIO / ENTER    : Atacar en la dirección actual
-  E / TAB            : Terminar turno (no hacer nada)" />
+        <TextArea editable="false" prefHeight="100" prefWidth="960" styleClass="controls-area" text="  CONTROLES:   W/A/S/D o ↑/←/↓/→ : Moverse   ESPACIO / ENTER    : Atacar en la dirección actual   E / TAB            : Terminar turno (no hacer nada)" />
     </bottom>
 
 </BorderPane>
