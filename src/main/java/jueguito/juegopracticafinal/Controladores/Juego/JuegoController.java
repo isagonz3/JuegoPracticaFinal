@@ -49,7 +49,8 @@ public class JuegoController {
     @FXML
     private void onDeshacerMovimiento() {
 
-        Posicion anterior = partida.getLog().deshacerMovimiento();
+        Posicion anterior = partida.getLog().deshacerMovimiento(partida.getZonaActual());
+
         if (anterior == null) {
             System.out.println("No hay movimientos para deshacer");
             return;

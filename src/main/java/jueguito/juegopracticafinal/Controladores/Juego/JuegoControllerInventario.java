@@ -18,7 +18,6 @@ public class JuegoControllerInventario {
     }
 
     public void seleccionarObjeto(Objeto nuevo) {
-        // Guardamos la referencia directa del objeto seleccionado en la lista
         this.objetoSeleccionado = nuevo;
     }
 

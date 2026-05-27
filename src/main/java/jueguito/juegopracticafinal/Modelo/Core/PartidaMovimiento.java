@@ -172,7 +172,7 @@ public class PartidaMovimiento {
         // MOVER JUGADOR
         // ============================================================
 
-        partida.getLog().registrarMovimiento(actual);
+        partida.getLog().registrarMovimiento(actual, partida.getZonaActual());
 
         zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
 
@@ -181,7 +181,6 @@ public class PartidaMovimiento {
         destino.setEntidad(jugador);
 
         partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
-
 
         // ============================================================
         // OBJETOS
@@ -203,7 +202,6 @@ public class PartidaMovimiento {
 
         return true;
     }
-
 
     // ============================================================
     // BFS PARA DISTANCIA

@@ -198,7 +198,8 @@ public class Partida {
             jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
 
             for (int i = 0; i < inv.size(); i++) {
-                if (inv.getObjeto(i) != null && "Llave".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
+                if (inv.getObjeto(i) != null &&
+                        "Llave".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
                     tieneLlave = true;
                     break;
                 }
@@ -211,7 +212,11 @@ public class Partida {
 
             log.registrar("Usaste la Llave para abrir el gran portón a la Zona 8...");
         }
+
         // ============================================================
+        // IMPORTANTE: registrar cambio de zona (AÑADIDO)
+        // ============================================================
+        log.registrar("CAMBIO_ZONA:" + idZonaActual + "->" + nid);
 
         if (nz.getCountTurnos() == 0) {
             objetosYCombate.poblarZona(nz);
@@ -230,7 +235,6 @@ public class Partida {
                 log.registrar("Has estrado sin el gato, vuelve a por él");
             }
         }
-        // ============================================================
 
         zonaActual.getCelda(
                 jugador.getPosicion().getRow(),
