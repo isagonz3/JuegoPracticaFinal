@@ -23,7 +23,7 @@
             <Button fx:id="cargarPartidaBtn" text="Cargar Partida" />
             <Button fx:id="salirBtn" text="Salir" />
         </HBox>
-      <TextArea editable="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="500.0" text="                                                  &#10;                                                CONTROLES: W/S/A/D para moverte por el mapa" wrapText="true">
+      <TextArea editable="false" prefHeight="160.0" prefWidth="942.0" text="                                                    &#10;                                                  CONTROLES: W/S/A/D para moverte por el mapa" wrapText="true">
          <font>
             <Font name="Fira Code Retina" size="11.0" />
          </font>

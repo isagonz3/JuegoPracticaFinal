@@ -1,0 +1,108 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+title Guardar + Cargar partida (JSON)
+
+participant JuegoController as JC
+participant FileChooser as FC
+participant MenuController as MC
+participant MapaLoader as ML
+participant GrafoZonas as GZ
+
+participant LoadJSON as LJ
+participant Partida as P
+participant Jugador as J
+participant Inventario as I
+participant Objeto as O
+participant Gato as G
+participant Zona as Z
+
+== GUARDAR PARTIDA ==
+JC -> FC: showSaveDialog()
+alt usuario elige ruta
+  JC -> LJ: guardarPartida(partida, ruta)
+  LJ -> J: getNombre(), getEstadisticas()
+  LJ -> J: getPosicion()
+  LJ -> I: size()
+  loop por cada Objeto en inventario
+    LJ -> O: getNombre(), getTipo(), bonus...
+  end
+  loop slots equipamiento
+    LJ -> J: getEquipamiento()[i]
+  end
+  LJ -> G: getNombre()
+  LJ -> P: isGatoEncontrado()
+  LJ -> P: getIdZonaActual(), getTurnoActual()
+  LJ -> P: getEstadoActual()
+  LJ -> P: getLog().getEntradas()
+  LJ -> Config: get().zona.numZonas
+  LJ -> P: getGrafoZonas()
+  loop por cada zona
+    LJ -> Z: isVisitada()
+  end
+  loop por celdas de zonaActual
+    LJ -> Z: getCelda(r,c)
+    alt es Enemigo vivo
+      LJ -> LJ: serializar nombre|vida|atq|def|row|col
+    end
+  end
+  LJ -> LJ: escribir JSON con Gson
+  LJ --> JC: ok
+  JC -> P: log "Partida guardada"
+end
+
+== CARGAR PARTIDA ==
+J -> MC: pulsa "Cargar Partida"
+MC -> FC: showOpenDialog()
+alt usuario elige archivo
+  MC -> ML: cargarZonas()
+  MC -> GZ: new GrafoZonas()
+  loop por cada Zona
+    MC -> GZ: addZona(zona)
+  end
+  MC -> ML: cargarPuertas()
+  MC -> ML: conectarPuertas(grafo, puertas)
+  MC -> LJ: cargarPartida(ruta, grafo)
+  LJ -> LJ: leer JSON con Gson
+  alt JSON inv�lido o no existe
+    LJ --> MC: null
+    MC --> J: error
+    return
+  end
+  LJ -> P: new Partida(grafo)
+  LJ -> P: setIdZonaActual(), setZonaActual()
+  LJ -> P: setTurnoActual(), setGatoEncontrado()
+  LJ -> P: setEstadoActual()
+  LJ -> J: new Jugador(nombre, stats, pos)
+  LJ -> P: setJugador(jugador)
+  LJ -> Z: getCelda(posJugador).setEntidad(jugador)
+
+  loop por objetos en JSON
+    LJ -> I: addObjeto(objeto restaurado)
+  end
+  loop por equipamiento en JSON
+    LJ -> J: equipar(objeto, slot)
+  end
+
+  LJ -> P: setGato(new Gato(...))
+  LJ -> Z: zonaGato.getCelda(16,14).setEntidad(gato)
+
+  loop por entradas de log
+    LJ -> P: log.registrar(mensaje)
+  end
+  loop por zonas visitadas
+    LJ -> Z: setVisitada(valor)
+  end
+  loop por enemigos serializados
+    alt formato correcto (split "|" da 6 partes)
+      LJ -> Z: getCelda(row,col).setEntidad(enemigo)
+    else formato incorrecto
+  end
+
+  LJ --> MC: Partida cargada
+  MC -> J: navega a irAJuego(partida)
+else usuario cancela
+end
+@enduml

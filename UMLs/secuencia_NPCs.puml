@@ -1,0 +1,58 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant JuegoController as JC
+participant JuegoControllerAcciones as JCA
+participant Partida as P
+participant PartidaObjetosYCombate as PO
+participant Zona as Z
+participant Celda as C
+participant NPC as N
+
+JC -> JCA: interactuarBoton()
+JCA -> P: interactNPC()
+P -> PO: interactNPC()
+PO -> Z: buscar NPCs en todas las celdas
+loop por cada celda
+  PO -> C: tieneNPC()
+  alt NPC encontrado
+    PO -> N: getTipo()
+    alt ALDEANO && adyacente
+      PO --> P: NPC
+      P --> JCA: NPC
+      JCA -> N: hablar()
+      alt "Sirena"
+        N --> JCA: "Necesitas barca"
+      else "Guardia"
+        N --> JCA: "Necesitas llave"
+      else otro
+        N --> JCA: dialogo secuencial
+      end
+      JCA -> JC: appendText(npc: dialogo)
+    else COMERCIANTE && distancia <= 2
+      PO --> P: NPC
+      P --> JCA: NPC
+      JCA -> JCA: abrirTienda(npc)
+      JCA -> JC: tiendaPanel.setVisible(true)
+    end
+  end
+end
+PO --> P: null
+P --> JCA: null
+
+alt no habia NPC
+  JCA -> P: interactuarGato()
+  P -> PO: interactuarGato()
+  PO -> Z: buscar Gato en celdas adyacentes
+  alt gato encontrado
+    PO -> Inventario: addObjeto(new Objeto("Gato"))
+    PO -> Z: celdaGato.setEntidad(null)
+    PO -> P: setGatoEncontrado(true)
+    JCA -> JC: "Has rescatado al gato"
+  else no hay gato
+    JCA -> JC: "No hay nadie"
+  end
+end
+@enduml

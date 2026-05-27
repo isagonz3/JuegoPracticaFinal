@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+title Fin de partida (victoria o derrota)
+
+participant JuegoController as JC
+participant JuegoControllerAcciones as JCA
+participant Partida as P
+participant EndController as EC
+participant JueguitoFX as APP
+actor "Jugador" as J
+
+alt Victoria
+  P -> P: checkVictoria()
+  note right: gatoEncontrado &&\nidZonaActual == castillo &&\ntipoCelda == SALIDA
+  P -> P: estadoActual = VICTORIA
+  P -> P: log "Has logrado recuperar el gato!"
+else Derrota por vida
+  P -> P: checkDerrota()
+  P -> P: estadoActual = DERROTA
+  P -> P: log "Has perdido: no te quedan puntos de vida!"
+else Derrota por turnos
+  P -> P: checkDerrota()
+  P -> P: estadoActual = DERROTA
+  P -> P: log "Has perdido: has superado el l�mite de turnos!"
+end
+
+JC -> P: getEstadoActual()
+alt EN_CURSO
+  JC -> UIRenderer: actualizarUI()
+  JC -> MapaRenderer: render()
+else VICTORIA o DERROTA
+  JCA -> APP: irAEnd(mensaje, logs)
+  APP -> APP: FXMLLoader(end-view.fxml)
+  APP -> EC: inicializar(resultado, logs, app)
+  EC -> EC: resultadoLabel.setText(resultado)
+  alt victoria
+    EC -> EC: color = VERDE
+  else derrota
+    EC -> EC: color = ROJO
+  end
+  EC -> EC: logFinal.setText(sb.toString())
+  EC -> EC: volverBtn.setOnAction -> volverAlMenu()
+  APP -> Stage: setScene(scene)
+end
+
+== VOLVER AL MENU ==
+J -> EC: pulsa "Volver al Menu"
+EC -> APP: volverAlMenu()
+APP -> APP: FXMLLoader(menu-view.fxml)
+APP -> MenuController: setApp(this)
+APP -> Stage: setScene(scene)
+@enduml

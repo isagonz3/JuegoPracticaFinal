@@ -1,0 +1,87 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+title Objeto
+
+participant JuegoController as JC
+participant JuegoControllerInventario as JCI
+participant Partida as P
+participant PartidaObjetosYCombate as PO
+participant Jugador as J
+participant Inventario as I
+participant Objeto as O
+
+=== USAR OBJETO ==
+
+JC -> JCI: usarObjeto()
+JCI -> JCI: get objetoSeleccionado
+alt objetoSeleccionado == null
+  return
+end
+JCI -> P: usarObjeto(aUsar)
+P -> PO: usarObjeto(o)
+PO -> P: getEstadoActual()
+PO -> J: getInventario()
+PO -> O: getTipo()
+alt tipo != USABLE o no en inventario
+  PO --> P: false
+end
+PO -> O: usarObjeto()
+note right: usosRestantes--
+PO -> J: getEstadisticas().curarVida(vidaBonus)
+PO -> J: getEstadisticas().aumentarAtaque(ataqueBonus)
+PO -> J: getEstadisticas().aumentarDefensa(defensaBonus)
+PO -> J: getEstadisticas().aumentarRangoMov(rangoBonus)
+PO -> I: getObjetosUsados().add(o)
+PO -> I: removeObjeto(o)
+P -> P: terminarTurnoPublic()
+note right: usar objeto consume\nel turno completo
+P --> JCI: true
+JCI -> JC: clearSelection()
+JC -> P: getEstadoActual()
+alt VICTORIA o DERROTA
+  JC -> JueguitoFX: irAEnd()
+else
+  JC -> UIRenderer: actualizarUI()
+  JC -> MapaRenderer: render()
+end
+
+=== EQUIPAR OBJETO ==
+
+JC -> JCI: equiparObjeto()
+JCI -> JCI: get objetoSeleccionado
+JCI -> O: getSlot()
+alt slot == null
+  JCI -> P: log "No es equipable"
+  return
+end
+JCI -> P: equiparObjeto(aEquipar, slot)
+P -> PO: equiparObjeto(o, s)
+PO -> O: getTipo()
+alt tipo != EQUIPABLE o no en inventario
+  PO --> P: false
+end
+PO -> O: getSlot()
+alt slot no coincide
+  PO --> P: false
+end
+PO -> J: equipar(o, s)
+J -> I: removeObjeto(o)
+J -> J: equipamiento[slot] = objeto
+J -> J: addBonusEquipamiento()
+note right: recalcula bonusAtaqueEq,\n bonusDefensaEq, bonusRangoEq
+J --> PO: true
+P -> P: terminarTurnoPublic()
+note right: equipar consume\n turno completo
+P --> JCI: true
+JCI -> JC: clearSelection()
+JC -> P: getEstadoActual()
+alt fin de juego
+  JC -> JueguitoFX: irAEnd()
+else
+  JC -> UIRenderer: actualizarUI()
+  JC -> MapaRenderer: render()
+end
+@enduml

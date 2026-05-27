@@ -334,7 +334,7 @@ public class Partida {
     }
 
     public boolean interactuarGato() {
-        return findGato();
+        return objetosYCombate.interactuarGato();
     }
 
 
