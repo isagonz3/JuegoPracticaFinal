@@ -22,10 +22,6 @@ public class Estadisticas {
         return vidaMax;
     }
 
-    public void setVidaMax(int vidaMax) {
-        this.vidaMax = vidaMax;
-    }
-
     public int getVidaActual() {
         return vidaActual;
     }
@@ -38,24 +34,12 @@ public class Estadisticas {
         return ataqueBase;
     }
 
-    public void setAtaqueBase(int ataqueBase) {
-        this.ataqueBase = ataqueBase;
-    }
-
     public int getDefensaBase() {
         return defensaBase;
     }
 
-    public void setDefensaBase(int defensaBase) {
-        this.defensaBase = defensaBase;
-    }
-
     public int getRangoMov() {
         return rangoMov;
-    }
-
-    public void setRangoMov(int rangoMov) {
-        this.rangoMov = rangoMov;
     }
 
     public int getPuntosMovDisponibles() {
@@ -70,27 +54,12 @@ public class Estadisticas {
         return vidaActual > 0;
     }
 
-    public void resetMovimiento() {
-        this.puntosMovDisponibles = this.rangoMov;
-    }
-
     public boolean usarMovimiento(int puntos){
         if(puntos <= 0 || puntos > puntosMovDisponibles){
             return false;
         }
         this.puntosMovDisponibles -= puntos;
         return true;
-    }
-
-    public boolean puedeMoverse(){
-        return this.puntosMovDisponibles > 0;
-    }
-
-    public Estadisticas clonar(){
-        Estadisticas estadisticas = new Estadisticas(vidaMax, ataqueBase, defensaBase, rangoMov);
-        estadisticas.vidaActual = this.vidaActual;
-        estadisticas.puntosMovDisponibles = this.puntosMovDisponibles;
-        return estadisticas;
     }
 
     public void curarVida(int bonus){
@@ -130,7 +99,6 @@ public class Estadisticas {
         this.vidaActual = Math.max(0, this.vidaActual - dano);
     }
 
-    // 🔥 NUEVO: Resta el daño real directamente sin volver a aplicar la defensa
     public void restarVidaDirecta(int danoReal) {
         this.vidaActual = Math.max(0, this.vidaActual - danoReal);
     }

@@ -28,6 +28,7 @@ public class JuegoControllerAcciones {
         this.app = app;
     }
 
+
     // ============================================================
     // MANEJO DE TECLAS
     // ============================================================
@@ -163,12 +164,13 @@ public class JuegoControllerAcciones {
         ctrl.getMapaRenderer().render(partida);
     }
 
+
     // ============================================================
     // INTERACCIÓN CON NPC
     // ============================================================
 
     public void interactuarBoton() {
-        // 1. Intentar interactuar con NPC (si lo hay)
+        // 1. Intentar interactuar con NPC
         NPC npc = partida.interactNPC();
         if (npc != null) {
             if (npc.getTipo() == TipoNPC.COMERCIANTE) {
@@ -176,19 +178,16 @@ public class JuegoControllerAcciones {
             } else {
                 ctrl.getLogArea().appendText(npc.getNombre() + ": " + npc.hablar() + "\n");
             }
-            // Si el NPC fue encontrado, no queremos ejecutar nada más
             return;
         }
 
-        // 2. Intentar interactuar con Gato (si lo hay)
+        // 2. Intentar interactuar con Gato
         if (partida.interactuarGato()) {
             ctrl.getLogArea().appendText("¡Has rescatado al gato!\n");
         } else {
-            // Solo si no había ni NPC ni Gato
             ctrl.getLogArea().appendText("No hay nadie ni nada con lo que interactuar...\n");
         }
 
-        // Refrescamos pantalla al terminar
         ctrl.getUiRenderer().actualizarUI(partida);
         ctrl.getMapaRenderer().render(partida);
     }
@@ -242,6 +241,7 @@ public class JuegoControllerAcciones {
 
         ctrl.getUiRenderer().actualizarUI(partida);
     }
+
 
     // ============================================================
     // FIN DE TURNO

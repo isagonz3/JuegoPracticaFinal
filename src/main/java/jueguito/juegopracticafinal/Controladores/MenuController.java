@@ -68,8 +68,6 @@ public class MenuController {
                     app.irAJuego(partida);
                 }
             }
-
-
         });
         salirBtn.setOnAction(e -> Platform.exit());
     }

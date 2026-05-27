@@ -3,7 +3,6 @@ package jueguito.juegopracticafinal.Modelo.Log;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 public class LogMovimiento {
-
     private final Lista<EntradaLog> entradas = new Lista<>();
 
     public void registrar(String mensaje) {

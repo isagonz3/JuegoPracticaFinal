@@ -12,9 +12,4 @@ public class ResultadoCombate {
         this.enemigoKO = enemigoKO;
         this.mensaje = mensaje;
     }
-
-    public int getHit() { return hit; }
-    public int getVidaRestante() { return vidaRestante; }
-    public boolean isEnemigoKO() { return enemigoKO; }
-    public String getMensaje() { return mensaje; }
 }

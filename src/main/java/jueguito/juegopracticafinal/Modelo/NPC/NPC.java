@@ -30,11 +30,6 @@ public class NPC {
         return tipo;
     }
 
-
-    public void addDialogo(String dialogo){
-        this.dialogos.add(dialogo);
-    }
-
     public String hablar() {
 
         if (tipo == TipoNPC.ALDEANO) {
@@ -55,17 +50,7 @@ public class NPC {
             dialogoActual++;
             return frase;
         }
-
         return "...";
-    }
-
-    public void restartDialogo(){
-        this.dialogoActual = 0;
-    }
-
-
-    public String getSprite() {
-        return sprite;
     }
 
     public void setSprite(String sprite) {

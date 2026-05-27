@@ -72,14 +72,6 @@ public class Zona {
       this.nombreZona = nombreZona;
    }
 
-   public Matrix<Celda> getMatrix() {
-      return matrix;
-   }
-   public void setMatrix(Matrix<Celda> matrix) {
-      this.matrix = matrix;
-   }
-
-
    public int getRows(){
       return matrix.getNumRows();
    }
@@ -118,46 +110,12 @@ public class Zona {
       return spawnObjects;
    }
 
-   public Lista<Posicion> getSpawnNPCs() {
-      return spawnNPCs;
-   }
-
    public Celda getCelda(int row, int col){
       return matrix.get(row, col);
    }
 
-    public void setCelda(int row, int col, Celda celda){
-        celda.setRow(row);
-        celda.setCol(col);
-        matrix.set(row, col, celda);
-    }
-
-   public Lista<Celda> getPuertas() {
-      return puertas;
-   }
-
    public boolean esValida(int row, int col){
       return matrix.esValida(row,col);
-   }
-
-   public Lista<Celda> getCeldasVecinas(int row, int col) {
-      Lista<Celda> vecinas = new Lista<>();
-      int[][] coordenadas = {{-1,0}, {1,0}, {0,-1}, {0,1}}; //Norte, Sur, Oeste, Este
-
-       for (int[] coordenada : coordenadas) {
-
-          int newrow = row + coordenada[0];
-          int newcol = col + coordenada[1];
-
-          if (matrix.esValida(newrow, newcol)) {
-             Celda celda = matrix.get(newrow, newcol);
-             if (celda != null && celda.isTransitable()) {
-                vecinas.add(celda);
-             }
-          }
-
-       }
-      return vecinas;
    }
 
    public Lista<Celda> getCeldasAccesibles(int row, int col, int rango) {
@@ -190,10 +148,6 @@ public class Zona {
                if (matrix.esValida(newrow, newcol) && !visitadas[newrow][newcol]) {
                   Celda celda = matrix.get(newrow, newcol);
 
-                  // 🔥 CORRECCIÓN CRÍTICA:
-                  // Para expandir el camino, la celda debe ser transitable.
-                  // Se permite pisar la celda si NO está ocupada por un enemigo,
-                  // o si tiene un objeto en el suelo (¡así la UI te dejará hacer click en ella!).
                   if (celda != null && celda.isTransitable() && (!celda.isOcupada() || celda.tieneObjeto())) {
                      visitadas[newrow][newcol] = true;
                      cola.enqueue(new int[]{newrow, newcol, colaDist + 1});
@@ -281,5 +235,4 @@ public class Zona {
       }
       return new Lista<>();
    }
-
 }

@@ -10,9 +10,6 @@ public class Inventario {
     private Lista<Objeto> objetosUsados;
     private Lista<Objeto> objetosEquipados;
 
-    // =========================
-    // CONSTRUCTOR
-    // =========================
     public Inventario() {
         this.objetos = new Lista<>();
         this.objetosUsados = new Lista<>();
@@ -27,9 +24,6 @@ public class Inventario {
         this.sizeInventario = size;
     }
 
-    // =========================
-    // INVENTARIO BASE
-    // =========================
     public boolean addObjeto(Objeto objeto) {
 
         if (objetos.getSize() >= sizeInventario) return false;
@@ -50,10 +44,6 @@ public class Inventario {
         return objetos.getSize() >= sizeInventario;
     }
 
-    public boolean inventarioVacio() {
-        return objetos.isEmpty();
-    }
-
     public Lista<Objeto> getObjetos() {
         return objetos;
     }
@@ -70,24 +60,17 @@ public class Inventario {
                 return true;
             }
         }
-
         return false;
-    }
-
-    // =========================
-    // USADOS
-    // =========================
-    public void registrarUsado(Objeto o) {
-        objetosUsados.add(o);
     }
 
     public Lista<Objeto> getObjetosUsados() {
         return objetosUsados;
     }
+    public Lista<Objeto> getObjetosEquipados() {
+        return objetosEquipados;
+    }
 
-    // =========================
-    // EQUIPADOS (SIN MAP)
-    // =========================
+
     public boolean equipar(Objeto o) {
 
         if (o == null || o.getSlot() == null) return false;
@@ -109,30 +92,8 @@ public class Inventario {
         return true;
     }
 
-    public void desequipar(Objeto o) {
-        objetosEquipados.delete(o);
-    }
-
-    public Lista<Objeto> getObjetosEquipados() {
-        return objetosEquipados;
-    }
-
-    public Objeto getEquipado(SlotEquipable slot) {
-
-        for (int i = 0; i < objetosEquipados.getSize(); i++) {
-
-            Objeto o = objetosEquipados.get(i);
-
-            if (o.getSlot() == slot) {
-                return o;
-            }
-        }
-
-        return null;
-    }
-
     // =========================
-    // TURNOS
+    // TURNOS DE LOS OBJETOS
     // =========================
     public void avanzarTurno() {
 

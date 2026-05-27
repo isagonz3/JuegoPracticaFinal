@@ -32,7 +32,6 @@ public class PartidaObjetosYCombate {
     // ============================================================
 
     //Calcular el daño con la formula dada
-
     public static int calcularHit(int ataque, int defensa) {
         return Math.max(0, (int)(ataque * (Math.random() * 2) - defensa));
     }
@@ -125,7 +124,7 @@ public class PartidaObjetosYCombate {
                 // 1. Calculamos el daño mitigado por la defensa una sola vez
                 int hit = calcularHit(ataque, defensa);
 
-                // 2. Cambiamos recibirAtaque por nuestro nuevo método directo
+                // 2. Cambiamos recibirAtaque por nuestro nuevo metodo directo
                 jugador.getEstadisticas().restarVidaDirecta(hit);
 
                 // 3. El Log ahora mostrará exactamente lo que ha bajado en la barra azul
@@ -136,6 +135,7 @@ public class PartidaObjetosYCombate {
             }
         }
     }
+
 
     // ============================================================
     // OBJETOS
@@ -248,7 +248,6 @@ public class PartidaObjetosYCombate {
     }
 
 
-
     // ============================================================
     // NPC
     // ============================================================
@@ -289,13 +288,14 @@ public class PartidaObjetosYCombate {
         return null;
     }
 
+
     // ============================================================
     // SPAWN DE ENEMIGOS
     // ============================================================
 
     public void poblarZona(Zona zona) {
 
-        if (zona.getIdZona() == 0 || zona.getIdZona() == 1 || zona.getIdZona() == 5)
+        if (zona.getIdZona() == 0 || zona.getIdZona() == 1 || zona.getIdZona() == 5 || zona.getIdZona() == 6 || zona.getIdZona() == 9)
             return;
 
         Lista<Posicion> spawns = zona.getSpawnEnemigos();
@@ -366,6 +366,7 @@ public class PartidaObjetosYCombate {
         }
     }
 
+
     // ============================================================
     // SPAWN DE OBJETOS
     // ============================================================
@@ -385,9 +386,7 @@ public class PartidaObjetosYCombate {
         int GEMAS = 2;
         int ALEATORIOS = 3;
 
-        // ============================================================
         // SPAWNS FIJOS (Vienen del archivo .txt)
-        // ============================================================
         if (spawns.getSize() > 0) {
 
             int colocados = 0;
@@ -401,7 +400,7 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                // Validamos que sea transitable (un '0' real) y que no sea puerta
+                // Validamos que sea transitable y que no sea puerta
                 if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
                         && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearGema());
@@ -409,7 +408,7 @@ public class PartidaObjetosYCombate {
                 }
             }
 
-            // Luego colocar OBJETOS ALEATORIOS
+            // Luego colocar objetos aleatorios
             int colocadosAleatorios = 0;
 
             for (int i = 0; i < spawns.getSize() && colocadosAleatorios < ALEATORIOS; i++) {
@@ -433,9 +432,8 @@ public class PartidaObjetosYCombate {
             return;
         }
 
-        // ============================================================
+
         // 2. SPAWN ALEATORIO (si no hay spawns fijos en el archivo)
-        // ============================================================
 
         // Primero GEMAS
         int colocadasGemas = 0;
@@ -458,7 +456,7 @@ public class PartidaObjetosYCombate {
             colocadasGemas++;
         }
 
-        // Luego OBJETOS ALEATORIOS
+        // Luego objetos aleatorios
         int colocadosAleatorios = 0;
 
         while (colocadosAleatorios < ALEATORIOS) {
@@ -481,7 +479,6 @@ public class PartidaObjetosYCombate {
 
         asegurarMinimoGemas(zona, GEMAS);
     }
-
 
     private void asegurarMinimoGemas(Zona zona, int minimo) {
 
@@ -560,6 +557,7 @@ public class PartidaObjetosYCombate {
             default -> new Objeto("Pocion de defensa", TipoObjeto.USABLE, 0, 1, 0, 0, 1, "+1 def");
         };
     }
+
 
     // ============================================================
     // INTERACCIÓN CON EL GATO

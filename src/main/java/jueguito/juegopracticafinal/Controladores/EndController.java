@@ -37,6 +37,4 @@ public class EndController {
 
         volverBtn.setOnAction(e -> app.volverAlMenu());
     }
-
-
 }

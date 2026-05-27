@@ -10,28 +10,12 @@ public class Posicion {
         this.col = col;
     }
 
-    public int getIdZona() {
-        return idZona;
-    }
-
-    public void setIdZona(int idZona) {
-        this.idZona = idZona;
-    }
-
     public int getRow() {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
     }
 
     @Override

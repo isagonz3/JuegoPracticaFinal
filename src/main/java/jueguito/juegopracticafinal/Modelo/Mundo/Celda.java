@@ -102,18 +102,6 @@ public class Celda {
         return Math.abs(this.row - otra.row) + Math.abs(this.col - otra.col) == 1;
     }
 
-    public int getDistancia(Celda otra) {
-        if (otra == null) return Integer.MAX_VALUE;
-        return Math.abs(this.row - otra.row) + Math.abs(this.col - otra.col);
-    }
-
-    public void clear(){
-        this.entidad = null;
-        this.objeto = null;
-        this.npc = null;
-        this.puerta = null;
-    }
-
     public boolean esAdyacenteDistancia(Celda otra, int dist) {
         int dx = Math.abs(this.row - otra.row);
         int dy = Math.abs(this.col - otra.col);
@@ -121,5 +109,3 @@ public class Celda {
         return (dx + dy) == dist;
     }
 }
-
-

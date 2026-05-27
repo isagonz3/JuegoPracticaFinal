@@ -28,7 +28,6 @@ public class Partida {
     private boolean movimientoRealizado = false;
     private boolean accionRealizada = false;
 
-    // Nuevos módulos
     private PartidaMovimiento movimiento;
     private PartidaObjetosYCombate objetosYCombate;
     private UIRenderer ui;
@@ -39,6 +38,7 @@ public class Partida {
         this.movimiento = new PartidaMovimiento(this);
         this.objetosYCombate = new PartidaObjetosYCombate(this);
     }
+
 
     // ============================================================
     // INICIO DE PARTIDA
@@ -93,6 +93,7 @@ public class Partida {
         log.registrar("INICIANDO PARTIDA \n Bienvenido. Estas en el Interior de tu Casa");
     }
 
+
     // ============================================================
     // TURNOS
     // ============================================================
@@ -128,6 +129,11 @@ public class Partida {
         iniciarTurno();
     }
 
+
+    // ============================================================
+    // FIN DE PARTIDA
+    // ============================================================
+
     private boolean checkVictoria() {
 
         if (gatoEncontrado && idZonaActual == 9) {
@@ -155,6 +161,7 @@ public class Partida {
 
         return false;
     }
+
 
     // ============================================================
     // CAMBIO DE ZONA
@@ -185,15 +192,12 @@ public class Partida {
             return;
         }
 
-        // ============================================================
-        // BLOQUEO DE SEGURIDAD: DE ZONA 7 A ZONA 8 SE NECESITA LLAVE
-        // ============================================================
+        // De la zona 7 a la zona 8 se necesita una llave
         if (idZonaActual == 7 && nid == 8) {
 
             boolean tieneLlave = false;
             jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
 
-            // Recorremos las celdas de la mochila buscando la "Llave"
             for (int i = 0; i < inv.size(); i++) {
                 if (inv.getObjeto(i) != null && "Llave".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
                     tieneLlave = true;
@@ -201,7 +205,6 @@ public class Partida {
                 }
             }
 
-            // Si la mochila no tiene la llave, se cancela el cambio de zona
             if (!tieneLlave) {
                 log.registrar("¡La puerta a la Zona 8 está cerrada! Necesitas la Llave.");
                 return;
@@ -216,9 +219,7 @@ public class Partida {
             objetosYCombate.ponerObjetos(nz);
         }
 
-        // ============================================================
-        // COMPROBAR SI EL JUGADOR LLEVA A GATIKO
-        // ============================================================
+        // Comprobar si el jugador tiene al gato en el inventario
         if (idZonaActual == 8 && nid == 9) {
 
             if (gatoEncontrado) {
@@ -277,13 +278,9 @@ public class Partida {
                 .setPuntosMovDisponibles(jugador.getRangoTotal());
     }
 
-    // ============================================================
-    // GATO
-    // ============================================================
-
 
     // ============================================================
-    // DELEGACIÓN DE MÉTODOS A LOS MÓDULOS
+    // MÉTODOS NECESARIOS
     // ============================================================
 
     public boolean moverJugador(int row, int col) {
@@ -292,14 +289,6 @@ public class Partida {
 
     public Lista<Celda> getCeldasAccesibles() {
         return movimiento.getCeldasAccesibles();
-    }
-
-    public Lista<Celda> getCaminoMinimo(int dr, int dc) {
-        return movimiento.getCaminoMinimo(dr, dc);
-    }
-
-    public ResultadoCombate atacarEnemigo(Enemigo e) {
-        return objetosYCombate.atacarEnemigo(e);
     }
 
     public boolean atacarDireccion(int row, int col) {
@@ -326,8 +315,9 @@ public class Partida {
         return objetosYCombate.interactuarGato();
     }
 
+
     // ============================================================
-    // UTILIDADES INTERNAS
+    // Colocar entidades fijas
     // ============================================================
 
     private Posicion findSpawn(Zona zona) {
@@ -398,9 +388,7 @@ public class Partida {
     }
 
     private void colocarNPCsFijos() {
-        // =========================
         // NPC 1
-        // =========================
         Zona zona1 = grafo.getZona(5);
 
         if (zona1 != null && zona1.esValida(4, 9)) {
@@ -420,9 +408,7 @@ public class Partida {
             }
         }
 
-        // =========================
         // NPC 2
-        // =========================
         Zona zona2 = grafo.getZona(6);
 
         if (zona2 != null && zona2.esValida(13,1)) {
@@ -442,9 +428,7 @@ public class Partida {
             }
         }
 
-        // =========================
         // NPC 3
-        // =========================
         Zona zona3 = grafo.getZona(7);
 
         if (zona3 != null && zona3.esValida(5, 8)) {
@@ -463,9 +447,8 @@ public class Partida {
                 celda3.setNpc(npc3);
             }
         }
-        // =========================
-        // NPC PRINCESA
-        // =========================
+
+        // NPC princesa
         Zona zonaPrincesa = grafo.getZona(9);
 
         if (zonaPrincesa != null && zonaPrincesa.esValida(25, 8)) {
@@ -486,6 +469,7 @@ public class Partida {
         }
     }
 
+
     // ============================================================
     // GETTERS NECESARIOS PARA LOS MÓDULOS
     // ============================================================
@@ -494,7 +478,6 @@ public class Partida {
     public Zona getZonaActual() { return zonaActual; }
     public LogMovimiento getLog() { return log; }
     public boolean isFaseJugadorActiva() { return faseJugadorActiva; }
-    public void setFaseJugadorActiva(boolean f) { faseJugadorActiva = f; }
     public EstadoJuego getEstadoActual() { return estadoActual; }
     public void terminarTurnoPublic() { terminarTurno(); }
     public Gato getGato() {
@@ -509,44 +492,35 @@ public class Partida {
     public int getTurnoActual() {
         return turnoActual;
     }
-    public boolean isMovimientoRealizado() { return movimientoRealizado; }
-    public void setMovimientoRealizado(boolean b) { this.movimientoRealizado = b; }
     public boolean isAccionRealizada() { return accionRealizada; }
     public void setAccionRealizada(boolean b) { this.accionRealizada = b; }
     public GrafoZonas getGrafoZonas() {
         return grafo;
     }
-
     public void setIdZonaActual(int idZonaActual) {
         this.idZonaActual = idZonaActual;
     }
     public void setZonaActual(Zona zonaActual) {
         this.zonaActual = zonaActual;
     }
-
     public void setTurnoActual(int turnoActual) {
         this.turnoActual = turnoActual;
     }
-
     public void setGatoEncontrado(boolean gatoEncontrado) {
         this.gatoEncontrado = gatoEncontrado;
     }
-
     public void setEstadoActual(EstadoJuego estadoActual) {
         this.estadoActual = estadoActual;
     }
-
     public void setJugador(Jugador jugador) {
         this.jugador = jugador;
     }
-
     public void setGato(Gato gato) {
         this.gato = gato;
     }
     public void setUi(UIRenderer ui) {
         this.ui = ui;
     }
-
     public UIRenderer getUi() {
         return ui;
     }

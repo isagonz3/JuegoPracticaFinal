@@ -108,6 +108,7 @@ public class PartidaMovimiento {
         return true;
     }
 
+
     // ============================================================
     // BFS PARA DISTANCIA
     // ============================================================
@@ -152,6 +153,7 @@ public class PartidaMovimiento {
         return Integer.MAX_VALUE;
     }
 
+
     // ============================================================
     // CELDAS ACCESIBLES
     // ============================================================
@@ -171,24 +173,6 @@ public class PartidaMovimiento {
         );
     }
 
-    // ============================================================
-    // CAMINO MÍNIMO
-    // ============================================================
-
-    public Lista<Celda> getCaminoMinimo(int dr, int dc) {
-
-        Jugador jugador = partida.getJugador();
-        Zona zonaActual = partida.getZonaActual();
-
-        if (jugador == null || zonaActual == null)
-            return new Lista<>();
-
-        return zonaActual.getCaminoMinimo(
-                jugador.getPosicion().getRow(),
-                jugador.getPosicion().getCol(),
-                dr, dc
-        );
-    }
 
     // ============================================================
     // MOVIMIENTO DE ENEMIGOS
@@ -265,10 +249,7 @@ public class PartidaMovimiento {
 
             int bestDir = -1;
 
-            // ============================================================
-            // SI FUE ATACADO
-            // ============================================================
-
+            // Si el enemigo ha sido atacado
             if (e.isAtacado()) {
 
                 int decision = (int)(Math.random() * 2);
@@ -315,7 +296,7 @@ public class PartidaMovimiento {
                     }
                 }
 
-                // ATACAR
+                // El enemigo te ataca
                 else {
 
                     Celda pjCelda = zonaActual.getCelda(pj.getRow(), pj.getCol());
@@ -339,10 +320,7 @@ public class PartidaMovimiento {
                 continue;
             }
 
-            // ============================================================
-            // PERSEGUIR AL JUGADOR
-            // ============================================================
-
+            // El enemigo te persigue
             Celda pjCelda = zonaActual.getCelda(pj.getRow(), pj.getCol());
 
             if (zonaActual.getCelda(i, j).esAdyacente(pjCelda))

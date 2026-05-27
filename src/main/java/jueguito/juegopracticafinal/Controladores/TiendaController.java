@@ -6,24 +6,14 @@ import jueguito.juegopracticafinal.Controladores.Juego.JuegoController;
 
 public class TiendaController {
 
-    @FXML
-    private Button comprarBarcaBtn;
-
-    @FXML
-    private Button comprarMapaBtn;
-
-    @FXML
-    private Button salirBtn;
+    @FXML private Button comprarBarcaBtn;
+    @FXML private Button comprarMapaBtn;
+    @FXML private Button salirBtn;
 
     private JuegoController juegoController; // para acceder a inventario y log
 
-    public void setJuegoController(JuegoController jc) {
-        this.juegoController = jc;
-    }
-
     @FXML
     private void initialize() {
-
         comprarBarcaBtn.setOnAction(e -> comprarBarca());
 
         comprarMapaBtn.setOnAction(e -> comprarMapa());
@@ -41,7 +31,6 @@ public class TiendaController {
     }
 
     private void cerrarTienda() {
-        // cerrar ventana
         salirBtn.getScene().getWindow().hide();
     }
 }

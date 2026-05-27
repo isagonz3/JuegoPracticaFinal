@@ -1,6 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Mundo;
 
 public class Puerta implements Comparable<Puerta> {
+
     private int xOrigen;
     private int yOrigen;
     private int xDestino;

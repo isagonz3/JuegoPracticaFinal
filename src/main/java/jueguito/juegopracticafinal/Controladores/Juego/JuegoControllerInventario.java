@@ -22,9 +22,11 @@ public class JuegoControllerInventario {
         this.objetoSeleccionado = nuevo;
     }
 
+
     // ============================================================
-    // USAR OBJETO AUTOMÁTICO
+    // USAR OBJETO
     // ============================================================
+
     public void usarObjeto() {
         if (objetoSeleccionado == null) return;
 
@@ -43,13 +45,14 @@ public class JuegoControllerInventario {
         }
     }
 
+
     // ============================================================
-    // EQUIPAR OBJETO AUTOMÁTICO (CORREGIDO)
+    // EQUIPAR OBJETO AUTOMÁTICO
     // ============================================================
+
     public void equiparObjeto() {
         if (objetoSeleccionado == null) return;
 
-        // 🔥 PASO CLAVE: Guardamos una copia local del objeto de forma segura
         Objeto aEquipar = objetoSeleccionado;
         SlotEquipable slot = aEquipar.getSlot();
 
@@ -59,7 +62,6 @@ public class JuegoControllerInventario {
             return;
         }
 
-        // 🔥 Enviamos el objeto y su slot exacto a la partida
         if (partida.equiparObjeto(aEquipar, slot)) {
 
             // Limpiamos la selección en la interfaz de JavaFX
@@ -68,7 +70,6 @@ public class JuegoControllerInventario {
 
             if (verificarFinJuego()) return;
 
-            // 🔥 ACTUALIZACIÓN COMPLETA: Ahora sí pasará el turno, moverá enemigos y redibujará
             ctrl.getUiRenderer().actualizarUI(partida);
             ctrl.getMapaRenderer().render(partida);
         }

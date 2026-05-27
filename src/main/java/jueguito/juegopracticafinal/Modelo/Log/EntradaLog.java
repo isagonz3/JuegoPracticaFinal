@@ -1,6 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Log;
 
 public class EntradaLog {
+
     private final String mensaje;
 
     public EntradaLog(String mensaje) {

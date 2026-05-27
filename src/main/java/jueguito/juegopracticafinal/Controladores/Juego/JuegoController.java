@@ -44,6 +44,7 @@ public class JuegoController {
     @FXML private TextArea objetosUsadosArea;
     @FXML private TextArea objetosEquipadosArea;
 
+
     // ============================
     // DATOS
     // ============================
@@ -53,6 +54,7 @@ public class JuegoController {
 
     private int baseRow = 1;
     private int baseCol = 0;
+
 
     // ============================
     // MÓDULOS
@@ -64,6 +66,7 @@ public class JuegoController {
     private SpriteManager spriteManager;
     private MapaRenderer mapaRenderer;
     private UIRenderer uiRenderer;
+
 
     // ============================
     // INICIALIZACIÓN
@@ -94,6 +97,7 @@ public class JuegoController {
         configEventos();
     }
 
+
     // ============================
     // EVENTOS
     // ============================
@@ -104,7 +108,6 @@ public class JuegoController {
 
         guardarBtn.setOnAction(e -> guardaPartida());
 
-        // SOLO UI -> lógica en acciones
         entregarGatoBtn.setOnAction(e -> acciones.terminarTurno());
 
         inventarioList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
@@ -131,6 +134,7 @@ public class JuegoController {
         acciones.manejarTecla(event);
     }
 
+
     // ============================
     // GUARDAR PARTIDA
     // ============================
@@ -152,6 +156,7 @@ public class JuegoController {
             uiRenderer.actualizarUI(partida);
         }
     }
+
 
     // ============================
     // GETTERS

@@ -43,6 +43,7 @@ public class UIRenderer {
         this.objetosEquipadosArea = objetosEquipadosArea;
     }
 
+
     // ============================================================
     // ACTUALIZAR UI COMPLETA
     // ============================================================
@@ -67,18 +68,15 @@ public class UIRenderer {
                         j.getEstadisticas().getVidaMax()
         );
 
-        // Log
         actualizarLog(partida);
 
-        // Inventario
         actualizarInventario(j);
 
-        // Objetos usados
         actualizarUsados(j);
 
-        // Objetos equipados
         actualizarEquipados(j);
     }
+
 
     // ============================================================
     // LOG
@@ -95,10 +93,6 @@ public class UIRenderer {
         ultimoLogIndex = entradas.getSize();
     }
 
-    public void limpiarLog() {
-        logArea.clear();
-        ultimoLogIndex = 0;
-    }
 
     // ============================================================
     // INVENTARIO
@@ -115,9 +109,11 @@ public class UIRenderer {
         }
     }
 
-// ============================================================
-// OBJETOS USADOS (CORREGIDO)
-// ============================================================
+
+    // ============================================================
+    // OBJETOS USADOS (CORREGIDO)
+    // ============================================================
+
     private void actualizarUsados(Jugador j) {
         StringBuilder usados = new StringBuilder();
         Lista<Objeto> listaUsados = j.getInventario().getObjetosUsados();
@@ -133,9 +129,11 @@ public class UIRenderer {
         objetosUsadosArea.setText(usados.toString());
     }
 
-// ============================================================
-// OBJETOS EQUIPADOS (CORREGIDO)
-// ============================================================
+
+    // ============================================================
+    // OBJETOS EQUIPADOS (CORREGIDO)
+    // ============================================================
+
     private void actualizarEquipados(Jugador j) {
         StringBuilder equip = new StringBuilder();
         Lista<Objeto> listaEquipados = j.getInventario().getObjetosEquipados();
@@ -151,4 +149,3 @@ public class UIRenderer {
         objetosEquipadosArea.setText(equip.toString());
     }
 }
-

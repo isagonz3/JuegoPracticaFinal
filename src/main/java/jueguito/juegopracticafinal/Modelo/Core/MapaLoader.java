@@ -6,7 +6,6 @@ import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.TADs.GsonUtil;
 import jueguito.juegopracticafinal.TADs.Lista;
 
-
 public class MapaLoader {
 
     public static Lista<Zona> cargarZonas(){

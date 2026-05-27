@@ -33,9 +33,7 @@ public class Objeto {
     }
 
     public Objeto(String nombre, TipoObjeto tipo, int ataqueBonus, int defensaBonus, int vidaBonus, int rangoBonus, int usosMax, String descripcion) {
-
         this.id = contador++;
-
         this.nombre = nombre;
         this.tipo = tipo;
         this.ataqueBonus = ataqueBonus;
@@ -55,16 +53,8 @@ public class Objeto {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public TipoObjeto getTipo() {
         return tipo;
-    }
-
-    public void setTipo(TipoObjeto tipo) {
-        this.tipo = tipo;
     }
 
     public SlotEquipable getSlot() {
@@ -133,16 +123,6 @@ public class Objeto {
         }
         usosRestantes--;
         return true;
-    }
-
-    public boolean objetoGastado() {
-        return isConsumible() && usosRestantes <= 0;
-    }
-
-    public Objeto copiar() {
-        Objeto copia = new Objeto(nombre, tipo, ataqueBonus, defensaBonus, vidaBonus, rangoBonus, usosMax, descripcion);
-        copia.slot = this.slot;
-        return copia;
     }
 
     @Override

@@ -26,16 +26,8 @@ public abstract class  Entidad {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public Estadisticas getEstadisticas() {
         return estadisticas;
-    }
-
-    public void setEstadisticas(Estadisticas estadisticas) {
-        this.estadisticas = estadisticas;
     }
 
     public Posicion getPosicion() {
@@ -87,6 +79,4 @@ public abstract class  Entidad {
         }
         return " ";
     }
-
-
 }

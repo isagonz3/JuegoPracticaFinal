@@ -31,10 +31,6 @@ public class Jugador extends Entidad{
         return inventario;
     }
 
-    public Objeto getEquipamiento(SlotEquipable slot){
-        return equipamiento[slot.ordinal()];
-    }
-
     public Objeto[] getEquipamiento(){
         return equipamiento;
     }
@@ -56,14 +52,6 @@ public class Jugador extends Entidad{
         return true;
     }
 
-    public void quitarEquipamiento(SlotEquipable slot){
-        Objeto actual = equipamiento[slot.ordinal()];
-        if(actual != null && inventario.addObjeto(actual)){
-            equipamiento[slot.ordinal()] = null;
-        }
-        addBonusEquipamiento();
-    }
-
     private void addBonusEquipamiento(){
         bonusAtaqueEq = 0;
         bonusDefensaEq = 0;
@@ -77,13 +65,6 @@ public class Jugador extends Entidad{
             }
         }
     }
-
-
-    public int getDefensaEscudo() {
-        Objeto escudo = inventario.getEquipado(SlotEquipable.ESCUDO);
-        return (escudo != null) ? escudo.getDefensaBonus() : 0;
-    }
-
 
     @Override
     public int getAtaqueTotal(){
@@ -99,18 +80,6 @@ public class Jugador extends Entidad{
         return estadisticas.getRangoMov() + bonusRangoEq;
     }
 
-    public int getBonusAtaqueEq() {
-        return bonusAtaqueEq;
-    }
-
-    public int getBonusDefensaEq() {
-        return bonusDefensaEq;
-    }
-
-    public int getBonusRangoEq() {
-        return bonusRangoEq;
-    }
-
     public void setLog(LogMovimiento log) {
         this.log = log;
     }
@@ -122,5 +91,4 @@ public class Jugador extends Entidad{
     public String getTipoEntidad(){
         return "JUGADOR";
     }
-
 }
