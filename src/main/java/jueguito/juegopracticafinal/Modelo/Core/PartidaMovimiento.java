@@ -2,8 +2,10 @@ package jueguito.juegopracticafinal.Modelo.Core;
 
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorAccesoZonaBloqueada;
 import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorCasillaOcupada;
 import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoInvalido;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoSinBarca;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda;
@@ -25,7 +27,9 @@ public class PartidaMovimiento {
 
     public boolean moverJugador(int row, int col)
             throws ErrorMovimientoInvalido,
-            ErrorCasillaOcupada {
+            ErrorCasillaOcupada,
+            ErrorMovimientoSinBarca,
+            ErrorAccesoZonaBloqueada {
 
         // ============================================================
         // VALIDAR ESTADO DE PARTIDA
@@ -115,7 +119,7 @@ public class PartidaMovimiento {
 
                 if (!tieneBarca) {
 
-                    throw new ErrorMovimientoInvalido(
+                    throw new ErrorMovimientoSinBarca(
                             "Necesitas la Barca para cruzar"
                     );
                 }
@@ -172,15 +176,23 @@ public class PartidaMovimiento {
         // MOVER JUGADOR
         // ============================================================
 
-        partida.getLog().registrarMovimiento(actual, partida.getZonaActual());
+        partida.getLog().registrarMovimiento(
+                actual,
+                partida.getZonaActual()
+        );
 
-        zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
+        zonaActual.getCelda(
+                actual.getRow(),
+                actual.getCol()
+        ).setEntidad(null);
 
         jugador.moverA(new Posicion(row, col));
 
         destino.setEntidad(jugador);
 
-        partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
+        partida.getLog().registrar(
+                "Te moviste a la casilla [" + row + ", " + col + "]"
+        );
 
         // ============================================================
         // OBJETOS

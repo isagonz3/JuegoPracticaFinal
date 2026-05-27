@@ -1,6 +1,10 @@
 package jueguito.juegopracticafinal.Modelo.Core;
 
 import jueguito.juegopracticafinal.Modelo.Entidades.*;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorAccesoZonaBloqueada;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorCasillaOcupada;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoInvalido;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoSinBarca;
 import jueguito.juegopracticafinal.Modelo.Inventario.*;
 import jueguito.juegopracticafinal.Modelo.Log.LogMovimiento;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
@@ -166,7 +170,8 @@ public class Partida {
     // CAMBIO DE ZONA
     // ============================================================
 
-    public void cambiarZona(Puerta puerta) {
+    public void cambiarZona(Puerta puerta)
+            throws ErrorAccesoZonaBloqueada {
 
         if (puerta == null) return;
         if (estadoActual != EstadoJuego.EN_CURSO) return;
@@ -175,10 +180,13 @@ public class Partida {
         int nid, dr, dc;
 
         if (puerta.getZonaOrigen() == idZonaActual) {
+
             nid = puerta.getZonaDestino();
             dr = puerta.getYDestino();
             dc = puerta.getXDestino();
+
         } else {
+
             nid = puerta.getZonaOrigen();
             dr = puerta.getYOrigen();
             dc = puerta.getXOrigen();
@@ -187,76 +195,140 @@ public class Partida {
         Zona nz = grafo.getZona(nid);
 
         if (nz == null) {
+
             log.registrar("Esta puerta no lleva a ninguna zona conocida");
             return;
         }
 
-        // De la zona 7 a la zona 8 se necesita una llave
+        // ============================================================
+        // VALIDACIÓN LLAVE
+        // ============================================================
+
         if (idZonaActual == 7 && nid == 8) {
 
             boolean tieneLlave = false;
-            jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
+
+            jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv =
+                    jugador.getInventario();
 
             for (int i = 0; i < inv.size(); i++) {
+
                 if (inv.getObjeto(i) != null &&
-                        "Llave".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
+                        "Llave".equalsIgnoreCase(
+                                inv.getObjeto(i).getNombre()
+                        )) {
+
                     tieneLlave = true;
                     break;
                 }
             }
 
             if (!tieneLlave) {
-                log.registrar("¡La puerta a la Zona 8 está cerrada! Necesitas la Llave.");
-                return;
+
+                throw new ErrorAccesoZonaBloqueada(
+                        "Necesitas la Llave para acceder a la Zona 8"
+                );
             }
 
-            log.registrar("Usaste la Llave para abrir el gran portón a la Zona 8...");
+            log.registrar(
+                    "Usaste la Llave para abrir el gran portón a la Zona 8..."
+            );
         }
 
         // ============================================================
-        // IMPORTANTE: registrar cambio de zona (AÑADIDO)
+        // REGISTRAR CAMBIO DE ZONA
         // ============================================================
-        log.registrar("CAMBIO_ZONA:" + idZonaActual + "->" + nid);
+
+        log.registrar(
+                "CAMBIO_ZONA:" + idZonaActual + "->" + nid
+        );
+
+        // ============================================================
+        // POBLAR ZONA
+        // ============================================================
 
         if (nz.getCountTurnos() == 0) {
+
             objetosYCombate.poblarZona(nz);
             objetosYCombate.ponerObjetos(nz);
         }
 
-        // Comprobar si el jugador tiene al gato en el inventario
+        // ============================================================
+        // VALIDACIÓN GATO
+        // ============================================================
+
         if (idZonaActual == 8 && nid == 9) {
 
             if (gatoEncontrado) {
 
-                log.registrar("Solo falta entregarle el gato a la princesa, acércate a ella");
+                log.registrar(
+                        "Solo falta entregarle el gato a la princesa, acércate a ella"
+                );
 
             } else {
 
-                log.registrar("Has estrado sin el gato, vuelve a por él");
+                log.registrar(
+                        "Has estrado sin el gato, vuelve a por él"
+                );
             }
         }
+
+        // ============================================================
+        // LIMPIAR POSICIÓN ACTUAL
+        // ============================================================
 
         zonaActual.getCelda(
                 jugador.getPosicion().getRow(),
                 jugador.getPosicion().getCol()
         ).setEntidad(null);
 
+        // ============================================================
+        // DESCUBRIMIENTO DE ZONA
+        // ============================================================
+
         if (!nz.isVisitada()) {
+
             log.registrar("Nueva zona descubierta!");
         }
 
         nz.setVisitada(true);
 
+        // ============================================================
+        // ACTUALIZAR ZONA ACTUAL
+        // ============================================================
+
         idZonaActual = nid;
         zonaActual = nz;
 
-        dr = Math.min(Math.max(dr, 0), nz.getRows() - 1);
-        dc = Math.min(Math.max(dc, 0), nz.getCols() - 1);
+        // ============================================================
+        // AJUSTAR POSICIÓN
+        // ============================================================
+
+        dr = Math.min(
+                Math.max(dr, 0),
+                nz.getRows() - 1
+        );
+
+        dc = Math.min(
+                Math.max(dc, 0),
+                nz.getCols() - 1
+        );
+
+        // ============================================================
+        // MOVER JUGADOR
+        // ============================================================
 
         jugador.moverA(new Posicion(dr, dc));
+
         nz.getCelda(dr, dc).setEntidad(jugador);
 
-        log.registrar("Has entrado en: " + nz.getNombreZona());
+        // ============================================================
+        // LOG FINAL
+        // ============================================================
+
+        log.registrar(
+                "Has entrado en: " + nz.getNombreZona()
+        );
 
         accionCambioZona();
     }
@@ -286,7 +358,12 @@ public class Partida {
     // MÉTODOS NECESARIOS
     // ============================================================
 
-    public boolean moverJugador(int row, int col) {
+    public boolean moverJugador(int row, int col)
+            throws ErrorMovimientoInvalido,
+            ErrorCasillaOcupada,
+            ErrorMovimientoSinBarca,
+            ErrorAccesoZonaBloqueada {
+
         return movimiento.moverJugador(row, col);
     }
 

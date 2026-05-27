@@ -4,8 +4,10 @@ import javafx.scene.input.KeyEvent;
 import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorAccesoZonaBloqueada;
 import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorCasillaOcupada;
 import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoInvalido;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoSinBarca;
 import jueguito.juegopracticafinal.Modelo.Inventario.Inventario;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.TipoObjeto;
@@ -95,6 +97,22 @@ public class JuegoControllerAcciones {
 
             partida.getLog().registrar(
                     "Hay algo bloqueando el paso"
+            );
+
+            ctrl.getUiRenderer().actualizarUI(partida);
+
+        } catch (ErrorMovimientoSinBarca e) {
+
+            partida.getLog().registrar(
+                    e.getMessage()
+            );
+
+            ctrl.getUiRenderer().actualizarUI(partida);
+
+        } catch (ErrorAccesoZonaBloqueada e) {
+
+            partida.getLog().registrar(
+                    e.getMessage()
             );
 
             ctrl.getUiRenderer().actualizarUI(partida);
