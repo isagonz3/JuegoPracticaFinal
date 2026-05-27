@@ -159,6 +159,16 @@ public class Partida {
         return false;
     }
 
+
+    public void evaluarFinJuego() {
+        // Si ya terminó, no hacemos nada
+        if (estadoActual != EstadoJuego.EN_CURSO) return;
+
+        // Ejecutamos los checks
+        if (checkVictoria() || checkDerrota()) {
+            log.registrar("El juego ha terminado.");
+        }
+    }
     // ============================================================
     // CAMBIO DE ZONA
     // ============================================================

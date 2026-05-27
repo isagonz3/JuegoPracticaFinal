@@ -43,9 +43,7 @@ public class PartidaMovimiento {
             return false;
         }
 
-        // ============================================================
-        // 🌊 RESTRICCIÓN DE TERRENO: CASILLAS DE AGUA EN ZONA 6 (PIDE BARCA)
-        // ============================================================
+        // Restricción para que solo se pueda entrar en el agua si tienes la barca
         if (zonaActual.getIdZona() == 6) {
             // Comprobamos si la casilla de destino es una de las que requieren Barca
             if ((row == 6 && col == 0) || (row == 6 && col == 1) || (row == 6 && col == 2) ||
@@ -56,7 +54,6 @@ public class PartidaMovimiento {
                 boolean tieneBarca = false;
                 jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
 
-                // Buscamos la Barca en la mochila
                 for (int i = 0; i < inv.size(); i++) {
                     if (inv.getObjeto(i) != null && "Barca".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
                         tieneBarca = true;
@@ -64,16 +61,14 @@ public class PartidaMovimiento {
                     }
                 }
 
-                // 🔥 CORRECCIÓN: Si no tiene el ítem, muestra "Movimiento restringido"
                 if (!tieneBarca) {
                     partida.getLog().registrar("Movimiento restringido");
                     return false;
                 }
             }
         }
-        // ============================================================
 
-        // 4. Calcular ruta y coste de puntos de movimiento (PM)
+        // Calcular la ruta y el coste de puntos de movimiento
         Posicion actual = jugador.getPosicion();
         int coste = calcularDist(actual.getRow(), actual.getCol(), row, col, zonaActual);
 
@@ -87,25 +82,25 @@ public class PartidaMovimiento {
             return false;
         }
 
-        // 5. Consumir los puntos de movimiento del jugador
+        // Consumir los puntos de movimiento del jugador
         if (!jugador.getEstadisticas().usarMovimiento(coste))
             return false;
 
-        // 6. Mover físicamente la entidad en la matriz del mapa
+        // Mover el jugador por el mapa
         zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
 
         jugador.moverA(new Posicion(row, col));
         destino.setEntidad(jugador);
 
-        // 7. NOTIFICACIÓN DE PASO
+        // Notificar en el log el movimiento
         partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
 
-        // 8. RECOGIDA AUTOMÁTICA DE OBJETOS
+        // Recoger el objeto que está en el suelo automaticamente
         if (destino.tieneObjeto()) {
             partida.recogerObjeto(destino);
         }
 
-        // 9. Comprobar si la casilla además era una transición de zona (Puerta)
+        // Comprobar si la casilla en la que estamos es una puerta
         if (destino.tienePuerta()) {
             partida.cambiarZona(destino.getPuerta());
         }
