@@ -85,6 +85,10 @@
                         text="No realizar acción"
                         maxWidth="Infinity"/>
 
+                <Button fx:id="entregarGatoBtn"
+                        text="Entregar gato"
+                        maxWidth="Infinity"/>
+
                 <Button fx:id="guardarBtn"
                         text="Guardar Partida"
                         maxWidth="Infinity"/>

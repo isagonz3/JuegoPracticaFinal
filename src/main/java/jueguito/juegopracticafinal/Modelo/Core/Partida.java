@@ -129,17 +129,14 @@ public class Partida {
     }
 
     private boolean checkVictoria() {
-        if (gatoEncontrado &&
-                idZonaActual == get().zona.zonaCastillo &&
-                zonaActual.getCelda(
-                        jugador.getPosicion().getRow(),
-                        jugador.getPosicion().getCol()
-                ).getTipoCelda() == TipoCelda.SALIDA) {
+
+        if (gatoEncontrado && idZonaActual == 9) {
 
             estadoActual = EstadoJuego.VICTORIA;
             log.registrar("Has logrado recuperar el gato de la princesa!");
             return true;
         }
+
         return false;
     }
 
@@ -159,16 +156,6 @@ public class Partida {
         return false;
     }
 
-
-    public void evaluarFinJuego() {
-        // Si ya terminó, no hacemos nada
-        if (estadoActual != EstadoJuego.EN_CURSO) return;
-
-        // Ejecutamos los checks
-        if (checkVictoria() || checkDerrota()) {
-            log.registrar("El juego ha terminado.");
-        }
-    }
     // ============================================================
     // CAMBIO DE ZONA
     // ============================================================
@@ -229,11 +216,21 @@ public class Partida {
             objetosYCombate.ponerObjetos(nz);
         }
 
-        if (nid == get().zona.zonaCastillo && !gatoEncontrado) {
-            log.registrar("DETENTE: has entrado sin el gato");
-            estadoActual = EstadoJuego.DERROTA;
-            return;
+        // ============================================================
+        // COMPROBAR SI EL JUGADOR LLEVA A GATIKO
+        // ============================================================
+        if (idZonaActual == 8 && nid == 9) {
+
+            if (gatoEncontrado) {
+
+                log.registrar("Solo falta entregarle el gato a la princesa, acércate a ella");
+
+            } else {
+
+                log.registrar("Has estrado sin el gato, vuelve a por él");
+            }
         }
+        // ============================================================
 
         zonaActual.getCelda(
                 jugador.getPosicion().getRow(),
@@ -284,39 +281,6 @@ public class Partida {
     // GATO
     // ============================================================
 
-    public boolean findGato() {
-        if (gatoEncontrado) return true;
-        if (zonaGato(gato.getPosicion()) != idZonaActual) return false;
-
-        Posicion pg = gato.getPosicion();
-        Posicion pj = jugador.getPosicion();
-
-        if (Math.abs(pj.getRow() - pg.getRow()) <= 1 &&
-                Math.abs(pj.getCol() - pg.getCol()) <= 1) {
-
-            gatoEncontrado = true;
-            log.registrar("Encontraste al gato! Toca llevarlo hasta la princesa.");
-            return true;
-        }
-
-        return false;
-    }
-
-    public int zonaGato(Posicion p) {
-        if (idZonaGato >= 0) return idZonaGato;
-
-        for (int i = 0; i < get().zona.numZonas; i++) {
-            Zona z = grafo.getZona(i);
-            if (z != null &&
-                    z.esValida(p.getRow(), p.getCol()) &&
-                    z.getCelda(p.getRow(), p.getCol()).getEntidad() == gato) {
-                idZonaGato = i;
-                return i;
-            }
-        }
-
-        return -1;
-    }
 
     // ============================================================
     // DELEGACIÓN DE MÉTODOS A LOS MÓDULOS
@@ -377,7 +341,7 @@ public class Partida {
     }
 
     private void colocarGatoFijo() {
-        int zonaId = 2;
+        int zonaId = 8;
 
         Zona zonaGato = grafo.getZona(zonaId);
         if (zonaGato == null) return;
@@ -497,6 +461,27 @@ public class Partida {
                 npc3.setSprite("/entidades/NPC_3.png");
 
                 celda3.setNpc(npc3);
+            }
+        }
+        // =========================
+        // NPC PRINCESA
+        // =========================
+        Zona zonaPrincesa = grafo.getZona(9);
+
+        if (zonaPrincesa != null && zonaPrincesa.esValida(25, 8)) {
+
+            Celda celdaPrincesa = zonaPrincesa.getCelda(25, 8);
+
+            if (celdaPrincesa != null && !celdaPrincesa.isOcupada()) {
+
+                NPC princesa = new NPC(
+                        "Princesa",
+                        TipoNPC.ALDEANO
+                );
+
+                princesa.setSprite("/entidades/princesa.png");
+
+                celdaPrincesa.setNpc(princesa);
             }
         }
     }

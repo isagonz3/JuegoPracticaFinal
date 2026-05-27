@@ -42,7 +42,7 @@ public class Configuracion {
         public int min = 1, max = 3;
     }
     public static class TurnoCfg {
-        public int maxTurnos = 50;
+        public int maxTurnos = 100;
     }
     public static class InventarioCfg {
         public int maxItems = 10, slotsEquip = 2;

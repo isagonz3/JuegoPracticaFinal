@@ -28,20 +28,24 @@ public class JuegoController {
     @FXML private ProgressBar vidaBar;
     @FXML private TextArea logArea;
     @FXML private GridPane mapaGrid;
-    @FXML private Button terminarTurnoBtn, guardarBtn;
+
+    @FXML private Button terminarTurnoBtn, guardarBtn, entregarGatoBtn;
+
     @FXML private ListView<Objeto> inventarioList;
     @FXML private Button usarBtn, equiparBtn;
     @FXML private Button atacarBtn;
     @FXML private Button interactuarBtn;
+
     @FXML private VBox tiendaPanel;
     @FXML private Button comprarBarcaBtn;
     @FXML private Button comprarMapaBtn;
     @FXML private Button salirTiendaBtn;
+
     @FXML private TextArea objetosUsadosArea;
     @FXML private TextArea objetosEquipadosArea;
 
     // ============================
-    // Datos
+    // DATOS
     // ============================
 
     private Partida partida;
@@ -70,17 +74,16 @@ public class JuegoController {
         this.partida = partida;
         this.app = app;
 
-        // Controladores lógicos
         this.acciones = new JuegoControllerAcciones(this, partida, app);
         this.inventarioCtrl = new JuegoControllerInventario(this, partida);
 
-        // Renderers
         this.spriteManager = new SpriteManager();
         this.mapaRenderer = new MapaRenderer(mapaGrid, spriteManager);
+
         this.uiRenderer = new UIRenderer(
                 zonaLabel, turnoLabel, vidaLabel, vidaBar,
-                logArea, inventarioList, objetosUsadosArea, objetosEquipadosArea
-
+                logArea, inventarioList,
+                objetosUsadosArea, objetosEquipadosArea
         );
 
         partida.iniciarTurno();
@@ -91,10 +94,6 @@ public class JuegoController {
         configEventos();
     }
 
-    public void terminarTurno() {
-        acciones.terminarTurno();
-    }
-
     // ============================
     // EVENTOS
     // ============================
@@ -102,7 +101,11 @@ public class JuegoController {
     private void configEventos() {
 
         terminarTurnoBtn.setOnAction(e -> acciones.terminarTurno());
+
         guardarBtn.setOnAction(e -> guardaPartida());
+
+        // SOLO UI -> lógica en acciones
+        entregarGatoBtn.setOnAction(e -> acciones.terminarTurno());
 
         inventarioList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
                 inventarioCtrl.seleccionarObjeto(newVal)
@@ -118,6 +121,7 @@ public class JuegoController {
         comprarMapaBtn.setOnAction(e -> acciones.comprar("Mapa", 3));
         salirTiendaBtn.setOnAction(e -> acciones.cerrarTienda());
     }
+
 
     // ============================
     // TECLADO
@@ -135,7 +139,9 @@ public class JuegoController {
 
         FileChooser fc = new FileChooser();
         fc.setTitle("Guardar Partida");
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
+        fc.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("JSON", "*.json")
+        );
         fc.setInitialFileName("partida.json");
 
         File file = fc.showSaveDialog(app.getStage());
@@ -148,7 +154,7 @@ public class JuegoController {
     }
 
     // ============================
-    // GETTERS PARA LOS MÓDULOS
+    // GETTERS
     // ============================
 
     public Partida getPartida() { return partida; }
@@ -162,6 +168,7 @@ public class JuegoController {
     public TextArea getLogArea() { return logArea; }
     public VBox getTiendaPanel() { return tiendaPanel; }
     public ListView<Objeto> getInventarioList() { return inventarioList; }
+
     public TextArea getObjetosUsadosArea() { return objetosUsadosArea; }
     public TextArea getObjetosEquipadosArea() { return objetosEquipadosArea; }
 

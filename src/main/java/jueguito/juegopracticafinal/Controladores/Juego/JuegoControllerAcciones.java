@@ -77,7 +77,6 @@ public class JuegoControllerAcciones {
         if (partida.moverJugador(pos.getRow() + ctrl.getBaseRow(),
                 pos.getCol() + ctrl.getBaseCol())) {
 
-            partida.findGato();
 
             ctrl.getUiRenderer().actualizarUI(partida);
             ctrl.getMapaRenderer().render(partida);

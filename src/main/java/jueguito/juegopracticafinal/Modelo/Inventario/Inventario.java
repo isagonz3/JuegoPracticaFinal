@@ -168,18 +168,4 @@ public class Inventario {
             }
         }
     }
-
-    public Objeto findObjeto(String nombre) {
-
-        for (int i = 0; i < objetos.getSize(); i++) {
-
-            Objeto o = objetos.get(i);
-
-            if (o.getNombre().equalsIgnoreCase(nombre)) {
-                return o;
-            }
-        }
-
-        return null;
-    }
 }
