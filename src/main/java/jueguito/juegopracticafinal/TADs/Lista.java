@@ -100,12 +100,10 @@ public class Lista<T> {
     }
 
     public boolean contains(T elemento) {
-        ElementoDobleEnlazada<T> aux = first;
-        while (aux != null){
-            if (aux.elemento.equals(elemento)){
-                return true;
-            }
-            aux = aux.next;
+        Iterador<T> it = iterador();
+        while (it.hasNext()) {
+            T e = it.next();
+            if (e != null && e.equals(elemento)) return true;
         }
         return false;
     }
@@ -147,6 +145,23 @@ public class Lista<T> {
         return sb.toString();
     }
 
+    public Iterador<T> iterador() {
+        return new Iterador<T>() {
+            private ElementoDobleEnlazada<T> actual = first;
+
+            @Override
+            public boolean hasNext() {
+                return actual != null;
+            }
+
+            @Override
+            public T next() {
+                if (actual == null) return null;
+                T data = actual.elemento;
+                actual = actual.next;
+                return data;
+            }
+        };
+    }
+
 }
-
-

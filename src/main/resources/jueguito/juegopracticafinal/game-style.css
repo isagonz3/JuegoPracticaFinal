@@ -1,0 +1,161 @@
+/* ============================================
+   A TAD of Adventure - Game Stylesheet
+   ============================================ */
+
+/* === GLOBAL === */
+.root {
+    -fx-background-color: #1a1a2e;
+    -fx-font-family: 'Monospaced';
+}
+
+/* === FONDOS === */
+.bg-dark    { -fx-background-color: #1a1a2e; }
+.bg-panel   { -fx-background-color: #16213e; }
+.bg-input   { -fx-background-color: #0d1117; }
+.bg-overlay { -fx-background-color: rgba(0,0,0,0.85); }
+
+/* === BORDES === */
+.border-bottom { -fx-border-color: #0f3460; -fx-border-width: 0 0 2 0; }
+.border-left   { -fx-border-color: #0f3460; -fx-border-width: 0 0 0 2; }
+.border-accent { -fx-border-color: #e94560; -fx-border-width: 2; }
+.border-muted  { -fx-border-color: #30363d; -fx-border-width: 1; }
+.radius-10 { -fx-background-radius: 10; -fx-border-radius: 10; }
+.radius-5  { -fx-background-radius: 5; }
+
+/* === ETIQUETAS === */
+.label {
+    -fx-text-fill: #c9d1d9;
+}
+.label-title {
+    -fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;
+}
+.label-big {
+    -fx-font-size: 30; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;
+}
+.label-info {
+    -fx-font-size: 14; -fx-font-weight: bold;
+}
+.label-muted {
+    -fx-text-fill: #8b949e; -fx-font-size: 11;
+}
+.label-accent {
+    -fx-text-fill: #e94560;
+}
+.label-heal {
+    -fx-text-fill: #4ecca3;
+}
+
+/* === BOTONES === */
+.button {
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+.btn-danger {
+    -fx-background-color: #e94560;
+    -fx-text-fill: white;
+}
+.btn-danger:hover {
+    -fx-background-color: #c73650;
+}
+.btn-primary {
+    -fx-background-color: #0f3460;
+    -fx-text-fill: white;
+}
+.btn-primary:hover {
+    -fx-background-color: #1a4a8a;
+}
+.btn-success {
+    -fx-background-color: #4ecca3;
+    -fx-text-fill: #1a1a2e;
+}
+.btn-success:hover {
+    -fx-background-color: #3db88e;
+}
+.btn-warning {
+    -fx-background-color: #e9c46a;
+    -fx-text-fill: #1a1a2e;
+}
+.btn-warning:hover {
+    -fx-background-color: #d4b15a;
+}
+.btn-purple {
+    -fx-background-color: #533483;
+    -fx-text-fill: white;
+}
+.btn-purple:hover {
+    -fx-background-color: #6a44a0;
+}
+.btn-menu {
+    -fx-background-color: #0f3460;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-pref-width: 250;
+    -fx-pref-height: 50;
+}
+.btn-menu:hover {
+    -fx-background-color: #1a4a8a;
+    -fx-effect: dropshadow(gaussian, rgba(233,69,96,0.4), 10, 0.5, 0, 0);
+}
+
+/* === SCROLLPANE (mapa) === */
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+/* === PROGRESS BAR (vida) === */
+.progress-bar {
+    -fx-accent: #4ecca3;
+    -fx-control-inner-background: #1a1a2e;
+}
+
+/* === TEXTAREA === */
+.text-area {
+    -fx-control-inner-background: #0d1117;
+    -fx-text-fill: #c9d1d9;
+    -fx-background-color: #0d1117;
+    -fx-border-color: #30363d;
+    -fx-border-width: 1;
+    -fx-font-family: 'Consolas';
+    -fx-font-size: 11;
+}
+.text-area .content {
+    -fx-background-color: #0d1117;
+}
+
+/* === LISTVIEW (inventario) === */
+.list-view {
+    -fx-control-inner-background: #0d1117;
+    -fx-text-fill: #c9d1d9;
+    -fx-background-color: #0d1117;
+    -fx-border-color: #30363d;
+    -fx-border-width: 1;
+}
+.list-view .list-cell {
+    -fx-background-color: #0d1117;
+    -fx-text-fill: #c9d1d9;
+}
+.list-view .list-cell:selected {
+    -fx-background-color: #e94560;
+    -fx-text-fill: white;
+}
+
+/* === MENU: CONTROLES === */
+.controls-area {
+    -fx-control-inner-background: #16213e;
+    -fx-text-fill: #8b949e;
+    -fx-background-color: #16213e;
+    -fx-border-color: transparent;
+    -fx-font-family: 'Consolas';
+    -fx-font-size: 12;
+}
+
+/* === END SCREEN === */
+.end-title {
+    -fx-font-size: 36;
+    -fx-font-weight: bold;
+}

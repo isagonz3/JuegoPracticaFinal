@@ -251,10 +251,10 @@
 [32m+[m[32m            int[] actual = cola.dequeue();[m
 [32m+[m[32m            int row = actual[0];[m
 [32m+[m[32m            int col = actual[1];[m
-[32m+[m[32m            int data = actual[2];[m
+[32m+[m[32m            int elemento = actual[2];[m
 [32m+[m
 [32m+[m[32m            if(row == row2 && col == col2){[m
-[32m+[m[32m                return data;[m
+[32m+[m[32m                return elemento;[m
 [32m+[m[32m            }[m
 [32m+[m
 [32m+[m[32m            int[][] coordenadas = {{-1,0}, {1,0}, {0,-1}, {0,1}}; //Norte, Sur, Oeste, Este[m
@@ -266,7 +266,7 @@
 [32m+[m[32m                    Celda celda = zonaActual.getCelda(newRow,newCol);[m
 [32m+[m[32m                    if(celda != null && celda.isTransitable() && !celda.isOcupada()){[m
 [32m+[m[32m                        visitadas[newRow][newCol] = true;[m
-[32m+[m[32m                        cola.enqueue(new int[]{newRow,newCol,data +1});[m
+[32m+[m[32m                        cola.enqueue(new int[]{newRow,newCol,elemento +1});[m
 [32m+[m[32m                    }[m
                  }[m
              }[m

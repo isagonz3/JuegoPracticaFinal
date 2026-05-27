@@ -10,6 +10,8 @@ import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
 import jueguito.juegopracticafinal.TADs.Lista;
 
+import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;
+
 public class UIRenderer {
 
     private final Label zonaLabel;
@@ -54,7 +56,7 @@ public class UIRenderer {
 
         // Zona y turno
         zonaLabel.setText("Zona: " + partida.getZonaActual().getNombreZona());
-        turnoLabel.setText("Turno: " + partida.getTurnoActual());
+        turnoLabel.setText("Turno: " + partida.getTurnoActual() + "/" + get().turno.maxTurnos);
 
         // Vida
         vidaLabel.setText(

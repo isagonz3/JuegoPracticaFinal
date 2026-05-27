@@ -2,7 +2,8 @@ package jueguito.juegopracticafinal.Modelo.Core;
 
 import com.google.gson.Gson;
 
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class Configuracion {
     private static Configuracion INSTANCE;
@@ -18,8 +19,11 @@ public class Configuracion {
 
     public static Configuracion get() {
         if (INSTANCE == null) {
-            try (FileReader r = new FileReader("src/main/resources/datosJSON/configuracion.json")) {
-                INSTANCE = new Gson().fromJson(r, Configuracion.class);
+            try (InputStream is = Configuracion.class.getResourceAsStream(
+                    "/datosJSON/configuracion.json");) {
+                if (is != null) {
+                    INSTANCE = new Gson().fromJson(new InputStreamReader(is), Configuracion.class);
+                }
             } catch (Exception e) {
                 INSTANCE = new Configuracion();
             }

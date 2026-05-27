@@ -228,7 +228,7 @@ Compiled method (n/a) 123066 3577     n 0       com.sun.prism.d3d.D3DResourceFac
  main code      [0x000001b9b6989d00,0x000001b9b6989f09] = 521
  stub code      [0x000001b9b6989f09,0x000001b9b6989f10] = 7
  oops           [0x000001b9b6989f10,0x000001b9b6989f18] = 8
- mutable data [0x000001b9d90de9d0,0x000001b9d90de9f0] = 32
+ mutable elemento [0x000001b9d90de9d0,0x000001b9d90de9f0] = 32
  relocation     [0x000001b9d90de9d0,0x000001b9d90de9f0] = 32
 
 [Constant Pool (empty)]
@@ -301,15 +301,15 @@ Compiled method (c2) 123077 5074       4       com.sun.prism.d3d.D3DTexture::upd
  main code      [0x000001b9b6aa9a80,0x000001b9b6aaa2c0] = 2112
  stub code      [0x000001b9b6aaa2c0,0x000001b9b6aaa310] = 80
  oops           [0x000001b9b6aaa310,0x000001b9b6aaa330] = 32
- mutable data [0x000001b9d9ca8300,0x000001b9d9ca84e0] = 480
+ mutable elemento [0x000001b9d9ca8300,0x000001b9d9ca84e0] = 480
  relocation     [0x000001b9d9ca8300,0x000001b9d9ca83b8] = 184
  metadata       [0x000001b9d9ca83b8,0x000001b9d9ca84e0] = 296
- immutable data [0x000001b9da005340,0x000001b9da005a18] = 1752
+ immutable elemento [0x000001b9da005340,0x000001b9da005a18] = 1752
  dependencies   [0x000001b9da005340,0x000001b9da0053a8] = 104
  nul chk table  [0x000001b9da0053a8,0x000001b9da0053e8] = 64
  handler table  [0x000001b9da0053e8,0x000001b9da005448] = 96
  scopes pcs     [0x000001b9da005448,0x000001b9da0055d8] = 400
- scopes data    [0x000001b9da0055d8,0x000001b9da005a18] = 1088
+ scopes elemento    [0x000001b9da0055d8,0x000001b9da005a18] = 1088
 
 [Constant Pool (empty)]
 
@@ -720,15 +720,15 @@ Compiled method (c2) 123103 7492       4       com.sun.prism.impl.BaseResourceFa
  main code      [0x000001b9b6a95500,0x000001b9b6a95790] = 656
  stub code      [0x000001b9b6a95790,0x000001b9b6a957c8] = 56
  oops           [0x000001b9b6a957c8,0x000001b9b6a957d0] = 8
- mutable data [0x000001b9ef37e5f0,0x000001b9ef37e750] = 352
+ mutable elemento [0x000001b9ef37e5f0,0x000001b9ef37e750] = 352
  relocation     [0x000001b9ef37e5f0,0x000001b9ef37e650] = 96
  metadata       [0x000001b9ef37e650,0x000001b9ef37e750] = 256
- immutable data [0x000001b98298f820,0x000001b98298fb80] = 864
+ immutable elemento [0x000001b98298f820,0x000001b98298fb80] = 864
  dependencies   [0x000001b98298f820,0x000001b98298f888] = 104
  nul chk table  [0x000001b98298f888,0x000001b98298f8b0] = 40
  handler table  [0x000001b98298f8b0,0x000001b98298f8e0] = 48
  scopes pcs     [0x000001b98298f8e0,0x000001b98298f9c0] = 224
- scopes data    [0x000001b98298f9c0,0x000001b98298fb80] = 448
+ scopes elemento    [0x000001b98298f9c0,0x000001b98298fb80] = 448
 
 [Constant Pool (empty)]
 

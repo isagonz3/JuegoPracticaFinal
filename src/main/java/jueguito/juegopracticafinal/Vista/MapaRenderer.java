@@ -1,12 +1,15 @@
 package jueguito.juegopracticafinal.Vista;
 
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
@@ -15,18 +18,27 @@ import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
+import jueguito.juegopracticafinal.TADs.Iterador;
 import jueguito.juegopracticafinal.TADs.Lista;
+
+import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;
 
 public class MapaRenderer {
 
     private final GridPane mapaGrid;
     private final SpriteManager sprites;
 
-    private static final int TILE_SIZE = 16;
+
+    private static final int TILE_PIX = get().ui.tileSize;
 
     public MapaRenderer(GridPane mapaGrid, SpriteManager sprites) {
         this.mapaGrid = mapaGrid;
         this.sprites = sprites;
+        mapaGrid.setHgap(0);
+        mapaGrid.setVgap(0);
+        mapaGrid.setStyle("-fx-grid-lines-visible: false;");
+        mapaGrid.setBackground(Background.EMPTY);
+
     }
 
     public void render(Partida partida) {
@@ -45,6 +57,13 @@ public class MapaRenderer {
         int rows = zona.getRows();
         int cols = zona.getCols();
 
+        int maxAnchoMapa = 554;
+        int maxAltoMapa  = 500;
+        int tileW = maxAnchoMapa / cols;
+        int tileH = maxAltoMapa  / rows;
+        int tileSize = Math.min(tileW, tileH);
+        tileSize = Math.max(12, Math.min(32, tileSize));
+
         Lista<Celda> accesibles = partida.getCeldasAccesibles();
         boolean[][] checkCelda = null;
 
@@ -61,25 +80,29 @@ public class MapaRenderer {
 
                 WritableImage tile = new WritableImage(
                         pixelReader,
-                        j * TILE_SIZE,
-                        i * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE
+                        j * TILE_PIX,
+                        i * TILE_PIX,
+                        TILE_PIX,
+                        TILE_PIX
                 );
 
                 ImageView tileView = new ImageView(tile);
-                tileView.setFitWidth(TILE_SIZE);
-                tileView.setFitHeight(TILE_SIZE);
+                tileView.setFitWidth(tileSize);
+                tileView.setFitHeight(tileSize);
+                tileView.setSmooth(false);
 
                 StackPane celdaPane = new StackPane(tileView);
+                celdaPane.setBackground(Background.EMPTY);
+                celdaPane.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
+                celdaPane.setPadding(Insets.EMPTY);
 
                 Celda celda = zona.getCelda(i, j);
 
                 if (celda != null && celda.tieneEntidad()) {
                     ImageView entView = getEntidadSprite(celda);
                     if (entView != null) {
-                        entView.setFitWidth(TILE_SIZE);
-                        entView.setFitHeight(TILE_SIZE);
+                        entView.setFitWidth(tileSize);
+                        entView.setFitHeight(tileSize);
                         celdaPane.getChildren().add(entView);
                     }
                 }
@@ -88,8 +111,8 @@ public class MapaRenderer {
                     ImageView npcView = new ImageView(
                             sprites.getNPCSprite(celda.getNpc().getNombre())
                     );
-                    npcView.setFitWidth(TILE_SIZE);
-                    npcView.setFitHeight(TILE_SIZE);
+                    npcView.setFitWidth(tileSize);
+                    npcView.setFitHeight(tileSize);
                     celdaPane.getChildren().add(npcView);
                 }
 
@@ -97,13 +120,13 @@ public class MapaRenderer {
                     ImageView objView = new ImageView(
                             sprites.getObjetoSprite(celda.getObjeto().getNombre())
                     );
-                    objView.setFitWidth(TILE_SIZE);
-                    objView.setFitHeight(TILE_SIZE);
+                    objView.setFitWidth(tileSize);
+                    objView.setFitHeight(tileSize);
                     celdaPane.getChildren().add(objView);
                 }
 
                 if (checkCelda != null && checkCelda[i][j]) {
-                    Rectangle ilum = new Rectangle(TILE_SIZE, TILE_SIZE, Color.rgb(206, 0, 100, 0.25));
+                    Rectangle ilum = new Rectangle(tileSize, tileSize, Color.rgb(206, 0, 100, 0.25));
                     celdaPane.getChildren().add(ilum);
                 }
 
@@ -111,6 +134,7 @@ public class MapaRenderer {
             }
         }
     }
+
 
     private ImageView getEntidadSprite(Celda celda) {
 

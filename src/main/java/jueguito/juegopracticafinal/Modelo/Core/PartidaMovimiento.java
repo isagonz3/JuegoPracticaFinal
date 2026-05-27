@@ -36,6 +36,30 @@ public class PartidaMovimiento {
             return false;
         }
 
+        // Restricción para que solo se pueda entrar en el agua si tienes la barca
+        if (zonaActual.getIdZona() == 6) {
+            // Comprobamos si la casilla de destino es una de las que requieren Barca
+            if ((row == 6 && col == 0) || (row == 6 && col == 1) || (row == 6 && col == 2) ||
+                    (row == 7 && col == 3) || (row == 8 && col == 4) || (row == 9 && col == 5) ||
+                    (row == 10 && col == 6) || (row == 10 && col == 7) || (row == 11 && col == 8) ||
+                    (row == 12 && col == 8) || (row == 13 && col == 9) || (row == 14 && col == 10)) {
+                boolean tieneBarca = false;
+                jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
+
+                for (int i = 0; i < inv.size(); i++) {
+                    if (inv.getObjeto(i) != null && "Barca".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
+                        tieneBarca = true;
+                        break;
+                    }
+                }
+
+                if (!tieneBarca) {
+                    partida.getLog().registrar("Movimiento restringido");
+                    return false;
+                }
+            }
+        }
+
         Posicion actual = jugador.getPosicion();
         int coste = calcularDist(actual.getRow(), actual.getCol(), row, col, zonaActual);
 

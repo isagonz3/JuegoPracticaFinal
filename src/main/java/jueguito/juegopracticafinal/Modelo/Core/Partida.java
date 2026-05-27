@@ -428,7 +428,7 @@ public class Partida {
 
         Zona zona2 = grafo.getZona(6);
 
-        if (zona2 != null && zona2.esValida(13,1)) {
+        if (zona2 != null && zona2.esValida(13, 1)) {
 
             Celda celda2 = zona2.getCelda(13, 1);
 
@@ -472,29 +472,65 @@ public class Partida {
     // GETTERS NECESARIOS PARA LOS MÓDULOS
     // ============================================================
 
-    public Jugador getJugador() { return jugador; }
-    public Zona getZonaActual() { return zonaActual; }
-    public LogMovimiento getLog() { return log; }
-    public boolean isFaseJugadorActiva() { return faseJugadorActiva; }
-    public void setFaseJugadorActiva(boolean f) { faseJugadorActiva = f; }
-    public EstadoJuego getEstadoActual() { return estadoActual; }
-    public void terminarTurnoPublic() { terminarTurno(); }
+    public Jugador getJugador() {
+        return jugador;
+    }
+
+    public Zona getZonaActual() {
+        return zonaActual;
+    }
+
+    public LogMovimiento getLog() {
+        return log;
+    }
+
+    public boolean isFaseJugadorActiva() {
+        return faseJugadorActiva;
+    }
+
+    public void setFaseJugadorActiva(boolean f) {
+        faseJugadorActiva = f;
+    }
+
+    public EstadoJuego getEstadoActual() {
+        return estadoActual;
+    }
+
+    public void terminarTurnoPublic() {
+        terminarTurno();
+    }
+
     public Gato getGato() {
         return gato;
     }
+
     public boolean isGatoEncontrado() {
         return gatoEncontrado;
     }
+
     public int getIdZonaActual() {
         return idZonaActual;
     }
+
     public int getTurnoActual() {
         return turnoActual;
     }
-    public boolean isMovimientoRealizado() { return movimientoRealizado; }
-    public void setMovimientoRealizado(boolean b) { this.movimientoRealizado = b; }
-    public boolean isAccionRealizada() { return accionRealizada; }
-    public void setAccionRealizada(boolean b) { this.accionRealizada = b; }
+
+    public boolean isMovimientoRealizado() {
+        return movimientoRealizado;
+    }
+
+    public void setMovimientoRealizado(boolean b) {
+        this.movimientoRealizado = b;
+    }
+
+    public boolean isAccionRealizada() {
+        return accionRealizada;
+    }
+
+    public void setAccionRealizada(boolean b) {
+        this.accionRealizada = b;
+    }
 
     public GrafoZonas getGrafoZonas() {
         return grafo;
@@ -503,6 +539,7 @@ public class Partida {
     public void setIdZonaActual(int idZonaActual) {
         this.idZonaActual = idZonaActual;
     }
+
     public void setZonaActual(Zona zonaActual) {
         this.zonaActual = zonaActual;
     }
@@ -526,6 +563,7 @@ public class Partida {
     public void setGato(Gato gato) {
         this.gato = gato;
     }
+
     public void setUi(UIRenderer ui) {
         this.ui = ui;
     }
@@ -533,5 +571,5 @@ public class Partida {
     public UIRenderer getUi() {
         return ui;
     }
-
 }
+

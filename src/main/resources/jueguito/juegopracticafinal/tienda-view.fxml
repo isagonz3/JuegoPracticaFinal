@@ -2,35 +2,63 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="jueguito.juegopracticafinal.Controladores.TiendaController"
-            prefWidth="400" prefHeight="300">
+            prefWidth="400" prefHeight="350"
+            stylesheets="@game-style.css"
+            styleClass="bg-dark"
+            style="-fx-border-color: #e94560; -fx-border-width: 3;
+                   -fx-background-radius: 10; -fx-border-radius: 10;">
+
+    <padding><Insets top="30" left="30" right="30" bottom="30" /></padding>
 
     <center>
-        <VBox spacing="20" alignment="CENTER">
+        <VBox spacing="25" alignment="CENTER">
 
-            <Label text="TIENDA DEL COMERCIANTE"
-                   style="-fx-font-size: 18; -fx-font-weight: bold;" />
+            <!-- TÍTULO -->
+            <Label text="🏪 TIENDA DEL COMERCIANTE"
+                   style="-fx-font-size: 22; -fx-font-weight: bold;
+                          -fx-text-fill: #e94560;" />
 
-            <VBox spacing="10">
+            <!-- PRODUCTO: BARCA -->
+            <VBox spacing="8" alignment="CENTER"
+                  style="-fx-padding: 15; -fx-background-color: #16213e;
+                         -fx-background-radius: 8; -fx-border-color: #0f3460;
+                         -fx-border-radius: 8; -fx-border-width: 1;">
 
-                <Label text="Barca - 5 gemas" />
-                <Button text="Comprar"
-                        fx:id="comprarBarcaBtn" />
-
+                <Label text="🚤 Barca"
+                       style="-fx-font-size: 16; -fx-font-weight: bold;
+                              -fx-text-fill: #e0e0e0;" />
+                <Label text="Cruza el lago y llega a la llave"
+                       styleClass="label-muted" />
+                <Label text="Precio: 5 gemas"
+                       style="-fx-text-fill: #e9c46a; -fx-font-weight: bold;" />
+                <Button fx:id="comprarBarcaBtn" text="Comprar Barca"
+                        prefWidth="200" styleClass="btn-danger" />
             </VBox>
 
-            <VBox spacing="10">
+            <!-- PRODUCTO: MAPA -->
+            <VBox spacing="8" alignment="CENTER"
+                  style="-fx-padding: 15; -fx-background-color: #16213e;
+                         -fx-background-radius: 8; -fx-border-color: #0f3460;
+                         -fx-border-radius: 8; -fx-border-width: 1;">
 
-                <Label text="Mapa - 3 gemas" />
-                <Button text="Comprar"
-                        fx:id="comprarMapaBtn" />
-
+                <Label text="🗺 Mapa del tesoro"
+                       style="-fx-font-size: 16; -fx-font-weight: bold;
+                              -fx-text-fill: #e0e0e0;" />
+                <Label text="Explora más rápido"
+                       styleClass="label-muted" />
+                <Label text="Precio: 3 gemas"
+                       style="-fx-text-fill: #e9c46a; -fx-font-weight: bold;" />
+                <Button fx:id="comprarMapaBtn" text="Comprar Mapa"
+                        prefWidth="200" styleClass="btn-primary" />
             </VBox>
 
-            <Button text="Salir"
-                    fx:id="salirBtn" />
+            <!-- SALIR -->
+            <Button fx:id="salirBtn" text="Salir de la tienda"
+                    prefWidth="200" styleClass="btn-purple" />
 
         </VBox>
     </center>
