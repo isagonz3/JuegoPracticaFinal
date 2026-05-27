@@ -125,7 +125,7 @@ public class PartidaObjetosYCombate {
                 // 1. Calculamos el daño mitigado por la defensa una sola vez
                 int hit = calcularHit(ataque, defensa);
 
-                // 2. 🔥 Cambiamos recibirAtaque por nuestro nuevo método directo
+                // 2. Cambiamos recibirAtaque por nuestro nuevo método directo
                 jugador.getEstadisticas().restarVidaDirecta(hit);
 
                 // 3. El Log ahora mostrará exactamente lo que ha bajado en la barra azul
@@ -136,6 +136,7 @@ public class PartidaObjetosYCombate {
             }
         }
     }
+
     // ============================================================
     // OBJETOS
     // ============================================================
@@ -173,7 +174,7 @@ public class PartidaObjetosYCombate {
         inv.getObjetosUsados().add(o);
         inv.removeObjeto(o);
 
-        // 🔥 AQUÍ SÍ: Uso exitoso = El turno termina automáticamente
+        // Uso exitoso = El turno termina automáticamente
         partida.terminarTurnoPublic();
         return true;
     }
@@ -374,6 +375,7 @@ public class PartidaObjetosYCombate {
         // Zonas donde NO spawnear objetos
         if (zona.getIdZona() == 0 ||
                 zona.getIdZona() == 5 ||
+                zona.getIdZona() == 6 ||
                 zona.getIdZona() == 9) {
             return;
         }
@@ -384,7 +386,7 @@ public class PartidaObjetosYCombate {
         int ALEATORIOS = 3;
 
         // ============================================================
-        // 1. SPAWNS FIJOS (Vienen del archivo .txt)
+        // SPAWNS FIJOS (Vienen del archivo .txt)
         // ============================================================
         if (spawns.getSize() > 0) {
 
@@ -399,7 +401,7 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                // 🔥 CORRECCIÓN: Validamos que sea transitable (un '0' real) y que no sea puerta
+                // Validamos que sea transitable (un '0' real) y que no sea puerta
                 if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
                         && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearGema());
@@ -418,7 +420,7 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                // 🔥 CORRECCIÓN: Validamos que sea transitable (un '0' real) y que no sea puerta
+                // Validamos que sea transitable (un '0' real) y que no sea puerta
                 if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
                         && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearObjetoRandom());
@@ -449,7 +451,7 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
-            // 🔥 CORRECCIÓN: No spawnear en puertas de forma aleatoria
+            // No spawnear en puertas de forma aleatoria
             if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearGema());
@@ -470,7 +472,7 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
-            // 🔥 CORRECCIÓN: No spawnear en puertas de forma aleatoria
+            // No spawnear en puertas de forma aleatoria
             if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearObjetoRandom());
@@ -512,7 +514,7 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
-            // 🔥 CORRECCIÓN: En el relleno de seguridad tampoco permitimos puertas
+            // En el relleno de seguridad tampoco permitimos puertas
             if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearGema());
@@ -559,6 +561,9 @@ public class PartidaObjetosYCombate {
         };
     }
 
+    // ============================================================
+    // INTERACCIÓN CON EL GATO
+    // ============================================================
 
     public boolean interactuarGato() {
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
@@ -593,7 +598,6 @@ public class PartidaObjetosYCombate {
                         // 4. Marcamos en partida que el gato fue encontrado
                         partida.setGatoEncontrado(true);
 
-                        partida.getLog().registrar("¡Has rescatado al Gato!");
                         if(partida.getUi() != null) partida.getUi().actualizarUI(partida);
                         return true;
                     } else {

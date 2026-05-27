@@ -23,21 +23,21 @@ public class PartidaMovimiento {
 
     public boolean moverJugador(int row, int col) {
 
-        // 1. Validación de estado de partida
+        // Validación de estado de partida
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
             return false;
 
         Zona zonaActual = partida.getZonaActual();
         Jugador jugador = partida.getJugador();
 
-        // 2. Obtener celda de destino y validar límites
+        // Obtener celda de destino y validar límites
         Celda destino = zonaActual.getCelda(row, col);
         if (destino == null) {
             partida.getLog().registrar("No puedes moverte aqui");
             return false;
         }
 
-        // 3. Comprobar colisiones (Filtro transitable y ocupado)
+        // Comprobar colisiones (Filtro transitable y ocupado)
         if (!destino.isTransitable() || destino.isOcupada()) {
             partida.getLog().registrar("No puedes moverte a " + destino.getTipoCelda());
             return false;

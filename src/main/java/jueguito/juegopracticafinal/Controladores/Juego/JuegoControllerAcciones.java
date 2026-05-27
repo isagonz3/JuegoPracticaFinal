@@ -65,13 +65,6 @@ public class JuegoControllerAcciones {
             case E: case TAB:
                 terminarTurno();
                 break;
-
-            case SPACE: case ENTER:
-                atacarTecla();
-                break;
-
-            default:
-                return;
         }
 
         event.consume();
@@ -91,13 +84,6 @@ public class JuegoControllerAcciones {
         }
     }
 
-    private void atacarTecla() {
-
-        partida.atacarDireccion(ctrl.getBaseRow(), ctrl.getBaseCol());
-
-        ctrl.getUiRenderer().actualizarUI(partida);
-        ctrl.getMapaRenderer().render(partida);
-    }
 
     // ============================================================
     // BOTÓN DE ATAQUE
@@ -196,7 +182,6 @@ public class JuegoControllerAcciones {
         }
 
         // 2. Intentar interactuar con Gato (si lo hay)
-        // Esto solo se ejecutará si el NPC era null
         if (partida.interactuarGato()) {
             ctrl.getLogArea().appendText("¡Has rescatado al gato!\n");
         } else {
@@ -209,6 +194,11 @@ public class JuegoControllerAcciones {
         ctrl.getMapaRenderer().render(partida);
     }
 
+
+    // ============================================================
+    // TIENDA
+    // ============================================================
+
     private void abrirTienda(NPC npc) {
 
         ctrl.getTiendaPanel().setVisible(true);
@@ -218,10 +208,6 @@ public class JuegoControllerAcciones {
     public void cerrarTienda() {
         ctrl.getTiendaPanel().setVisible(false);
     }
-
-    // ============================================================
-    // TIENDA
-    // ============================================================
 
     public void comprar(String item, int coste) {
 

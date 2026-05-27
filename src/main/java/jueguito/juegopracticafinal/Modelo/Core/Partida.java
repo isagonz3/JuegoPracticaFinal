@@ -377,7 +377,7 @@ public class Partida {
     }
 
     private void colocarGatoFijo() {
-        int zonaId = 8;
+        int zonaId = 2;
 
         Zona zonaGato = grafo.getZona(zonaId);
         if (zonaGato == null) return;
