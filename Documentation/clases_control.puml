@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/class-diagram
+left to right direction
+hide empty members
+
+
+class MenuController
+class EndController
+class TiendaController
+class JuegoController
+class JuegoControllerAcciones
+class JuegoControllerInventario
+
+MenuController --> JueguitoFX : setApp()
+MenuController ..> MapaLoader : crearGrafo()
+MenuController ..> Partida : new + iniciar()
+MenuController ..> LoadJSON : cargarPartida()
+MenuController : -Button nuevaPartidaBtn\n-Button cargarPartidaBtn\n-Button salirBtn\n+crearGrafo(): GrafoZonas
+
+EndController --> JueguitoFX : volverAlMenu()
+EndController : -Label resultadoLabel\n-TextArea logFinal\n-Button volverBtn\n+inicializar(resultado, logs, app)
+
+TiendaController --> JuegoController : setJuegoController()
+TiendaController ..> JuegoControllerAcciones : comprar()
+TiendaController : -Button comprarBarcaBtn\n-Button comprarMapaBtn\n-Button salirBtn
+
+JuegoController --> Partida
+JuegoController --> JueguitoFX : app
+JuegoController *-- JuegoControllerAcciones
+JuegoController *-- JuegoControllerInventario
+JuegoController *-- MapaRenderer
+JuegoController *-- UIRenderer
+JuegoController *-- SpriteManager
+JuegoController : @FXML\n-GridPane mapaGrid\n-Label zonaLabel, turnoLabel, vidaLabel\n-ProgressBar vidaBar\n-TextArea logArea\n-ListView<Objeto> inventarioList\n-Button terminarTurnoBtn, guardarBtn\n-Button usarBtn, equiparBtn, atacarBtn\n-Button interactuarBtn\n-VBox tiendaPanel\n+inicializar(partida, app)\n+manejarTecla(event)
+
+JuegoControllerAcciones --> Partida
+JuegoControllerAcciones --> JuegoController
+JuegoControllerAcciones --> JueguitoFX : irAEnd()
+JuegoControllerAcciones : +manejarTecla() / moverTecla()\n+atacarTecla() / atacarBoton()\n+interactuarBoton() / terminarTurno()\n+comprar(item, coste) / cerrarTienda()
+
+JuegoControllerInventario --> Partida
+JuegoControllerInventario --> JuegoController
+JuegoControllerInventario : +seleccionarObjeto()\n+usarObjeto() / equiparObjeto()\n-verificarFinJuego()
+@enduml

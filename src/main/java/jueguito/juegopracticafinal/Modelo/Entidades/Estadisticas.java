@@ -122,7 +122,6 @@ public class Estadisticas {
         this.vidaActual = Math.max(0, this.vidaActual - dano);
     }
 
-    // 🔥 NUEVO: Resta el daño real directamente sin volver a aplicar la defensa
     public void restarVidaDirecta(int danoReal) {
         this.vidaActual = Math.max(0, this.vidaActual - danoReal);
     }
@@ -133,5 +132,9 @@ public class Estadisticas {
                 "ATAQUE: " +  ataqueBase +
                 "DEFENSA: " + defensaBase +
                 "MOVIMIENTO: " + puntosMovDisponibles + "/" + rangoMov;
+    }
+
+    public void recibirAtaque(int puntos) {
+        aplicarAtaque(puntos, 0);
     }
 }

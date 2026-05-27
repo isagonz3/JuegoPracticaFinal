@@ -1,4 +1,5 @@
 @startuml
+left to right direction
 Jugador --> (Moverse por la zona)
 Jugador --> (Moverse entre zonas)
 Jugador --> (Recoger objeto)
