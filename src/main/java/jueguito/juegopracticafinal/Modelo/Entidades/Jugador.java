@@ -6,7 +6,6 @@ import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Inventario.TipoObjeto;
 import jueguito.juegopracticafinal.Modelo.Log.LogMovimiento;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
-import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
 
 public class Jugador extends Entidad{
 

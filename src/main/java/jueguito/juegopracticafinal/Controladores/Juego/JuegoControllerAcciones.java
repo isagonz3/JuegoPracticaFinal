@@ -4,6 +4,8 @@ import javafx.scene.input.KeyEvent;
 import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorCasillaOcupada;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoInvalido;
 import jueguito.juegopracticafinal.Modelo.Inventario.Inventario;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.TipoObjeto;
@@ -75,12 +77,35 @@ public class JuegoControllerAcciones {
 
         Posicion pos = partida.getJugador().getPosicion();
 
-        if (partida.moverJugador(pos.getRow() + ctrl.getBaseRow(),
-                pos.getCol() + ctrl.getBaseCol())) {
+        try {
 
+            boolean movido = partida.moverJugador(
+                    pos.getRow() + ctrl.getBaseRow(),
+                    pos.getCol() + ctrl.getBaseCol()
+            );
+
+            if (movido) {
+
+                ctrl.getUiRenderer().actualizarUI(partida);
+
+                ctrl.getMapaRenderer().render(partida);
+            }
+
+        } catch (ErrorCasillaOcupada e) {
+
+            partida.getLog().registrar(
+                    "Hay algo bloqueando el paso"
+            );
 
             ctrl.getUiRenderer().actualizarUI(partida);
-            ctrl.getMapaRenderer().render(partida);
+
+        } catch (ErrorMovimientoInvalido e) {
+
+            partida.getLog().registrar(
+                    e.getMessage()
+            );
+
+            ctrl.getUiRenderer().actualizarUI(partida);
         }
     }
 

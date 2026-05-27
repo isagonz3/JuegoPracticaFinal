@@ -1,6 +1,5 @@
 package jueguito.juegopracticafinal.Modelo.Mundo;
 
-import jueguito.juegopracticafinal.TADs.Cola;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 public class GrafoZonas {

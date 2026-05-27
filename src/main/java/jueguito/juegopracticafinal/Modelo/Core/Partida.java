@@ -1,12 +1,13 @@
 package jueguito.juegopracticafinal.Modelo.Core;
 
 import jueguito.juegopracticafinal.Modelo.Entidades.*;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorCasillaOcupada;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoInvalido;
 import jueguito.juegopracticafinal.Modelo.Inventario.*;
 import jueguito.juegopracticafinal.Modelo.Log.LogMovimiento;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
-import jueguito.juegopracticafinal.Modelo.Turno.ResultadoCombate;
 import jueguito.juegopracticafinal.Modelo.Vista.UIRenderer;
 import jueguito.juegopracticafinal.TADs.Lista;
 
@@ -283,7 +284,10 @@ public class Partida {
     // MÉTODOS NECESARIOS
     // ============================================================
 
-    public boolean moverJugador(int row, int col) {
+    public boolean moverJugador(int row, int col)
+            throws ErrorMovimientoInvalido,
+            ErrorCasillaOcupada {
+
         return movimiento.moverJugador(row, col);
     }
 
@@ -524,5 +528,4 @@ public class Partida {
     public UIRenderer getUi() {
         return ui;
     }
-
 }

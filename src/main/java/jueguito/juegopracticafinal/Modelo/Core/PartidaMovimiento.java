@@ -2,6 +2,8 @@ package jueguito.juegopracticafinal.Modelo.Core;
 
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorCasillaOcupada;
+import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoInvalido;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda;
@@ -21,87 +23,184 @@ public class PartidaMovimiento {
     // MOVIMIENTO DEL JUGADOR
     // ============================================================
 
-    public boolean moverJugador(int row, int col) {
+    public boolean moverJugador(int row, int col)
+            throws ErrorMovimientoInvalido,
+            ErrorCasillaOcupada {
 
-        // Validación de estado de partida
-        if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
-            return false;
+        // ============================================================
+        // VALIDAR ESTADO DE PARTIDA
+        // ============================================================
+
+        if (partida.getEstadoActual()
+                != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO) {
+
+            throw new ErrorMovimientoInvalido(
+                    "La partida no está en curso"
+            );
+        }
 
         Zona zonaActual = partida.getZonaActual();
         Jugador jugador = partida.getJugador();
 
-        // Obtener celda de destino y validar límites
+        // ============================================================
+        // OBTENER DESTINO
+        // ============================================================
+
         Celda destino = zonaActual.getCelda(row, col);
+
         if (destino == null) {
-            partida.getLog().registrar("No puedes moverte aqui");
-            return false;
+
+            throw new ErrorMovimientoInvalido(
+                    "No puedes moverte fuera del mapa"
+            );
         }
 
-        // Comprobar colisiones (Filtro transitable y ocupado)
-        if (!destino.isTransitable() || destino.isOcupada()) {
-            partida.getLog().registrar("No puedes moverte a " + destino.getTipoCelda());
-            return false;
+        // ============================================================
+        // VALIDAR TRANSITABILIDAD
+        // ============================================================
+
+        if (!destino.isTransitable()) {
+
+            throw new ErrorMovimientoInvalido(
+                    "La celda no es transitable"
+            );
         }
 
-        // Restricción para que solo se pueda entrar en el agua si tienes la barca
+        // ============================================================
+        // VALIDAR OCUPACIÓN
+        // ============================================================
+
+        if (destino.isOcupada()) {
+
+            throw new ErrorCasillaOcupada(
+                    "La casilla está ocupada"
+            );
+        }
+
+        // ============================================================
+        // VALIDACIÓN BARCA
+        // ============================================================
+
         if (zonaActual.getIdZona() == 6) {
-            // Comprobamos si la casilla de destino es una de las que requieren Barca
-            if ((row == 6 && col == 0) || (row == 6 && col == 1) || (row == 6 && col == 2) ||
-                    (row == 7 && col == 3) || (row == 8 && col == 4) || (row == 9 && col == 5) ||
-                    (row == 10 && col == 6) || (row == 10 && col == 7) || (row == 11 && col == 8) ||
-                    (row == 12 && col == 8) || (row == 13 && col == 9) || (row == 14 && col == 10)) {
+
+            if ((row == 6 && col == 0) ||
+                    (row == 6 && col == 1) ||
+                    (row == 6 && col == 2) ||
+                    (row == 7 && col == 3) ||
+                    (row == 8 && col == 4) ||
+                    (row == 9 && col == 5) ||
+                    (row == 10 && col == 6) ||
+                    (row == 10 && col == 7) ||
+                    (row == 11 && col == 8) ||
+                    (row == 12 && col == 8) ||
+                    (row == 13 && col == 9) ||
+                    (row == 14 && col == 10)) {
 
                 boolean tieneBarca = false;
-                jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv = jugador.getInventario();
+
+                jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv =
+                        jugador.getInventario();
 
                 for (int i = 0; i < inv.size(); i++) {
-                    if (inv.getObjeto(i) != null && "Barca".equalsIgnoreCase(inv.getObjeto(i).getNombre())) {
+
+                    if (inv.getObjeto(i) != null &&
+                            "Barca".equalsIgnoreCase(
+                                    inv.getObjeto(i).getNombre()
+                            )) {
+
                         tieneBarca = true;
                         break;
                     }
                 }
 
                 if (!tieneBarca) {
-                    partida.getLog().registrar("Movimiento restringido");
-                    return false;
+
+                    throw new ErrorMovimientoInvalido(
+                            "Necesitas la Barca para cruzar"
+                    );
                 }
             }
         }
 
-        // Calcular la ruta y el coste de puntos de movimiento
+        // ============================================================
+        // VALIDAR CAMINO
+        // ============================================================
+
         Posicion actual = jugador.getPosicion();
-        int coste = calcularDist(actual.getRow(), actual.getCol(), row, col, zonaActual);
+
+        int coste = calcularDist(
+                actual.getRow(),
+                actual.getCol(),
+                row,
+                col,
+                zonaActual
+        );
 
         if (coste == Integer.MAX_VALUE) {
-            partida.getLog().registrar("No hay camino disponible");
-            return false;
+
+            throw new ErrorMovimientoInvalido(
+                    "No existe un camino válido"
+            );
         }
 
-        if (coste > jugador.getEstadisticas().getPuntosMovDisponibles()) {
-            partida.getLog().registrar("No tienes suficientes PM");
-            return false;
+        // ============================================================
+        // VALIDAR PM
+        // ============================================================
+
+        if (coste >
+                jugador.getEstadisticas()
+                        .getPuntosMovDisponibles()) {
+
+            throw new ErrorMovimientoInvalido(
+                    "No tienes suficientes puntos de movimiento"
+            );
         }
 
-        // Consumir los puntos de movimiento del jugador
-        if (!jugador.getEstadisticas().usarMovimiento(coste))
-            return false;
+        // ============================================================
+        // CONSUMIR MOVIMIENTO
+        // ============================================================
 
-        // Mover el jugador por el mapa
-        zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
+        if (!jugador.getEstadisticas()
+                .usarMovimiento(coste)) {
+
+            throw new ErrorMovimientoInvalido(
+                    "No se pudo consumir movimiento"
+            );
+        }
+
+        // ============================================================
+        // MOVER JUGADOR
+        // ============================================================
+
+        zonaActual.getCelda(
+                actual.getRow(),
+                actual.getCol()
+        ).setEntidad(null);
 
         jugador.moverA(new Posicion(row, col));
+
         destino.setEntidad(jugador);
 
-        // Notificar en el log el movimiento
-        partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
+        partida.getLog().registrar(
+                "Te moviste a la casilla ["
+                        + row + ", " + col + "]"
+        );
 
-        // Recoger el objeto que está en el suelo automaticamente
+        // ============================================================
+        // OBJETOS
+        // ============================================================
+
         if (destino.tieneObjeto()) {
+
             partida.recogerObjeto(destino);
         }
 
-        // Comprobar si la casilla en la que estamos es una puerta
+        // ============================================================
+        // PUERTAS
+        // ============================================================
+
         if (destino.tienePuerta()) {
+
             partida.cambiarZona(destino.getPuerta());
         }
 
