@@ -1,14 +1,12 @@
 package jueguito.juegopracticafinal.Modelo.Core;
 
 import jueguito.juegopracticafinal.Modelo.Entidades.*;
-import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorCasillaOcupada;
-import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoInvalido;
 import jueguito.juegopracticafinal.Modelo.Inventario.*;
 import jueguito.juegopracticafinal.Modelo.Log.LogMovimiento;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
-import jueguito.juegopracticafinal.Modelo.Vista.UIRenderer;
+import jueguito.juegopracticafinal.Vista.UIRenderer;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;
@@ -284,10 +282,7 @@ public class Partida {
     // MÉTODOS NECESARIOS
     // ============================================================
 
-    public boolean moverJugador(int row, int col)
-            throws ErrorMovimientoInvalido,
-            ErrorCasillaOcupada {
-
+    public boolean moverJugador(int row, int col) {
         return movimiento.moverJugador(row, col);
     }
 

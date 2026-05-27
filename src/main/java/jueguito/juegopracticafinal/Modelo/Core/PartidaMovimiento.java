@@ -172,19 +172,16 @@ public class PartidaMovimiento {
         // MOVER JUGADOR
         // ============================================================
 
-        zonaActual.getCelda(
-                actual.getRow(),
-                actual.getCol()
-        ).setEntidad(null);
+        partida.getLog().registrarMovimiento(actual);
+
+        zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
 
         jugador.moverA(new Posicion(row, col));
 
         destino.setEntidad(jugador);
 
-        partida.getLog().registrar(
-                "Te moviste a la casilla ["
-                        + row + ", " + col + "]"
-        );
+        partida.getLog().registrar("Te moviste a la casilla [" + row + ", " + col + "]");
+
 
         // ============================================================
         // OBJETOS

@@ -93,6 +93,10 @@
                         text="Guardar Partida"
                         maxWidth="Infinity"/>
 
+                <Button fx:id="deshacerMovimientoBtn"
+                        text="Deshacer movimiento"
+                        maxWidth="Infinity"/>
+
                 <HBox spacing="5">
 
                     <Button fx:id="atacarBtn"

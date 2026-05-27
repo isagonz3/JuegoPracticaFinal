@@ -9,10 +9,13 @@ import javafx.stage.FileChooser;
 import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Core.LoadJSON;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
+import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
-import jueguito.juegopracticafinal.Modelo.Vista.MapaRenderer;
-import jueguito.juegopracticafinal.Modelo.Vista.SpriteManager;
-import jueguito.juegopracticafinal.Modelo.Vista.UIRenderer;
+import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
+import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
+import jueguito.juegopracticafinal.Vista.MapaRenderer;
+import jueguito.juegopracticafinal.Vista.SpriteManager;
+import jueguito.juegopracticafinal.Vista.UIRenderer;
 
 import java.io.File;
 
@@ -43,6 +46,35 @@ public class JuegoController {
 
     @FXML private TextArea objetosUsadosArea;
     @FXML private TextArea objetosEquipadosArea;
+    @FXML
+    private void onDeshacerMovimiento() {
+
+        Posicion anterior = partida.getLog().deshacerMovimiento();
+        if (anterior == null) {
+            System.out.println("No hay movimientos para deshacer");
+            return;
+        }
+
+        Zona zonaActual = partida.getZonaActual();
+        Jugador jugador = partida.getJugador();
+
+        Posicion actual = jugador.getPosicion();
+
+        // Vaciar celda actual
+        zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
+
+        // Mover al jugador a la celda anterior
+        jugador.moverA(anterior);
+        zonaActual.getCelda(anterior.getRow(), anterior.getCol()).setEntidad(jugador);
+
+        // Redibujar mapa
+        mapaRenderer.render(partida);
+    }
+
+
+    @FXML
+    private Button deshacerMovimientoBtn;
+
 
 
     // ============================
@@ -123,7 +155,8 @@ public class JuegoController {
         comprarBarcaBtn.setOnAction(e -> acciones.comprar("Barca", 5));
         comprarMapaBtn.setOnAction(e -> acciones.comprar("Mapa", 3));
         salirTiendaBtn.setOnAction(e -> acciones.cerrarTienda());
-    }
+
+        deshacerMovimientoBtn.setOnAction(e -> onDeshacerMovimiento());    }
 
 
     // ============================
