@@ -6,7 +6,6 @@ public class NPC {
     private String nombre;
     private TipoNPC tipo;
     private Lista<String> dialogos;
-    private Lista<Tradeo> tradeos;
     private int dialogoActual;
 
     private String sprite;
@@ -15,7 +14,6 @@ public class NPC {
         this.nombre = nombre;
         this.tipo = tipo;
         this.dialogos = new Lista<>();
-        this.tradeos = new Lista<>();
         this.dialogoActual = 0;
     }
 
@@ -32,16 +30,9 @@ public class NPC {
         return tipo;
     }
 
-    public Lista<Tradeo> getTradeos() {
-        return tradeos;
-    }
 
     public void addDialogo(String dialogo){
         this.dialogos.add(dialogo);
-    }
-
-    public void addTradeo(Tradeo tradeo){
-        this.tradeos.add(tradeo);
     }
 
     public String hablar() {
@@ -72,9 +63,6 @@ public class NPC {
         this.dialogoActual = 0;
     }
 
-    public boolean comerciar(){
-        return tipo == TipoNPC.COMERCIANTE && tradeos.getSize() > 0;
-    }
 
     public String getSprite() {
         return sprite;
