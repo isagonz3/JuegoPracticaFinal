@@ -54,14 +54,16 @@ rectangle Mundo {
   Objeto <-- Celda : puede contener
   NPC <-- Celda : puede contener
   GrafoZonas o-- Zona : lista de
+  GrafoZonas : +getAdyacentes(int): Lista<Integer>\n+getNumZonas(): int
   Posicion --> Celda : coordenadas
   Puerta --> PuertaData : se carga desde JSON
   Zona --> ZonaData : se carga desde JSON
+  Zona : +getPuertas(): Lista<Celda>
   MapaLoader ..> GrafoZonas : crea e inicializa
   MapaLoader ..> Zona : crea desde JSON (habitaciones.json)
   MapaLoader ..> Puerta : crea desde JSON (puertas.json)
   MapaLoader ..> GsonUtil : usa para deserializar
-  Zona : +getCeldasAccesibles() BFS\n+getCaminoMinimo() BFS\n+Lista<Celda> puertas\n+Lista<Posicion> spawnEnemigos, spawnObjects
+  Zona : +getCeldasAccesibles() BFS\n+getCeldasAccesibles() BFS\n+Lista<Celda> puertas\n+Lista<Posicion> spawnEnemigos, spawnObjects \n +getPuertas()
 }
 
 rectangle Core {
@@ -72,7 +74,9 @@ rectangle Core {
   Partida *-- PartidaObjetosYCombate
   Partida o-- EstadoJuego
   Partida *-- LogMovimiento
+  Partida : +Lista<Celda> caminoMapa \n +boolean mapaActivo \n + usarMapa()
   PartidaMovimiento --> Partida
+  PartidaMovimiento : +calcularCamino(r1,c1,r2,c2,z): Lista<Celda>
   PartidaObjetosYCombate --> Partida
   Configuracion <-- Partida : get().jugador, get().enemigos...
   LoadJSON ..> Partida : guardarPartida() / cargarPartida()
@@ -107,7 +111,7 @@ rectangle Log {
 
 Partida ..> Celda : manipula en zonaActual
 PartidaMovimiento ..> Cola : usa para BFS
-PartidaMovimiento ..> Zona : getCeldasVecinas / getCaminoMinimo
+PartidaMovimiento ..> Zona : getCeldasVecinas / getCeldasAccesibles
 PartidaObjetosYCombate ..> Enemigo : atacar / poblar
 PartidaObjetosYCombate ..> NPC : interactNPC()
 @enduml

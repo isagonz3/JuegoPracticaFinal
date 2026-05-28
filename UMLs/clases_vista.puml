@@ -16,6 +16,7 @@ MapaRenderer ..> ImageView : crea por celda
 MapaRenderer ..> WritableImage : recorta tiles
 MapaRenderer ..> PixelReader : lee fondo.png
 MapaRenderer : +render(Partida)\n+getEntidadSprite(Celda): ImageView
+MapaRenderer : -Lista<Matrix<Image>> cacheCeldas
 
 UIRenderer *-- Label : zonaLabel, turnoLabel, vidaLabel
 UIRenderer *-- ProgressBar : vidaBar
