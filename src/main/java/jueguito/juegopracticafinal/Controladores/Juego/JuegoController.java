@@ -16,14 +16,12 @@ import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.Vista.MapaRenderer;
 import jueguito.juegopracticafinal.Vista.SpriteManager;
 import jueguito.juegopracticafinal.Vista.UIRenderer;
-
 import java.io.File;
 
+//Controlador principal del juego: se encarga de coordinar toda la logica de la partida en ejecución, siendo el intermediario entre la vista y el modelo
 public class JuegoController {
 
-    // ============================
-    // FXML
-    // ============================
+    // ATRIBUTOS FXML
 
     @FXML private Label zonaLabel;
     @FXML private Label turnoLabel;
@@ -32,10 +30,13 @@ public class JuegoController {
     @FXML private TextArea logArea;
     @FXML private GridPane mapaGrid;
 
-    @FXML private Button terminarTurnoBtn, guardarBtn, entregarGatoBtn;
+    @FXML private Button terminarTurnoBtn;
+    @FXML private Button guardarBtn;
+    @FXML private Button entregarGatoBtn;
 
     @FXML private ListView<Objeto> inventarioList;
-    @FXML private Button usarBtn, equiparBtn;
+    @FXML private Button usarBtn;
+    @FXML private Button equiparBtn;
     @FXML private Button atacarBtn;
     @FXML private Button interactuarBtn;
 
@@ -46,41 +47,11 @@ public class JuegoController {
 
     @FXML private TextArea objetosUsadosArea;
     @FXML private TextArea objetosEquipadosArea;
-    @FXML
-    private void onDeshacerMovimiento() {
 
-        Posicion anterior = partida.getLog().deshacerMovimiento(partida.getZonaActual());
-
-        if (anterior == null) {
-            System.out.println("No hay movimientos para deshacer");
-            return;
-        }
-
-        Zona zonaActual = partida.getZonaActual();
-        Jugador jugador = partida.getJugador();
-
-        Posicion actual = jugador.getPosicion();
-
-        // Vaciar celda actual
-        zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
-
-        // Mover al jugador a la celda anterior
-        jugador.moverA(anterior);
-        zonaActual.getCelda(anterior.getRow(), anterior.getCol()).setEntidad(jugador);
-
-        // Redibujar mapa
-        mapaRenderer.render(partida);
-    }
+    @FXML private Button deshacerMovimientoBtn;
 
 
-    @FXML
-    private Button deshacerMovimientoBtn;
-
-
-
-    // ============================
     // DATOS
-    // ============================
 
     private Partida partida;
     private JueguitoFX app;
@@ -89,9 +60,7 @@ public class JuegoController {
     private int baseCol = 0;
 
 
-    // ============================
     // MÓDULOS
-    // ============================
 
     private JuegoControllerAcciones acciones;
     private JuegoControllerInventario inventarioCtrl;
@@ -101,10 +70,9 @@ public class JuegoController {
     private UIRenderer uiRenderer;
 
 
-    // ============================
-    // INICIALIZACIÓN
-    // ============================
+    // MÉTODOS
 
+    //Inicializa el controlador del juego con la partida actual y la aplicación, crea las acciones, el inventario renderizado, inicia el turno y configura la interfaz
     public void inicializar(Partida partida, JueguitoFX app) {
 
         this.partida = partida;
@@ -130,11 +98,7 @@ public class JuegoController {
         configEventos();
     }
 
-
-    // ============================
-    // EVENTOS
-    // ============================
-
+    //Configura todos los eventos de la interfaz  gráfica asociando los botones con acciones del juego
     private void configEventos() {
 
         terminarTurnoBtn.setOnAction(e -> acciones.terminarTurno());
@@ -157,22 +121,15 @@ public class JuegoController {
         comprarMapaBtn.setOnAction(e -> acciones.comprar("Mapa", 3));
         salirTiendaBtn.setOnAction(e -> acciones.cerrarTienda());
 
-        deshacerMovimientoBtn.setOnAction(e -> onDeshacerMovimiento());    }
+        deshacerMovimientoBtn.setOnAction(e -> onDeshacerMovimiento());
+    }
 
-
-    // ============================
-    // TECLADO
-    // ============================
-
+    //Dirige los eventos del teclado a las acciones del juego
     public void manejarTecla(KeyEvent event) {
         acciones.manejarTecla(event);
     }
 
-
-    // ============================
-    // GUARDAR PARTIDA
-    // ============================
-
+    //Guarda la partida actual en un archivo JSON con el estado actual del juego
     private void guardaPartida() {
 
         FileChooser fc = new FileChooser();
@@ -191,10 +148,32 @@ public class JuegoController {
         }
     }
 
+    //Deshace el ultimo movimiento del jugador recuperando la posición en la que estaba si no se ha cambiado de zona
+    @FXML
+    private void onDeshacerMovimiento() {
 
-    // ============================
-    // GETTERS
-    // ============================
+        Posicion anterior = partida.getLog().deshacerMovimiento(partida.getZonaActual());
+
+        if (anterior == null) {
+            System.out.println("No hay movimientos para deshacer");
+            return;
+        }
+
+        Zona zonaActual = partida.getZonaActual();
+        Jugador jugador = partida.getJugador();
+
+        Posicion actual = jugador.getPosicion();
+
+        zonaActual.getCelda(actual.getRow(), actual.getCol()).setEntidad(null);
+
+        jugador.moverA(anterior);
+        zonaActual.getCelda(anterior.getRow(), anterior.getCol()).setEntidad(jugador);
+
+        mapaRenderer.render(partida);
+    }
+
+
+    // GETTERS Y SETTERS
 
     public Partida getPartida() { return partida; }
     public JueguitoFX getApp() { return app; }
@@ -207,9 +186,6 @@ public class JuegoController {
     public TextArea getLogArea() { return logArea; }
     public VBox getTiendaPanel() { return tiendaPanel; }
     public ListView<Objeto> getInventarioList() { return inventarioList; }
-
-    public TextArea getObjetosUsadosArea() { return objetosUsadosArea; }
-    public TextArea getObjetosEquipadosArea() { return objetosEquipadosArea; }
 
     public JuegoControllerAcciones getAcciones() { return acciones; }
     public UIRenderer getUiRenderer() { return uiRenderer; }

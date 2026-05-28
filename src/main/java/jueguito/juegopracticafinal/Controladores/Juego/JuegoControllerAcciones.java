@@ -18,13 +18,19 @@ import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 
+//Controlador de las acciones principales del jugador: gestiona el movimiento, ataque, interacciones, comercio y avance de turnos
 public class JuegoControllerAcciones {
+
+    // ATRIBUTOS
 
     private final JuegoController ctrl;
     private final Partida partida;
     private final JueguitoFX app;
 
     private boolean ataqueRealizado = false;
+
+
+    // CONSTRUCTOR
 
     public JuegoControllerAcciones(JuegoController ctrl, Partida partida, JueguitoFX app) {
         this.ctrl = ctrl;
@@ -33,10 +39,9 @@ public class JuegoControllerAcciones {
     }
 
 
-    // ============================================================
-    // MANEJO DE TECLAS
-    // ============================================================
+    // MOVIMIENTO
 
+    //Gestiona las teclas pulsadas por el usuario durante la partida para mover al jugador
     public void manejarTecla(KeyEvent event) {
 
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return;
@@ -66,15 +71,12 @@ public class JuegoControllerAcciones {
                 ctrl.setBaseCol(1);
                 moverTecla();
                 break;
-
-            case E: case TAB:
-                terminarTurno();
-                break;
         }
 
         event.consume();
     }
 
+    //Ejecuta el movimiento del jugador según la dirección seleccionada, gestiona que no haya colisiones, errores de movimiento y actualiza la UI
     private void moverTecla() {
 
         Posicion pos = partida.getJugador().getPosicion();
@@ -87,51 +89,36 @@ public class JuegoControllerAcciones {
             );
 
             if (movido) {
-
                 ctrl.getUiRenderer().actualizarUI(partida);
-
                 ctrl.getMapaRenderer().render(partida);
             }
 
         } catch (ErrorCasillaOcupada e) {
 
-            partida.getLog().registrar(
-                    "Hay algo bloqueando el paso"
-            );
-
+            partida.getLog().registrar("Hay algo bloqueando el paso");
             ctrl.getUiRenderer().actualizarUI(partida);
 
         } catch (ErrorMovimientoSinBarca e) {
 
-            partida.getLog().registrar(
-                    e.getMessage()
-            );
-
+            partida.getLog().registrar(e.getMessage());
             ctrl.getUiRenderer().actualizarUI(partida);
 
         } catch (ErrorAccesoZonaBloqueada e) {
 
-            partida.getLog().registrar(
-                    e.getMessage()
-            );
-
+            partida.getLog().registrar(e.getMessage());
             ctrl.getUiRenderer().actualizarUI(partida);
 
         } catch (ErrorMovimientoInvalido e) {
 
-            partida.getLog().registrar(
-                    e.getMessage()
-            );
-
+            partida.getLog().registrar(e.getMessage());
             ctrl.getUiRenderer().actualizarUI(partida);
         }
     }
 
 
-    // ============================================================
-    // BOTÓN DE ATAQUE
-    // ============================================================
+    // ATAQUE
 
+    //Ejecuta el ataque del jugador en la dirección seleccionada: comprueba si hay un enemigo, aplica daño, registra el combate y gestiona el coontraataque
     public void atacarBoton() {
 
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return;
@@ -208,12 +195,11 @@ public class JuegoControllerAcciones {
     }
 
 
-    // ============================================================
-    // INTERACCIÓN CON NPC
-    // ============================================================
+    // INTERACCIÓN NPC
 
+    //Gestiona la interacción del jugador con los NPCs: puede abrir la tienda, mostrar diálogos o interactuar con objetos especiales
     public void interactuarBoton() {
-        // 1. Intentar interactuar con NPC
+
         NPC npc = partida.interactNPC();
         if (npc != null) {
             if (npc.getTipo() == TipoNPC.COMERCIANTE) {
@@ -224,7 +210,6 @@ public class JuegoControllerAcciones {
             return;
         }
 
-        // 2. Intentar interactuar con Gato
         if (partida.interactuarGato()) {
             ctrl.getLogArea().appendText("¡Has rescatado al gato!\n");
         } else {
@@ -236,12 +221,9 @@ public class JuegoControllerAcciones {
     }
 
 
-    // ============================================================
     // TIENDA
-    // ============================================================
 
     private void abrirTienda(NPC npc) {
-
         ctrl.getTiendaPanel().setVisible(true);
         ctrl.getLogArea().appendText("Has entrado en la tienda del comerciante\n");
     }
@@ -250,6 +232,7 @@ public class JuegoControllerAcciones {
         ctrl.getTiendaPanel().setVisible(false);
     }
 
+    //Gestiona la compra de objetos en la tienda verificando si el jugador tiene suficientes gemas y añade el objeto al inventario en caso de que sí
     public void comprar(String item, int coste) {
 
         Inventario inv = partida.getJugador().getInventario();
@@ -286,10 +269,9 @@ public class JuegoControllerAcciones {
     }
 
 
-    // ============================================================
     // FIN DE TURNO
-    // ============================================================
 
+    //Finaliza el turno del jugador y comprueba si hay victoria o derrota, actualiza el estado de juego y la interfaz
     public void terminarTurno() {
 
         partida.terminarTurno();

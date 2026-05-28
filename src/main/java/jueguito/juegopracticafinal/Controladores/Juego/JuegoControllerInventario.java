@@ -5,50 +5,53 @@ import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 
+//Controlador del inventario: permite seleccionar, usar y equipar objetos del inventario del jugador, y comprobar si la partida ha terminado tras dichas acciones
 public class JuegoControllerInventario {
+
+    // ATRIBUTOS
 
     private final JuegoController ctrl;
     private final Partida partida;
 
     private Objeto objetoSeleccionado;
 
+
+    // CONSTRUCTOR
+
     public JuegoControllerInventario(JuegoController ctrl, Partida partida) {
         this.ctrl = ctrl;
         this.partida = partida;
     }
+
+
+    // GETTERS Y SETTERS
 
     public void seleccionarObjeto(Objeto nuevo) {
         this.objetoSeleccionado = nuevo;
     }
 
 
-    // ============================================================
-    // USAR OBJETO
-    // ============================================================
+    // MÉTODOS
 
+    //Usa el objeto seleccionado del inventario: si el objeto es válido, aplica los cambios en la partida y limpia el objeto del inventario y actualiza la UI y el mapa
     public void usarObjeto() {
         if (objetoSeleccionado == null) return;
 
         Objeto aUsar = objetoSeleccionado;
 
         if (partida.usarObjeto(aUsar)) {
-            // Limpiamos la selección de la UI antes de actualizar pantallas
+
             ctrl.getInventarioList().getSelectionModel().clearSelection();
             objetoSeleccionado = null;
 
             if (verificarFinJuego()) return;
 
-            // Forzamos el renderizado del mapa con el turno ya pasado y enemigos movidos
             ctrl.getUiRenderer().actualizarUI(partida);
             ctrl.getMapaRenderer().render(partida);
         }
     }
 
-
-    // ============================================================
-    // EQUIPAR OBJETO AUTOMÁTICO
-    // ============================================================
-
+    //Equipa el objeto seleccionado del inventario: si el objeto es válido y no hay más de dos, aplica los cambios en la partida y limpia el objeto del inventario y actualiza la UI y el mapa
     public void equiparObjeto() {
         if (objetoSeleccionado == null) return;
 
@@ -63,7 +66,6 @@ public class JuegoControllerInventario {
 
         if (partida.equiparObjeto(aEquipar, slot)) {
 
-            // Limpiamos la selección en la interfaz de JavaFX
             ctrl.getInventarioList().getSelectionModel().clearSelection();
             objetoSeleccionado = null;
 
@@ -74,6 +76,7 @@ public class JuegoControllerInventario {
         }
     }
 
+    //Comprueba si la partida ha terminado, y en caso de finalización muestra el resultado correspondiente y el log
     private boolean verificarFinJuego() {
         if (partida.getEstadoActual() == EstadoJuego.VICTORIA) {
             ctrl.getApp().irAEnd("VICTORIA: Has encontrado al gato y llegado al castillo.",
