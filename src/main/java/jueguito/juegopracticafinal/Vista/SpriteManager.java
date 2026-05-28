@@ -2,8 +2,10 @@ package jueguito.juegopracticafinal.Vista;
 
 import javafx.scene.image.Image;
 
+//Gestiona y proporciona los sprites del juego para representar entiedades, objetos y las zonas del juego
 public class SpriteManager {
 
+    //Carga un sprite desde una ruta de los recursos y devuelve la imagen correspondiente a la ruta
     public Image getSprite(String ruta) {
         try {
             return new Image(getClass().getResourceAsStream(ruta));
@@ -13,26 +15,28 @@ public class SpriteManager {
         }
     }
 
-    // ============================================================
-    // SPRITES DE ENTIDADES
-    // ============================================================
 
+    // SPRITES DE ENTIDADES
+
+    //Sprite del jugador
     public Image getJugadorSprite() {
         return getSprite("/entidades/jugador_down00.png");
     }
 
+    //Sprite del gato
     public Image getGatoSprite() {
         return getSprite("/entidades/gato_quieto.png");
     }
 
+    //Sprite del enemigo
     public Image getEnemigoSprite() {
         return getSprite("/entidades/soldado_quieto.png");
     }
 
-    // ============================================================
-    // SPRITES DE NPC
-    // ============================================================
 
+    // SPRITES DE NPC
+
+    //Sprite del npc según el nombre
     public Image getNPCSprite(String nombre) {
 
         if (nombre == null) return getSprite("/entidades/NPC_1.png");
@@ -48,15 +52,18 @@ public class SpriteManager {
             case "guardia":
                 return getSprite("/entidades/NPC_3.png");
 
+            case "princesa":
+            return getSprite("/entidades/princesa.png");
+
             default:
                 return getSprite("/entidades/NPC_1.png");
         }
     }
 
-    // ============================================================
-    // SPRITES DE OBJETOS
-    // ============================================================
 
+    // SPRITES DE OBJETOS
+
+    //Sprite de objetos
     public Image getObjetoSprite(String nombre) {
 
         if (nombre == null) return getSprite("/objetos/pocionVida.png");
@@ -93,10 +100,10 @@ public class SpriteManager {
         }
     }
 
-    // ============================================================
-    // SPRITES DE ZONAS
-    // ============================================================
 
+    // SPRITES DE ZONAS
+
+    //Sprite de la zona del mapa
     public Image getZonaBackground(int idZona) {
 
         String[] zonas = {

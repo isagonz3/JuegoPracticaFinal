@@ -10,6 +10,7 @@ import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
 import jueguito.juegopracticafinal.TADs.Lista;
 
+//Renderiza y actualiza la interfaz: sincroniza el estado del modelo(partida,jugador,inventario,log...) con los elementos visuales de JavaFX
 public class UIRenderer {
 
     private final Label zonaLabel;
@@ -23,6 +24,8 @@ public class UIRenderer {
 
     private int ultimoLogIndex = 0;
 
+
+    //Constructor del renderizador de UI que recibe los componentes gráficos que se actualizan durante la ejecución del juego
     public UIRenderer(
             Label zonaLabel,
             Label turnoLabel,
@@ -44,20 +47,15 @@ public class UIRenderer {
     }
 
 
-    // ============================================================
-    // ACTUALIZAR UI COMPLETA
-    // ============================================================
-
+    //Actualiza la interfaz del usuario con el estado actual de la partida sincronizando la zona, los turnos, el inventario, los objetos usados...
     public void actualizarUI(Partida partida) {
 
         Jugador j = partida.getJugador();
         if (j == null) return;
 
-        // Zona y turno
         zonaLabel.setText("Zona: " + partida.getZonaActual().getNombreZona());
         turnoLabel.setText("Turno: " + partida.getTurnoActual());
 
-        // Vida
         vidaLabel.setText(
                 j.getEstadisticas().getVidaActual() + "/" +
                         j.getEstadisticas().getVidaMax()
@@ -78,10 +76,7 @@ public class UIRenderer {
     }
 
 
-    // ============================================================
-    // LOG
-    // ============================================================
-
+    //Actualiza el área de log mostrando las entradas nuevas correspondientes a las acciones y movimientos del jugador
     private void actualizarLog(Partida partida) {
 
         Lista<EntradaLog> entradas = partida.getLog().getEntradas();
@@ -94,10 +89,7 @@ public class UIRenderer {
     }
 
 
-    // ============================================================
-    // INVENTARIO
-    // ============================================================
-
+    //Actualiza la lista del inventario del jugador
     private void actualizarInventario(Jugador j) {
 
         inventarioList.getItems().clear();
@@ -110,42 +102,32 @@ public class UIRenderer {
     }
 
 
-    // ============================================================
-    // OBJETOS USADOS (CORREGIDO)
-    // ============================================================
-
+    //Muestra los objetos que están siendo usados por el jugador
     private void actualizarUsados(Jugador j) {
         StringBuilder usados = new StringBuilder();
         Lista<Objeto> listaUsados = j.getInventario().getObjetosUsados();
 
-        // Recorremos TODA la lista y los vamos acumulando uno a uno
         for (int i = 0; i < listaUsados.getSize(); i++) {
             if (listaUsados.get(i) != null) {
                 usados.append("- ").append(listaUsados.get(i).getNombre()).append("\n");
             }
         }
 
-        // Al final, insertamos el texto completo con todos los objetos juntos
         objetosUsadosArea.setText(usados.toString());
     }
 
 
-    // ============================================================
-    // OBJETOS EQUIPADOS (CORREGIDO)
-    // ============================================================
-
+    //Muestra los objetos que están siendo equipados por el jugador (máximo dos)
     private void actualizarEquipados(Jugador j) {
         StringBuilder equip = new StringBuilder();
         Lista<Objeto> listaEquipados = j.getInventario().getObjetosEquipados();
 
-        // Recorremos TODA la lista de equipados acumulando los nombres
         for (int i = 0; i < listaEquipados.getSize(); i++) {
             if (listaEquipados.get(i) != null) {
                 equip.append("- ").append(listaEquipados.get(i).getNombre()).append("\n");
             }
         }
 
-        // Insertamos el texto completo en el cuadro blanco
         objetosEquipadosArea.setText(equip.toString());
     }
 }

@@ -17,6 +17,7 @@ import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.TADs.Lista;
 
+//Renderiza visualmente el mapa del juego: dibuja el escenario sobre un GridPane utilizando spirtes para el fondo, entidades, NPCs, objetos y celdas
 public class MapaRenderer {
 
     private final GridPane mapaGrid;
@@ -24,11 +25,15 @@ public class MapaRenderer {
 
     private static final int TILE_SIZE = 16;
 
+
+    //Es el constructor del renderizador del mapa que inicializa el GridPane donde se dibujará el mapa y los sprites utilizados para cargar las imágenes
     public MapaRenderer(GridPane mapaGrid, SpriteManager sprites) {
         this.mapaGrid = mapaGrid;
         this.sprites = sprites;
     }
 
+
+    //Renderiza el estado actual de la partida dibujando el fondo de la zona, las entidades, objetos y celdas accesibles para el jugador coloreadas
     public void render(Partida partida) {
 
         mapaGrid.getChildren().clear();
@@ -50,6 +55,7 @@ public class MapaRenderer {
 
         if (accesibles != null && accesibles.getSize() > 0) {
             checkCelda = new boolean[rows][cols];
+
             for (int i = 0; i < accesibles.getSize(); i++) {
                 Celda c = accesibles.get(i);
                 checkCelda[c.getRow()][c.getCol()] = true;
@@ -77,6 +83,7 @@ public class MapaRenderer {
 
                 if (celda != null && celda.tieneEntidad()) {
                     ImageView entView = getEntidadSprite(celda);
+
                     if (entView != null) {
                         entView.setFitWidth(TILE_SIZE);
                         entView.setFitHeight(TILE_SIZE);
@@ -88,6 +95,7 @@ public class MapaRenderer {
                     ImageView npcView = new ImageView(
                             sprites.getNPCSprite(celda.getNpc().getNombre())
                     );
+
                     npcView.setFitWidth(TILE_SIZE);
                     npcView.setFitHeight(TILE_SIZE);
                     celdaPane.getChildren().add(npcView);
@@ -97,13 +105,19 @@ public class MapaRenderer {
                     ImageView objView = new ImageView(
                             sprites.getObjetoSprite(celda.getObjeto().getNombre())
                     );
+
                     objView.setFitWidth(TILE_SIZE);
                     objView.setFitHeight(TILE_SIZE);
                     celdaPane.getChildren().add(objView);
                 }
 
                 if (checkCelda != null && checkCelda[i][j]) {
-                    Rectangle ilum = new Rectangle(TILE_SIZE, TILE_SIZE, Color.rgb(206, 0, 100, 0.25));
+                    Rectangle ilum = new Rectangle(
+                            TILE_SIZE,
+                            TILE_SIZE,
+                            Color.rgb(206, 0, 100, 0.25)
+                    );
+
                     celdaPane.getChildren().add(ilum);
                 }
 
@@ -112,6 +126,8 @@ public class MapaRenderer {
         }
     }
 
+
+    //Obtiene el sprite correspondiente a cada entidad en las celdas y devuelve la imagen según su tipo
     private ImageView getEntidadSprite(Celda celda) {
 
         Entidad e = celda.getEntidad();
@@ -119,9 +135,11 @@ public class MapaRenderer {
         if (e instanceof Jugador) {
             return new ImageView(sprites.getJugadorSprite());
         }
+
         if (e instanceof Gato) {
             return new ImageView(sprites.getGatoSprite());
         }
+
         if (e instanceof Enemigo) {
             return new ImageView(sprites.getEnemigoSprite());
         }
