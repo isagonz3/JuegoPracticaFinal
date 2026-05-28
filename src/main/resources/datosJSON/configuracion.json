@@ -40,7 +40,7 @@
   },
   "ui": {
     "tileSize": 16,
-    "anchoVentana": 960,
-    "altoVentana": 576
+    "anchoVentana": 1100,
+    "altoVentana": 700
   }
 }

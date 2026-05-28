@@ -22,15 +22,17 @@ import jueguito.juegopracticafinal.TADs.Matrix;
 public class MapaRenderer {
 
     private final GridPane mapaGrid;
+    private final StackPane mapaStackPane;
     private final SpriteManager sprites;
     private final Lista<Matrix<Image>> cacheCeldas =  new Lista<>();
 
-    private static final int TILE_SIZE = 16;
+    private static final int TILE_SIZE_SOURCE = 16;
 
 
     //Es el constructor del renderizador del mapa que inicializa el GridPane donde se dibujará el mapa y los sprites utilizados para cargar las imágenes
-    public MapaRenderer(GridPane mapaGrid, SpriteManager sprites) {
+    public MapaRenderer(GridPane mapaGrid, StackPane mapaStackPane, SpriteManager sprites) {
         this.mapaGrid = mapaGrid;
+        this.mapaStackPane = mapaStackPane;
         this.sprites = sprites;
     }
 
@@ -51,6 +53,14 @@ public class MapaRenderer {
 
         int rows = zona.getRows();
         int cols = zona.getCols();
+
+        double viewportW = mapaStackPane.getWidth();
+        double viewportH = mapaStackPane.getHeight();
+        if (viewportW <= 0 || viewportH <= 0) {
+            viewportW = 850;
+            viewportH = 610;
+        }
+        double tileSize = Math.min(viewportW / cols, viewportH / rows);
 
         Lista<Celda> accesibles = partida.getCeldasAccesibles();
         boolean[][] checkCelda = null;
@@ -83,8 +93,8 @@ public class MapaRenderer {
                 Image tile = getTile(zonaImg,idZona,i,j);
 
                 ImageView tileView = new ImageView(tile);
-                tileView.setFitWidth(TILE_SIZE);
-                tileView.setFitHeight(TILE_SIZE);
+                tileView.setFitWidth(tileSize);
+                tileView.setFitHeight(tileSize);
 
                 StackPane celdaPane = new StackPane(tileView);
 
@@ -94,8 +104,8 @@ public class MapaRenderer {
                     ImageView entView = getEntidadSprite(celda);
 
                     if (entView != null) {
-                        entView.setFitWidth(TILE_SIZE);
-                        entView.setFitHeight(TILE_SIZE);
+                        entView.setFitWidth(tileSize);
+                        entView.setFitHeight(tileSize);
                         celdaPane.getChildren().add(entView);
                     }
                 }
@@ -105,8 +115,8 @@ public class MapaRenderer {
                             sprites.getNPCSprite(celda.getNpc().getNombre())
                     );
 
-                    npcView.setFitWidth(TILE_SIZE);
-                    npcView.setFitHeight(TILE_SIZE);
+                    npcView.setFitWidth(tileSize);
+                    npcView.setFitHeight(tileSize);
                     celdaPane.getChildren().add(npcView);
                 }
 
@@ -115,15 +125,15 @@ public class MapaRenderer {
                             sprites.getObjetoSprite(celda.getObjeto().getNombre())
                     );
 
-                    objView.setFitWidth(TILE_SIZE);
-                    objView.setFitHeight(TILE_SIZE);
+                    objView.setFitWidth(tileSize);
+                    objView.setFitHeight(tileSize);
                     celdaPane.getChildren().add(objView);
                 }
 
                 if (checkCelda != null && checkCelda[i][j]) {
                     Rectangle ilum = new Rectangle(
-                            TILE_SIZE,
-                            TILE_SIZE,
+                            tileSize,
+                            tileSize,
                             Color.rgb(206, 0, 100, 0.25)
                     );
 
@@ -132,9 +142,9 @@ public class MapaRenderer {
 
                 if (caminoCelda != null && caminoCelda[i][j]) {
                     Rectangle caminoMapa = new Rectangle(
-                            TILE_SIZE/2,
-                            TILE_SIZE/2,
-                            Color.rgb(206, 0, 100, 0.5)
+                            tileSize / 2,
+                            tileSize / 2,
+                            Color.rgb(250, 0, 60, 0.4)
                     );
                     celdaPane.getChildren().add(caminoMapa);
                 }
@@ -172,14 +182,14 @@ public class MapaRenderer {
 
         Matrix<Image> zonaCache = cacheCeldas.get(idZona);
         if(zonaCache == null){
-            int rows = (int)(imagenZona.getHeight() / TILE_SIZE);
-            int cols = (int)(imagenZona.getWidth() / TILE_SIZE);
+            int rows = (int)(imagenZona.getHeight() / TILE_SIZE_SOURCE);
+            int cols = (int)(imagenZona.getWidth() / TILE_SIZE_SOURCE);
             zonaCache = new Matrix<>(rows, cols);
             PixelReader pr = imagenZona.getPixelReader();
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < cols; c++) {
                     zonaCache.set(r, c,
-                            new WritableImage(pr, c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                            new WritableImage(pr, c * TILE_SIZE_SOURCE, r * TILE_SIZE_SOURCE, TILE_SIZE_SOURCE, TILE_SIZE_SOURCE)
                     );
                 }
             }

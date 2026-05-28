@@ -1,0 +1,141 @@
+.root {
+    -fx-background-color: #f0eeef;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-text-fill: #1b1020;
+}
+
+.menu-root {
+    -fx-background-color: #f0eeef;
+}
+
+.game-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ee1764;
+    -fx-padding: 20 0 30 0;
+}
+
+.zone-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34355a;
+    -fx-padding: 6 0 2 8;
+}
+
+.section-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-text-fill: #34355a;
+    -fx-border-color: #ed6d8b;
+    -fx-border-width: 0 0 2 0;
+    -fx-padding: 6 0 4 0;
+}
+
+.game-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1b1020;
+}
+
+.game-button {
+    -fx-background-color: #34355a;
+    -fx-text-fill: #f0eeef;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-border-color: #1b1020;
+    -fx-border-width: 2px;
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+.game-button:hover {
+    -fx-background-color: #483e5a;
+}
+.game-button:pressed {
+    -fx-background-color: #ee1764;
+}
+
+.game-text-area {
+    -fx-background-color: #f0eeef;
+    -fx-text-fill: #1b1020;
+    -fx-control-inner-background: #f0eeef;
+    -fx-border-color: #34355a;
+    -fx-border-width: 2px;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 11px;
+}
+.game-text-area .scroll-pane {
+    -fx-background-color: #f0eeef;
+}
+.game-text-area .scroll-bar:vertical {
+    -fx-background-color: #f0eeef;
+    -fx-border-color: #34355a;
+    -fx-border-width: 1px;
+}
+
+.game-list-view {
+    -fx-background-color: #f0eeef;
+    -fx-text-fill: #1b1020;
+    -fx-control-inner-background: #f0eeef;
+    -fx-border-color: #34355a;
+    -fx-border-width: 2px;
+}
+
+.game-progress-bar {
+    -fx-accent: #95de40;
+}
+.game-progress-bar .track {
+    -fx-background-color: #f0eeef;
+    -fx-border-color: #1b1020;
+    -fx-border-width: 1px;
+    -fx-background-radius: 0;
+}
+
+.shop-overlay {
+    -fx-background-color: rgba(52, 53, 90, 0.9);
+    -fx-border-color: #ee1764;
+    -fx-border-width: 3px;
+    -fx-padding: 30;
+    -fx-spacing: 15;
+    -fx-alignment: center;
+}
+.shop-overlay .label {
+    -fx-text-fill: #fde5a7;
+    -fx-font-weight: bold;
+}
+.shop-overlay .button {
+    -fx-background-color: #fde5a7;
+    -fx-text-fill: #34355a;
+    -fx-font-weight: bold;
+    -fx-border-color: #ee1764;
+    -fx-border-width: 2px;
+}
+
+.tienda-root {
+    -fx-background-color: #fde5a7;
+    -fx-border-color: #ee1764;
+    -fx-border-width: 3px;
+    -fx-padding: 30;
+}
+
+.end-root {
+    -fx-background-color: #f0eeef;
+    -fx-spacing: 25;
+    -fx-alignment: center;
+    -fx-padding: 40;
+}
+
+.victoria {
+    -fx-text-fill: #95de40;
+}
+.derrota {
+    -fx-text-fill: #ed0d0f;
+}
+
+.right-panel {
+    -fx-background-color: #f2d3c9;
+    -fx-border-color: #ed6d8b;
+    -fx-border-width: 2px;
+    -fx-padding: 8 10;
+}

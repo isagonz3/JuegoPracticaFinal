@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import jueguito.juegopracticafinal.App.JueguitoFX;
@@ -29,6 +30,7 @@ public class JuegoController {
     @FXML private ProgressBar vidaBar;
     @FXML private TextArea logArea;
     @FXML private GridPane mapaGrid;
+    @FXML private StackPane mapaStackPane;
 
     @FXML private Button terminarTurnoBtn;
     @FXML private Button guardarBtn;
@@ -82,7 +84,7 @@ public class JuegoController {
         this.inventarioCtrl = new JuegoControllerInventario(this, partida);
 
         this.spriteManager = new SpriteManager();
-        this.mapaRenderer = new MapaRenderer(mapaGrid, spriteManager);
+        this.mapaRenderer = new MapaRenderer(mapaGrid, mapaStackPane,spriteManager);
 
         this.uiRenderer = new UIRenderer(
                 zonaLabel, turnoLabel, vidaLabel, vidaBar,
@@ -94,6 +96,7 @@ public class JuegoController {
 
         uiRenderer.actualizarUI(partida);
         mapaRenderer.render(partida);
+
 
         configEventos();
     }
@@ -171,7 +174,6 @@ public class JuegoController {
 
         mapaRenderer.render(partida);
     }
-
 
     // GETTERS Y SETTERS
 
