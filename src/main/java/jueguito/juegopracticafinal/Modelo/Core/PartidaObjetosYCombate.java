@@ -21,17 +21,18 @@ import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;
 
 public class PartidaObjetosYCombate {
 
+    //ATRIBUTOS
+
     private final Partida partida;
+
 
     public PartidaObjetosYCombate(Partida partida) {
         this.partida = partida;
     }
 
-    // ============================================================
-    // COMBATE
-    // ============================================================
 
-    //Calcular el daño con la formula dada
+    // COMBATE
+
     public static int calcularHit(int ataque, int defensa) {
         return Math.max(0, (int)(ataque * (Math.random() * 2) - defensa));
     }
@@ -84,18 +85,17 @@ public class PartidaObjetosYCombate {
         Jugador jugador = partida.getJugador();
         Zona zonaActual = partida.getZonaActual();
 
-        if (partida.isAccionRealizada()) { partida.getLog().registrar("Ya realizaste una acción este turno"); return false; }
+        if (partida.isAccionRealizada()) { partida.getLog().registrar("Ya realizaste una acción este turno");
+            return false; }
 
         Celda c = zonaActual.getCelda(
                 jugador.getPosicion().getRow() + row,
                 jugador.getPosicion().getCol() + col
         );
-
         if (c == null || !c.tieneEntidad() || !(c.getEntidad() instanceof Enemigo)) {
             partida.getLog().registrar("No hay enemigos por aqui");
             return false;
         }
-
         atacarEnemigo((Enemigo) c.getEntidad());
         partida.setAccionRealizada(true);
         return true;
@@ -121,13 +121,13 @@ public class PartidaObjetosYCombate {
                 int ataque = e.getAtaqueTotal();
                 int defensa = jugador.getDefensaTotal();
 
-                // 1. Calculamos el daño mitigado por la defensa una sola vez
+                //1.Calculamos el daño mitigado por la defensa una sola vez
                 int hit = calcularHit(ataque, defensa);
 
-                // 2. Cambiamos recibirAtaque por nuestro nuevo metodo directo
+                //2.Cambiamos recibirAtaque por nuestro nuevo metodo directo
                 jugador.getEstadisticas().restarVidaDirecta(hit);
 
-                // 3. El Log ahora mostrará exactamente lo que ha bajado en la barra azul
+                //3.El Log ahora mostrará exactamente lo que ha bajado en la barra azul
                 partida.getLog().registrar(
                         "Has sido atacado por " + e.getNombre() +
                                 ", recibes " + hit + " de daño"
@@ -137,9 +137,7 @@ public class PartidaObjetosYCombate {
     }
 
 
-    // ============================================================
-    // OBJETOS
-    // ============================================================
+    // OBJETOS PARA EL INVENTARIO
 
     public boolean usarObjeto(Objeto o) {
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return false;
@@ -152,19 +150,19 @@ public class PartidaObjetosYCombate {
             return true;
         }
 
-        // Validaciones de seguridad (Si falla, NO pasa el turno, el jugador conserva su acción)
+        //Validaciones de seguridad (Si falla, NO pasa el turno, el jugador conserva su acción)
         if (o == null || o.getTipo() != TipoObjeto.USABLE || !inv.contiene(o)) {
             partida.getLog().registrar("No puedes usar este objeto o no lo tienes.");
             return false;
         }
 
-        // Aplicar efectos del objeto de tu base de datos
+        //Aplicar efectos del objeto de tu base de datos
         if (!o.usarObjeto()) {
             partida.getLog().registrar("No se pudo usar el objeto.");
             return false;
         }
 
-        // Aplicar bonus estadísticas
+        //Aplicar bonus estadísticas
         if (o.getVidaBonus() > 0) jugador.getEstadisticas().curarVida(o.getVidaBonus());
         if (o.getAtaqueBonus() > 0) jugador.getEstadisticas().aumentarAtaque(o.getAtaqueBonus());
         if (o.getDefensaBonus() > 0) jugador.getEstadisticas().aumentarDefensa(o.getDefensaBonus());
@@ -178,7 +176,7 @@ public class PartidaObjetosYCombate {
         inv.getObjetosUsados().add(o);
         inv.removeObjeto(o);
 
-        // Uso exitoso = El turno termina automáticamente
+        //Uso exitoso = El turno termina automáticamente
         partida.terminarTurnoPublic();
         return true;
     }
@@ -220,7 +218,7 @@ public class PartidaObjetosYCombate {
         Jugador jugador = partida.getJugador();
         Inventario inv = jugador.getInventario();
 
-        // Validaciones de seguridad
+        //Validaciones de seguridad
         if (o == null || o.getTipo() != TipoObjeto.EQUIPABLE || !inv.contiene(o)) {
             partida.getLog().registrar("No puedes equipar este objeto.");
             return false;
@@ -231,14 +229,14 @@ public class PartidaObjetosYCombate {
             return false;
         }
 
-        // Intentar equipar en el inventario
+        //Intentar equipar en el inventario
         boolean ok = inv.equipar(o);
         if (!ok) {
             partida.getLog().registrar("No se puede equipar este objeto.");
             return false;
         }
 
-        // Configurar la duración del objeto
+        //Configurar la duración del objeto
         o.setDuracionTurnos(4);
         o.resetTurnos();
 
@@ -246,15 +244,13 @@ public class PartidaObjetosYCombate {
 
         partida.getLog().registrar("Equipaste " + o.getNombre());
 
-        // El equipamiento ha sido un éxito -> El turno termina automáticamente
+        //El equipamiento ha sido un éxito -> El turno termina automáticamente
         partida.terminarTurnoPublic();
         return true;
     }
 
 
-    // ============================================================
     // NPC
-    // ============================================================
 
     public NPC interactNPC() {
 
@@ -280,7 +276,6 @@ public class PartidaObjetosYCombate {
                             c.esAdyacente(celdaJugador)) {
                         return npc;
                     }
-
                     if (npc.getTipo() == TipoNPC.COMERCIANTE &&
                             c.esAdyacenteDistancia(celdaJugador, 2)) {
                         return npc;
@@ -288,14 +283,11 @@ public class PartidaObjetosYCombate {
                 }
             }
         }
-
         return null;
     }
 
 
-    // ============================================================
     // SPAWN DE ENEMIGOS
-    // ============================================================
 
     public void poblarZona(Zona zona) {
 
@@ -361,7 +353,6 @@ public class PartidaObjetosYCombate {
                                     get().enemigos.rangoMov
                             )
                     );
-
                     e.setPosicion(new Posicion(r, co));
                     c.setEntidad(e);
                     break;
@@ -371,13 +362,11 @@ public class PartidaObjetosYCombate {
     }
 
 
-    // ============================================================
     // SPAWN DE OBJETOS
-    // ============================================================
 
     public void ponerObjetos(Zona zona) {
 
-        // Zonas donde NO spawnear objetos
+        //Zonas donde NO spawnear objetos
         if (zona.getIdZona() == 0 ||
                 zona.getIdZona() == 5 ||
                 zona.getIdZona() == 6 ||
@@ -390,12 +379,12 @@ public class PartidaObjetosYCombate {
         int GEMAS = 2;
         int ALEATORIOS = 3;
 
-        // SPAWNS FIJOS (Vienen del archivo .txt)
+        //SPAWNS FIJOS (Vienen del archivo .txt)
         if (spawns.getSize() > 0) {
 
             int colocados = 0;
 
-            // Primero colocar GEMAS
+            //Primero colocar GEMAS
             for (int i = 0; i < spawns.getSize() && colocados < GEMAS; i++) {
 
                 Posicion pos = spawns.get(i);
@@ -404,7 +393,7 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                // Validamos que sea transitable y que no sea puerta
+                //Validamos que sea transitable y que no sea puerta
                 if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
                         && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearGema());
@@ -412,7 +401,7 @@ public class PartidaObjetosYCombate {
                 }
             }
 
-            // Luego colocar objetos aleatorios
+            //Luego colocar objetos aleatorios
             int colocadosAleatorios = 0;
 
             for (int i = 0; i < spawns.getSize() && colocadosAleatorios < ALEATORIOS; i++) {
@@ -423,7 +412,7 @@ public class PartidaObjetosYCombate {
 
                 Celda celda = zona.getCelda(pos.getRow(), pos.getCol());
 
-                // Validamos que sea transitable (un '0' real) y que no sea puerta
+                //Validamos que sea transitable (un '0' real) y que no sea puerta
                 if (celda != null && celda.isTransitable() && !celda.isOcupada() && !celda.tieneObjeto()
                         && celda.getTipoCelda() != TipoCelda.PUERTA) {
                     celda.setObjeto(crearObjetoRandom());
@@ -431,15 +420,13 @@ public class PartidaObjetosYCombate {
                 }
             }
 
-            // Asegurar mínimo de gemas
+            //Asegurar mínimo de gemas
             asegurarMinimoGemas(zona, GEMAS);
             return;
         }
 
-
-        // 2. SPAWN ALEATORIO (si no hay spawns fijos en el archivo)
-
-        // Primero GEMAS
+        //SPAWN ALEATORIO (si no hay spawns fijos en el archivo)
+        //Primero GEMAS
         int colocadasGemas = 0;
 
         while (colocadasGemas < GEMAS) {
@@ -453,14 +440,15 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
-            // No spawnear en puertas de forma aleatoria
+
+            //No spawnear en puertas de forma aleatoria
             if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearGema());
             colocadasGemas++;
         }
 
-        // Luego objetos aleatorios
+        //Luego objetos aleatorios
         int colocadosAleatorios = 0;
 
         while (colocadosAleatorios < ALEATORIOS) {
@@ -474,7 +462,8 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
-            // No spawnear en puertas de forma aleatoria
+
+            //No spawnear en puertas de forma aleatoria
             if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
             celda.setObjeto(crearObjetoRandom());
@@ -485,10 +474,9 @@ public class PartidaObjetosYCombate {
     }
 
     private void asegurarMinimoGemas(Zona zona, int minimo) {
-
         int contador = 0;
 
-        // Contar gemas existentes
+        //Contar gemas existentes
         for (int i = 0; i < zona.getRows(); i++) {
             for (int j = 0; j < zona.getCols(); j++) {
 
@@ -503,7 +491,7 @@ public class PartidaObjetosYCombate {
             }
         }
 
-        // Añadir gemas hasta llegar al mínimo
+        //Añadir gemas hasta llegar al mínimo
         while (contador < minimo) {
 
             int fila = (int)(Math.random() * zona.getRows());
@@ -515,9 +503,9 @@ public class PartidaObjetosYCombate {
             if (!celda.isTransitable()) continue;
             if (celda.isOcupada()) continue;
             if (celda.tieneObjeto()) continue;
-            // En el relleno de seguridad tampoco permitimos puertas
-            if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
 
+            //En el relleno de seguridad tampoco permitimos puertas
+            if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
             celda.setObjeto(crearGema());
             contador++;
         }
@@ -563,9 +551,7 @@ public class PartidaObjetosYCombate {
     }
 
 
-    // ============================================================
-    // INTERACCIÓN CON EL GATO
-    // ============================================================
+    //INTERACCIÓN CON EL GATO
 
     public boolean interactuarGato() {
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
@@ -576,7 +562,7 @@ public class PartidaObjetosYCombate {
         Posicion pj = jugador.getPosicion();
         Celda celdaJugador = zonaActual.getCelda(pj.getRow(), pj.getCol());
 
-        // Buscamos al Gato en las celdas adyacentes
+        //Buscamos al Gato en las celdas adyacentes
         for (int i = pj.getRow() - 1; i <= pj.getRow() + 1; i++) {
             for (int j = pj.getCol() - 1; j <= pj.getCol() + 1; j++) {
 
@@ -609,7 +595,6 @@ public class PartidaObjetosYCombate {
                 }
             }
         }
-
         partida.getLog().registrar("No hay ningún gato cerca.");
         return false;
     }

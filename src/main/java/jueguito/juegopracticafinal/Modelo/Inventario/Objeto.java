@@ -1,6 +1,9 @@
 package jueguito.juegopracticafinal.Modelo.Inventario;
 
 public class Objeto {
+
+    //ATRIBUTOS
+
     private String nombre;
     private TipoObjeto tipo;
     private SlotEquipable slot;
@@ -15,8 +18,8 @@ public class Objeto {
     private int duracionTurnos = -1;
     private static int contador = 0;
     private int id;
-
     private int cantidad = 1;
+
 
     public Objeto() {
         this.nombre = "Objeto";
@@ -44,6 +47,30 @@ public class Objeto {
         this.usosRestantes = usosMax;
         this.descripcion = descripcion;
     }
+
+
+    //MÉTODOS
+
+    //Reduce en uno los usos restantes del objeto si todavía puede ser utilizado
+    public boolean usarObjeto() {
+        if (usosRestantes <= 0) {
+            return false;
+        }
+        usosRestantes--;
+        return true;
+    }
+
+    //Devuelve una representación en texto del objeto mostrando su nombre y cantidad si es mayor que uno
+    @Override
+    public String toString() {
+        if (cantidad > 1) {
+            return nombre + " x" + cantidad;
+        }
+        return nombre;
+    }
+
+
+    //GETTERS Y SETTERS
 
     public int getId() {
         return id;
@@ -81,16 +108,8 @@ public class Objeto {
         return vidaBonus;
     }
 
-    public int getUsosMax() {
-        return usosMax;
-    }
-
     public int getUsosRestantes() {
         return usosRestantes;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
     }
 
     public int getTurnosActivos() {
@@ -111,25 +130,5 @@ public class Objeto {
 
     public int getDuracionTurnos() {
         return duracionTurnos;
-    }
-
-    public boolean isConsumible() {
-        return this.tipo == TipoObjeto.USABLE || this.tipo == TipoObjeto.LLAVE;
-    }
-
-    public boolean usarObjeto() {
-        if (usosRestantes <= 0) {
-            return false;
-        }
-        usosRestantes--;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        if (cantidad > 1) {
-            return nombre + " x" + cantidad;
-        }
-        return nombre;
     }
 }

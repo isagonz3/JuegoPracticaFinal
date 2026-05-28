@@ -15,15 +15,18 @@ import jueguito.juegopracticafinal.TADs.Lista;
 
 public class PartidaMovimiento {
 
+    //ATRIBUTOS
+
     private final Partida partida;
 
     public PartidaMovimiento(Partida partida) {
         this.partida = partida;
     }
 
-    // ============================================================
+
+    //MÉTODOS
+
     // MOVIMIENTO DEL JUGADOR
-    // ============================================================
 
     public boolean moverJugador(int row, int col)
             throws ErrorMovimientoInvalido,
@@ -31,10 +34,7 @@ public class PartidaMovimiento {
             ErrorMovimientoSinBarca,
             ErrorAccesoZonaBloqueada {
 
-        // ============================================================
-        // VALIDAR ESTADO DE PARTIDA
-        // ============================================================
-
+        //Validar el estado de la partida
         if (partida.getEstadoActual()
                 != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO) {
 
@@ -46,10 +46,7 @@ public class PartidaMovimiento {
         Zona zonaActual = partida.getZonaActual();
         Jugador jugador = partida.getJugador();
 
-        // ============================================================
-        // OBTENER DESTINO
-        // ============================================================
-
+        //Obtener destino
         Celda destino = zonaActual.getCelda(row, col);
 
         if (destino == null) {
@@ -59,10 +56,7 @@ public class PartidaMovimiento {
             );
         }
 
-        // ============================================================
-        // VALIDAR TRANSITABILIDAD
-        // ============================================================
-
+        //Validad si la casilla puede ser transitable
         if (!destino.isTransitable()) {
 
             throw new ErrorMovimientoInvalido(
@@ -70,10 +64,7 @@ public class PartidaMovimiento {
             );
         }
 
-        // ============================================================
-        // VALIDAR OCUPACIÓN
-        // ============================================================
-
+        //Validad que la casilla esté ocupada
         if (destino.isOcupada()) {
 
             throw new ErrorCasillaOcupada(
@@ -81,10 +72,7 @@ public class PartidaMovimiento {
             );
         }
 
-        // ============================================================
-        // VALIDACIÓN BARCA
-        // ============================================================
-
+        //Validación de que la barca esté en el inventario
         if (zonaActual.getIdZona() == 6) {
 
             if ((row == 6 && col == 0) ||
@@ -111,14 +99,11 @@ public class PartidaMovimiento {
                             "Barca".equalsIgnoreCase(
                                     inv.getObjeto(i).getNombre()
                             )) {
-
                         tieneBarca = true;
                         break;
                     }
                 }
-
                 if (!tieneBarca) {
-
                     throw new ErrorMovimientoSinBarca(
                             "Necesitas la Barca para cruzar"
                     );
@@ -126,10 +111,7 @@ public class PartidaMovimiento {
             }
         }
 
-        // ============================================================
-        // VALIDAR CAMINO
-        // ============================================================
-
+        //Validad camino
         Posicion actual = jugador.getPosicion();
 
         int coste = calcularDist(
@@ -139,7 +121,6 @@ public class PartidaMovimiento {
                 col,
                 zonaActual
         );
-
         if (coste == Integer.MAX_VALUE) {
 
             throw new ErrorMovimientoInvalido(
@@ -147,10 +128,7 @@ public class PartidaMovimiento {
             );
         }
 
-        // ============================================================
-        // VALIDAR PM
-        // ============================================================
-
+        //Validad que queden puntos de vida
         if (coste >
                 jugador.getEstadisticas()
                         .getPuntosMovDisponibles()) {
@@ -160,10 +138,7 @@ public class PartidaMovimiento {
             );
         }
 
-        // ============================================================
-        // CONSUMIR MOVIMIENTO
-        // ============================================================
-
+        //Gastar movimientos
         if (!jugador.getEstadisticas()
                 .usarMovimiento(coste)) {
 
@@ -172,10 +147,7 @@ public class PartidaMovimiento {
             );
         }
 
-        // ============================================================
-        // MOVER JUGADOR
-        // ============================================================
-
+        //Mover objetos
         partida.getLog().registrarMovimiento(
                 actual,
                 partida.getZonaActual()
@@ -194,19 +166,13 @@ public class PartidaMovimiento {
                 "Te moviste a la casilla [" + row + ", " + col + "]"
         );
 
-        // ============================================================
-        // OBJETOS
-        // ============================================================
-
+        //Objetos
         if (destino.tieneObjeto()) {
 
             partida.recogerObjeto(destino);
         }
 
-        // ============================================================
-        // PUERTAS
-        // ============================================================
-
+        //Puertas
         if (destino.tienePuerta()) {
 
             partida.cambiarZona(destino.getPuerta());
@@ -215,9 +181,8 @@ public class PartidaMovimiento {
         return true;
     }
 
-    // ============================================================
-    // BFS PARA DISTANCIA
-    // ============================================================
+
+    //BFS PARA DISTANCIA
 
     public int calcularDist(int r1, int c1, int r2, int c2, Zona z) {
 
@@ -314,9 +279,7 @@ public class PartidaMovimiento {
     }
 
 
-    // ============================================================
     // CELDAS ACCESIBLES
-    // ============================================================
 
     public Lista<Celda> getCeldasAccesibles() {
 
@@ -334,11 +297,7 @@ public class PartidaMovimiento {
     }
 
 
-
-
-    // ============================================================
     // MOVIMIENTO DE ENEMIGOS
-    // ===========================================================
 
     private boolean estaCercaDePuerta(Zona zona, int filaDestino, int colDestino) {
         for (int i = 0; i < zona.getRows(); i++) {

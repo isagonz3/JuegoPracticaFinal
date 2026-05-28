@@ -6,37 +6,76 @@ import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.TADs.GsonUtil;
 import jueguito.juegopracticafinal.TADs.Lista;
 
+//Gestiona la carga del mapa del juego, incluyendo zonas, puertas y sus conexiones
 public class MapaLoader {
 
+    //MÉTODOS
+
+    //Carga todas las zonas del juego desde archivos JSON y las convierte en objetos Zona
     public static Lista<Zona> cargarZonas(){
-        ZonaData[] datos= GsonUtil.cargarArray("src/main/resources/datosJSON/habitaciones.json", ZonaData[].class);
-        Lista<Zona> zonas=new Lista<>();
-        if(datos!=null){
-            for(ZonaData d:datos){
+
+        ZonaData[] datos =
+                GsonUtil.cargarArray(
+                        "src/main/resources/datosJSON/habitaciones.json",
+                        ZonaData[].class
+                );
+
+        Lista<Zona> zonas = new Lista<>();
+
+        if(datos != null){
+
+            for(ZonaData d : datos){
                 Zona z = crearDesdeTexto(d.id, d.mapa);
                 zonas.add(z);
             }
         }
+
         return zonas;
     }
 
+    //Carga todas las puertas del juego desde JSON y las convierte en objetos Puerta
     public static Lista<Puerta> cargarPuertas(){
-        PuertaData[] datos = GsonUtil.cargarArray("src/main/resources/datosJSON/puertas.json",PuertaData[].class);
+
+        PuertaData[] datos =
+                GsonUtil.cargarArray(
+                        "src/main/resources/datosJSON/puertas.json",
+                        PuertaData[].class
+                );
+
         Lista<Puerta> puertas = new Lista<>();
-        if(datos!=null){
-            for(PuertaData d:datos){
-                puertas.add(new Puerta(d.zonaOrigen,d.zonaDestino,d.xOrigen,d.yOrigen,d.xDestino,d.yDestino));
+
+        if(datos != null){
+
+            for(PuertaData d : datos){
+                puertas.add(
+                        new Puerta(
+                                d.zonaOrigen,
+                                d.zonaDestino,
+                                d.xOrigen,
+                                d.yOrigen,
+                                d.xDestino,
+                                d.yDestino
+                        )
+                );
             }
         }
+
         return puertas;
     }
 
+    //Convierte una representación en texto del mapa en una estructura de celdas y crea una Zona
     private static Zona crearDesdeTexto(int id ,String[] mapa){
-        Celda[][] celdas=new Celda[mapa.length][];
-        for(int y=0; y<mapa.length; y++){
-            celdas[y]=new Celda[mapa[y].length()];
-            for(int x=0;x<mapa[y].length();x++){
+
+        Celda[][] celdas = new Celda[mapa.length][];
+
+        for(int y = 0; y < mapa.length; y++){
+
+            celdas[y] = new Celda[mapa[y].length()];
+
+            for(int x = 0; x < mapa[y].length(); x++){
+
                 celdas[y][x] = switch (mapa[y].charAt(x)) {
+
                     case '#' -> new Celda(TipoCelda.PARED);
                     case '_' -> new Celda(TipoCelda.SUELO);
                     case 'P' -> new Celda(TipoCelda.PUERTA);
@@ -44,47 +83,65 @@ public class MapaLoader {
                     case '~' -> new Celda(TipoCelda.AGUA);
                     case '0' -> new Celda(TipoCelda.VACIO);
                     case 'S' -> new Celda(TipoCelda.SALIDA);
-                    default -> throw new IllegalArgumentException("Símbolo desconocido: " + mapa[y].charAt(x));
+
+                    default -> throw new IllegalArgumentException(
+                            "Símbolo desconocido: " + mapa[y].charAt(x)
+                    );
                 };
             }
         }
         return new Zona(id, " ", celdas);
     }
 
+    //Conecta las puertas entre zonas y actualiza el grafo de zonas con sus relaciones
     public static void conectarPuertas(GrafoZonas grafo, Lista<Puerta> puertas){
+
         if(puertas == null){
             return;
         }
+
         for(int i = 0; i < puertas.getSize(); i++) {
+
             Puerta puerta = puertas.get(i);
+
             if(puerta == null){
                 continue;
             }
 
             int zonaOrigen = puerta.getZonaOrigen();
             int zonaDestino = puerta.getZonaDestino();
+
             int xOrigen = puerta.getXOrigen();
             int yOrigen = puerta.getYOrigen();
+
             int xDestino = puerta.getXDestino();
             int yDestino = puerta.getYDestino();
 
             Zona origen = grafo.getZona(zonaOrigen);
+
             if(origen != null && origen.esValida(yOrigen, xOrigen)){
-                Celda celdaOrigen = origen.getCelda(yOrigen,xOrigen);
+
+                Celda celdaOrigen = origen.getCelda(yOrigen, xOrigen);
+
                 celdaOrigen.setTipoCelda(TipoCelda.PUERTA);
                 celdaOrigen.setPuerta(puerta);
+
                 origen.addPuerta(celdaOrigen);
             }
 
             Zona destino = grafo.getZona(zonaDestino);
+
             if(destino != null && destino.esValida(yDestino, xDestino)){
-                Celda celdaDestino  = destino.getCelda(yDestino,xDestino);
+
+                Celda celdaDestino = destino.getCelda(yDestino, xDestino);
+
                 celdaDestino.setTipoCelda(TipoCelda.PUERTA);
                 celdaDestino.setPuerta(puerta);
+
                 destino.addPuerta(celdaDestino);
             }
 
-            grafo.conectar(zonaOrigen,zonaDestino);
+            grafo.conectar(zonaOrigen, zonaDestino);
         }
     }
 }

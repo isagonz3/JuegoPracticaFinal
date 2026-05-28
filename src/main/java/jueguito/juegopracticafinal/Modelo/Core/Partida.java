@@ -18,6 +18,8 @@ import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;
 
 public class Partida {
 
+    //ABTRIBUTOS
+
     private Jugador jugador;
     private Gato gato;
     private GrafoZonas grafo;
@@ -33,8 +35,6 @@ public class Partida {
     private boolean accionRealizada = false;
     private Lista<Celda> caminoMapa;
     private boolean mapaActivo;
-
-
     private PartidaMovimiento movimiento;
     private PartidaObjetosYCombate objetosYCombate;
     private UIRenderer ui;
@@ -47,9 +47,7 @@ public class Partida {
     }
 
 
-    // ============================================================
     // INICIO DE PARTIDA
-    // ============================================================
 
     public void iniciar() {
         Zona zi = grafo.getZona(get().zona.zonaInicial);
@@ -101,9 +99,7 @@ public class Partida {
     }
 
 
-    // ============================================================
     // TURNOS
-    // ============================================================
 
     public void iniciarTurno() {
         if (estadoActual != EstadoJuego.EN_CURSO) return;
@@ -137,9 +133,7 @@ public class Partida {
     }
 
 
-    // ============================================================
     // FIN DE PARTIDA
-    // ============================================================
 
     private boolean checkVictoria() {
 
@@ -170,9 +164,7 @@ public class Partida {
     }
 
 
-    // ============================================================
     // CAMBIO DE ZONA
-    // ============================================================
 
     public void cambiarZona(Puerta puerta)
             throws ErrorAccesoZonaBloqueada {
@@ -205,10 +197,7 @@ public class Partida {
             return;
         }
 
-        // ============================================================
-        // VALIDACIÓN LLAVE
-        // ============================================================
-
+        //Validar que el jugador haya cogido la llave
         if (idZonaActual == 7 && nid == 8) {
 
             boolean tieneLlave = false;
@@ -240,28 +229,19 @@ public class Partida {
             );
         }
 
-        // ============================================================
-        // REGISTRAR CAMBIO DE ZONA
-        // ============================================================
-
+        //Registrar el cambio de zona
         log.registrar(
                 "CAMBIO_ZONA:" + idZonaActual + "->" + nid
         );
 
-        // ============================================================
-        // POBLAR ZONA
-        // ============================================================
-
+        //Poblar la zona
         if (nz.getCountTurnos() == 0) {
 
             objetosYCombate.poblarZona(nz);
             objetosYCombate.ponerObjetos(nz);
         }
 
-        // ============================================================
-        // VALIDACIÓN GATO
-        // ============================================================
-
+        //Validar que el jugador haya rescatado al gato
         if (idZonaActual == 8 && nid == 9) {
 
             if (gatoEncontrado) {
@@ -278,19 +258,13 @@ public class Partida {
             }
         }
 
-        // ============================================================
-        // LIMPIAR POSICIÓN ACTUAL
-        // ============================================================
-
+        //Limpiar la posición en la que se encuentra el jugador
         zonaActual.getCelda(
                 jugador.getPosicion().getRow(),
                 jugador.getPosicion().getCol()
         ).setEntidad(null);
 
-        // ============================================================
-        // DESCUBRIMIENTO DE ZONA
-        // ============================================================
-
+        //Descubrimiento de zona
         if (!nz.isVisitada()) {
 
             log.registrar("Nueva zona descubierta!");
@@ -298,17 +272,11 @@ public class Partida {
 
         nz.setVisitada(true);
 
-        // ============================================================
-        // ACTUALIZAR ZONA ACTUAL
-        // ============================================================
-
+        //Actualizar la zona actual
         idZonaActual = nid;
         zonaActual = nz;
 
-        // ============================================================
-        // AJUSTAR POSICIÓN
-        // ============================================================
-
+        //Ajustar la posición
         dr = Math.min(
                 Math.max(dr, 0),
                 nz.getRows() - 1
@@ -319,18 +287,12 @@ public class Partida {
                 nz.getCols() - 1
         );
 
-        // ============================================================
-        // MOVER JUGADOR
-        // ============================================================
-
+        //Mover el jugado
         jugador.moverA(new Posicion(dr, dc));
 
         nz.getCelda(dr, dc).setEntidad(jugador);
 
-        // ============================================================
-        // LOG FINAL
-        // ============================================================
-
+        //Log final
         log.registrar(
                 "Has entrado en: " + nz.getNombreZona()
         );
@@ -363,9 +325,7 @@ public class Partida {
     }
 
 
-    // ============================================================
-    // MÉTODOS NECESARIOS
-    // ============================================================
+    //MÉTODOS NECESARIOS
 
     public boolean moverJugador(int row, int col)
             throws ErrorMovimientoInvalido,
@@ -500,9 +460,7 @@ public class Partida {
     }
 
 
-    // ============================================================
-    // Colocar entidades fijas
-    // ============================================================
+    //COLOCAR LAS ENTIDADES FIJAS
 
     private Posicion findSpawn(Zona zona) {
         for (int i = 0; i < zona.getRows(); i++)
@@ -572,7 +530,7 @@ public class Partida {
     }
 
     public void colocarNPCsFijos() {
-        // NPC 1
+        //NPC 1
         Zona zona1 = grafo.getZona(5);
 
         if (zona1 != null && zona1.esValida(4, 9)) {
@@ -592,7 +550,7 @@ public class Partida {
             }
         }
 
-        // NPC 2
+        //NPC 2
         Zona zona2 = grafo.getZona(6);
 
         if (zona2 != null && zona2.esValida(13,1)) {
@@ -612,7 +570,7 @@ public class Partida {
             }
         }
 
-        // NPC 3
+        //NPC 3
         Zona zona3 = grafo.getZona(7);
 
         if (zona3 != null && zona3.esValida(5, 8)) {
@@ -632,7 +590,7 @@ public class Partida {
             }
         }
 
-        // NPC princesa
+        //NPC princesa
         Zona zonaPrincesa = grafo.getZona(9);
 
         if (zonaPrincesa != null && zonaPrincesa.esValida(25, 8)) {
@@ -654,9 +612,7 @@ public class Partida {
     }
 
 
-    // ============================================================
-    // GETTERS NECESARIOS PARA LOS MÓDULOS
-    // ============================================================
+    // GETTERS Y SETTERS
 
     public Jugador getJugador() { return jugador; }
     public Zona getZonaActual() { return zonaActual; }
@@ -678,7 +634,6 @@ public class Partida {
     }
     public Lista<Celda> getCaminoMapa() { return caminoMapa; }
     public boolean isMapaActivo() { return mapaActivo; }
-    public void setMapaActivo(boolean b) { mapaActivo = b; if (!b) caminoMapa = null; }
     public boolean isAccionRealizada() { return accionRealizada; }
     public void setAccionRealizada(boolean b) { this.accionRealizada = b; }
     public GrafoZonas getGrafoZonas() {
