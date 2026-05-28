@@ -11,8 +11,7 @@ import jueguito.juegopracticafinal.TADs.Lista;
 
 public class EndController {
     @FXML private Label resultadoLabel;
-    @FXML
-    private TextArea logFinal;
+    @FXML private TextArea logFinal;
     @FXML private Button volverBtn;
 
     private JueguitoFX app;
