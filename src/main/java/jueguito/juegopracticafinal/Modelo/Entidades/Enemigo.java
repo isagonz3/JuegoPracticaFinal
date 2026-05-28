@@ -22,7 +22,6 @@ public class Enemigo extends Entidad {
 
     //GETTERS Y SETTERS
 
-    @Override
     public String getTipoEntidad() {
         return "ENEMIGO";
     }
