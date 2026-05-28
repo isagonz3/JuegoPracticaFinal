@@ -10,6 +10,7 @@ import jueguito.juegopracticafinal.Modelo.Log.LogMovimiento;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
+import jueguito.juegopracticafinal.TADs.Cola;
 import jueguito.juegopracticafinal.Vista.UIRenderer;
 import jueguito.juegopracticafinal.TADs.Lista;
 
@@ -30,6 +31,9 @@ public class Partida {
     private boolean faseJugadorActiva = true;
     private boolean movimientoRealizado = false;
     private boolean accionRealizada = false;
+    private Lista<Celda> caminoMapa;
+    private boolean mapaActivo;
+
 
     private PartidaMovimiento movimiento;
     private PartidaObjetosYCombate objetosYCombate;
@@ -177,6 +181,7 @@ public class Partida {
         if (estadoActual != EstadoJuego.EN_CURSO) return;
         if (!faseJugadorActiva) return;
 
+        boolean mapaEstabaActivo = mapaActivo;
         int nid, dr, dc;
 
         if (puerta.getZonaOrigen() == idZonaActual) {
@@ -330,6 +335,10 @@ public class Partida {
                 "Has entrado en: " + nz.getNombreZona()
         );
 
+        if (mapaEstabaActivo) {
+            usarMapa();
+        }
+
         accionCambioZona();
     }
 
@@ -393,6 +402,101 @@ public class Partida {
 
     public boolean interactuarGato() {
         return objetosYCombate.interactuarGato();
+    }
+
+    public void usarMapa(){
+        Zona zona = getZonaActual();
+        Posicion pj = jugador.getPosicion();
+        caminoMapa = null;
+        mapaActivo = false;
+
+        Celda salida = null;
+        for (int i = 0; i < zona.getRows() && salida == null; i++) {
+            for (int j = 0; j < zona.getCols() && salida == null; j++) {
+                Celda c = zona.getCelda(i, j);
+                if(c != null && c.getTipoCelda() == TipoCelda.SALIDA){
+                    salida = c;
+                }
+            }
+        }
+
+        if(salida != null){
+            caminoMapa = movimiento.calcularCamino(
+                    pj.getRow(),pj.getCol(),salida.getRow(),salida.getCol(),zona
+            );
+
+            if(caminoMapa != null && caminoMapa.getSize() > 0){
+                mapaActivo = true;
+                log.registrar("Este es el mejor camino hacia el castillo");
+                return;
+            }
+        }
+        Lista<Integer> visitZonas = new Lista<>();
+        Lista<Integer> prevZonas = new Lista<>();
+        Cola<Integer> colaZonas = new Cola<>();
+
+        for(int i = 0; i < grafo.getNumZonas();i++){
+            visitZonas.add(-1);
+            prevZonas.add(-1);
+        }
+
+        visitZonas.set(idZonaActual,idZonaActual);
+        colaZonas.enqueue(idZonaActual);
+
+        while(!colaZonas.isEmpty()){
+            int actual = colaZonas.dequeue();
+            if(actual == 9) break;
+
+            Lista<Integer> ady = grafo.getAdyacentes(actual);
+            for(int i = 0; i < ady.getSize();i++){
+                int next = ady.get(i);
+                if(visitZonas.get(next) == -1){
+                    visitZonas.set(next,next);
+                    prevZonas.set(next,actual);
+                    colaZonas.enqueue(next);
+                }
+            }
+        }
+
+        if(visitZonas.get(9) != -1){
+            int nextZona = 9;
+            while(prevZonas.get(nextZona) != idZonaActual && prevZonas.get(nextZona) != -1){
+                nextZona = prevZonas.get(nextZona);
+            }
+
+            Celda puerta = null;
+            for(int i = 0; i < zona.getRows() && puerta == null; i++) {
+                for (int j = 0; j < zona.getCols() && puerta == null; j++) {
+                    Celda c = zona.getCelda(i, j);
+                    if(c != null && c.tienePuerta()){
+                        Puerta p = c.getPuerta();
+                        int conectaA;
+                        if(p.getZonaOrigen() == idZonaActual){
+                            conectaA = p.getZonaDestino();
+                        }
+                        else{
+                            conectaA = p.getZonaOrigen();
+                        }
+
+                        if(conectaA == nextZona){
+                            puerta = c;
+                        }
+                    }
+                }
+            }
+            if(puerta != null){
+                caminoMapa = movimiento.calcularCamino(
+                        pj.getRow(),pj.getCol(),puerta.getRow(),puerta.getCol(),zona
+                );
+
+                if(caminoMapa != null && caminoMapa.getSize() > 0){
+                    mapaActivo = true;
+                    log.registrar("Este es el mejor camino hacia la siguiente zona");
+                    return;
+                }
+            }
+        }
+        log.registrar("No hay caminos hasta el castillo");
     }
 
 
@@ -572,6 +676,9 @@ public class Partida {
     public int getTurnoActual() {
         return turnoActual;
     }
+    public Lista<Celda> getCaminoMapa() { return caminoMapa; }
+    public boolean isMapaActivo() { return mapaActivo; }
+    public void setMapaActivo(boolean b) { mapaActivo = b; if (!b) caminoMapa = null; }
     public boolean isAccionRealizada() { return accionRealizada; }
     public void setAccionRealizada(boolean b) { this.accionRealizada = b; }
     public GrafoZonas getGrafoZonas() {

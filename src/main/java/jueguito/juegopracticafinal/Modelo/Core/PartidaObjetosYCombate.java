@@ -147,6 +147,10 @@ public class PartidaObjetosYCombate {
 
         Jugador jugador = partida.getJugador();
         Inventario inv = jugador.getInventario();
+        if ("Mapa".equalsIgnoreCase(o.getNombre())) {
+            partida.usarMapa();
+            return true;
+        }
 
         // Validaciones de seguridad (Si falla, NO pasa el turno, el jugador conserva su acción)
         if (o == null || o.getTipo() != TipoObjeto.USABLE || !inv.contiene(o)) {

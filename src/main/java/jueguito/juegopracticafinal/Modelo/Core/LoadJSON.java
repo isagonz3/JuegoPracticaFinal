@@ -210,7 +210,7 @@ public class LoadJSON {
                 String slotName = (partidaData.objetosSlot != null) ? partidaData.objetosSlot[i] : null;
 
                 Objeto o = new Objeto(nombre, tipo, atq, def, vida, rango, usos, "");
-                if (slotName != null) {
+                if (slotName != null && !slotName.isEmpty()) {
                     o.setSlot(SlotEquipable.valueOf(slotName));
                 }
                 jugador.getInventario().addObjeto(o);

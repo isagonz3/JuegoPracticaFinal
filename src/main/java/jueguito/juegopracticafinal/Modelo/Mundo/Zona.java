@@ -159,4 +159,8 @@ public class Zona {
    public void addPuerta(Celda celda){
       puertas.add(celda);
    }
+
+   public Lista<Celda> getPuertas(){
+      return puertas;
+   }
 }

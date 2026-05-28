@@ -16,12 +16,14 @@ import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.TADs.Lista;
+import jueguito.juegopracticafinal.TADs.Matrix;
 
 //Renderiza visualmente el mapa del juego: dibuja el escenario sobre un GridPane utilizando spirtes para el fondo, entidades, NPCs, objetos y celdas
 public class MapaRenderer {
 
     private final GridPane mapaGrid;
     private final SpriteManager sprites;
+    private final Lista<Matrix<Image>> cacheCeldas =  new Lista<>();
 
     private static final int TILE_SIZE = 16;
 
@@ -62,16 +64,23 @@ public class MapaRenderer {
             }
         }
 
+        boolean[][] caminoCelda = null;
+        if (partida.isMapaActivo() && partida.getCaminoMapa() != null) {
+            caminoCelda = new boolean[rows][cols];
+            for (int i = 0; i < partida.getCaminoMapa().getSize(); i++) {
+                Celda c = partida.getCaminoMapa().get(i);
+                if (c != null) {
+                    caminoCelda[c.getRow()][c.getCol()] = true;
+                }
+            }
+        }
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
 
-                WritableImage tile = new WritableImage(
-                        pixelReader,
-                        j * TILE_SIZE,
-                        i * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE
-                );
+
+
+                Image tile = getTile(zonaImg,idZona,i,j);
 
                 ImageView tileView = new ImageView(tile);
                 tileView.setFitWidth(TILE_SIZE);
@@ -121,6 +130,15 @@ public class MapaRenderer {
                     celdaPane.getChildren().add(ilum);
                 }
 
+                if (caminoCelda != null && caminoCelda[i][j]) {
+                    Rectangle caminoMapa = new Rectangle(
+                            TILE_SIZE/2,
+                            TILE_SIZE/2,
+                            Color.rgb(206, 0, 100, 0.5)
+                    );
+                    celdaPane.getChildren().add(caminoMapa);
+                }
+
                 mapaGrid.add(celdaPane, j, i);
             }
         }
@@ -146,4 +164,28 @@ public class MapaRenderer {
 
         return null;
     }
+
+    private Image getTile(Image imagenZona, int idZona, int row, int col) {
+        while(cacheCeldas.getSize() <= idZona) {
+            cacheCeldas.add(null);
+        }
+
+        Matrix<Image> zonaCache = cacheCeldas.get(idZona);
+        if(zonaCache == null){
+            int rows = (int)(imagenZona.getHeight() / TILE_SIZE);
+            int cols = (int)(imagenZona.getWidth() / TILE_SIZE);
+            zonaCache = new Matrix<>(rows, cols);
+            PixelReader pr = imagenZona.getPixelReader();
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
+                    zonaCache.set(r, c,
+                            new WritableImage(pr, c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                    );
+                }
+            }
+            cacheCeldas.set(idZona, zonaCache);
+        }
+        return zonaCache.get(row, col);
+    }
 }
+

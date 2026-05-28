@@ -259,6 +259,60 @@ public class PartidaMovimiento {
         return Integer.MAX_VALUE;
     }
 
+    public Lista<Celda> calcularCamino(int rO, int cO, int rD, int cD, Zona z) {
+        boolean[][] visitada = new boolean[z.getRows()][z.getCols()];
+        int[][] prevRow = new int[z.getRows()][z.getCols()];
+        int[][] prevCol = new int[z.getRows()][z.getCols()];
+
+        for (int i = 0; i < z.getRows(); i++) {
+            for (int j = 0; j < z.getCols(); j++) {
+                prevRow[i][j] = prevCol[i][j] = -1;
+            }
+        }
+
+        Cola<int[]> cola = new Cola<>();
+        cola.enqueue(new int[]{rO, cO});
+        visitada[rO][cO] = true;
+
+        int[][] dirs = {{-1,0},{1,0},{0,-1},{0,1}};
+
+        while (!cola.isEmpty()) {
+            int[] a = cola.dequeue();
+
+            if(a[0] == rD && a[1] == cD){
+                Lista<Celda> camino = new Lista<>();
+                int actualR = rD;
+                int actualC = cD;
+
+                while(actualR != rO || actualC != cO){
+                    camino.addFirst(z.getCelda(actualR, actualC));
+                    int prevR = prevRow[actualR][actualC];
+                    int prevC = prevCol[actualR][actualC];
+                    actualR = prevR;
+                    actualC = prevC;
+                }
+                return camino;
+            }
+            for(int[] d : dirs){
+                int nr = a[0] + d[0];
+                int nc = a[1] + d[1];
+
+                if(z.esValida(nr, nc) && !visitada[nr][nc]) {
+                    Celda c = z.getCelda(nr, nc);
+
+                    if (c != null && c.isTransitable() && ((nr == rD && nc == cD) || !c.isOcupada())) {
+                            visitada[nr][nc] = true;
+                            prevRow[nr][nc] = a[0];
+                            prevCol[nr][nc] = a[1];
+                            cola.enqueue(new int[]{nr,nc});
+                        }
+
+                }
+            }
+        }
+        return null;
+    }
+
 
     // ============================================================
     // CELDAS ACCESIBLES
@@ -278,6 +332,8 @@ public class PartidaMovimiento {
                 jugador.getEstadisticas().getPuntosMovDisponibles()
         );
     }
+
+
 
 
     // ============================================================
