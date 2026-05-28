@@ -34,4 +34,14 @@ public class GrafoZonas {
             if (!ady.get(i2).contains(id1)) ady.get(i2).add(id1);
         }
     }
+
+    public Lista<Integer> getAdyacentes(int idZona) {
+        int index = indice(idZona);
+        if(index >= 0) return ady.get(index);
+        else return new Lista<>();
+    }
+
+    public int getNumZonas(){
+        return zonas.getSize();
+    }
 }

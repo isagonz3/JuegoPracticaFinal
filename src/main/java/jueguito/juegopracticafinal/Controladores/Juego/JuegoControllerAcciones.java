@@ -260,7 +260,12 @@ public class JuegoControllerAcciones {
             }
         }
 
-        inv.addObjeto(new Objeto(item, TipoObjeto.NPC));
+
+        if ("Mapa".equalsIgnoreCase(item)) {
+            inv.addObjeto(new Objeto("Mapa", TipoObjeto.USABLE, 0, 0, 0, 0, 99, "Muestra el camino a la salida"));
+        } else {
+            inv.addObjeto(new Objeto(item, TipoObjeto.NPC));
+        }
 
         ctrl.getLogArea().appendText("Coste: " + coste + " gemas\n");
         ctrl.getLogArea().appendText(item + " comprado\n");
