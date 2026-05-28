@@ -9,7 +9,7 @@
 }
 
 .game-title {
-    -fx-font-size: 28px;
+    -fx-font-size: 50px;
     -fx-font-weight: bold;
     -fx-text-fill: #ee1764;
     -fx-padding: 20 0 30 0;
@@ -32,7 +32,7 @@
 }
 
 .game-label {
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
     -fx-font-weight: bold;
     -fx-text-fill: #1b1020;
 }
@@ -41,7 +41,7 @@
     -fx-background-color: #34355a;
     -fx-text-fill: #f0eeef;
     -fx-font-weight: bold;
-    -fx-font-size: 11px;
+    -fx-font-size: 9px;
     -fx-border-color: #1b1020;
     -fx-border-width: 2px;
     -fx-padding: 8 14;
