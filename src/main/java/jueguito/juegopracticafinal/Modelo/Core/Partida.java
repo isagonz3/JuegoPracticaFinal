@@ -571,7 +571,7 @@ public class Partida {
         celda.setObjeto(llave);
     }
 
-    private void colocarNPCsFijos() {
+    public void colocarNPCsFijos() {
         // NPC 1
         Zona zona1 = grafo.getZona(5);
 

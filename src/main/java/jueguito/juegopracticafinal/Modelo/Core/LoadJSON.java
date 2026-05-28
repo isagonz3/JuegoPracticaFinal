@@ -276,6 +276,7 @@ public class LoadJSON {
                     }
                 }
             }
+            partida.colocarNPCsFijos();
         }
         return partida;
     }
