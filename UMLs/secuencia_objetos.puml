@@ -84,4 +84,21 @@ else
   JC -> UIRenderer: actualizarUI()
   JC -> MapaRenderer: render()
 end
+
+=== USAR MAPA ==
+
+JC -> JCI: usarObjeto()
+JCI -> P: usarObjeto(Mapa)
+P -> PO: usarObjeto(o)
+PO -> O: getNombre()
+alt "Mapa"
+  PO -> P: usarMapa()
+  note right: BFS grid o grafo\n no consume objeto\n no termina turno
+  P --> JCI: true
+  JCI -> JC: clearSelection()
+  JC -> MapaRenderer: render()
+  note right: pinta camino sobre fondo
+else (otro objeto)
+  ... flujo normal ...
+end
 @enduml
