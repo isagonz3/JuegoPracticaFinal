@@ -2,7 +2,11 @@ package jueguito.juegopracticafinal.Modelo.NPC;
 
 import jueguito.juegopracticafinal.TADs.Lista;
 
+//Representa un personaje no jugable del juego almacenando su nombre, tipo, diálogos y sprite asociado
 public class NPC {
+
+    //ATRIBUTOS
+
     private String nombre;
     private TipoNPC tipo;
     private Lista<String> dialogos;
@@ -10,6 +14,10 @@ public class NPC {
 
     private String sprite;
 
+
+    //CONSTRUCTORES
+
+    //Es el constructor del NPC que inicializa su nombre, tipo y la lista vacía de diálogos
     public NPC(String nombre, TipoNPC tipo) {
         this.nombre = nombre;
         this.tipo = tipo;
@@ -17,19 +25,17 @@ public class NPC {
         this.dialogoActual = 0;
     }
 
+
+    //Es el constructor del NPC que inicializa su nombre, tipo y una lista de diálogos personalizada
     public NPC(String nombre, TipoNPC tipo, Lista<String> dialogos) {
         this(nombre, tipo);
         this.dialogos = dialogos;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
 
-    public TipoNPC getTipo() {
-        return tipo;
-    }
+    //MÉTODOS
 
+    //Gestiona el diálogo del NPC devolviendo frases según el tipo, nombre y progreso de conversación
     public String hablar() {
 
         if (tipo == TipoNPC.ALDEANO) {
@@ -53,6 +59,20 @@ public class NPC {
         return "...";
     }
 
+
+    //GETTERS Y SETTERS
+
+    //Obtiene el nombre del NPC
+    public String getNombre() {
+        return nombre;
+    }
+
+    //Obtiene el tipo del NPC
+    public TipoNPC getTipo() {
+        return tipo;
+    }
+
+    //Asigna el sprite asociado al NPC
     public void setSprite(String sprite) {
         this.sprite = sprite;
     }

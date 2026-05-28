@@ -4,11 +4,14 @@ import jueguito.juegopracticafinal.TADs.Lista;
 
 public class Inventario {
 
+    //ATRIBUTOS
+
     private Lista<Objeto> objetos;
     private int sizeInventario;
 
     private Lista<Objeto> objetosUsados;
     private Lista<Objeto> objetosEquipados;
+
 
     public Inventario() {
         this.objetos = new Lista<>();
@@ -24,6 +27,10 @@ public class Inventario {
         this.sizeInventario = size;
     }
 
+
+    //MÉTODOS
+
+    //Añade un objeto al inventario si no se ha alcanzado el tamaño máximo permitido
     public boolean addObjeto(Objeto objeto) {
 
         if (objetos.getSize() >= sizeInventario) return false;
@@ -32,26 +39,22 @@ public class Inventario {
         return true;
     }
 
+    //Elimina un objeto del inventario si existe y devuelve si la operación fue exitosa
     public boolean removeObjeto(Objeto objeto) {
         return objetos.delete(objeto) != null;
     }
 
+    //Devuelve la cantidad actual de objetos en el inventario
     public int size() {
         return objetos.getSize();
     }
 
+    //Comprueba si el inventario ha alcanzado su capacidad máxima
     public boolean inventarioLleno() {
         return objetos.getSize() >= sizeInventario;
     }
 
-    public Lista<Objeto> getObjetos() {
-        return objetos;
-    }
-
-    public Objeto getObjeto(int index) {
-        return objetos.get(index);
-    }
-
+    //Comprueba si el inventario contiene un objeto con el mismo identificador
     public boolean contiene(Objeto objeto) {
 
         for (int i = 0; i < objetos.getSize(); i++) {
@@ -60,17 +63,11 @@ public class Inventario {
                 return true;
             }
         }
+
         return false;
     }
 
-    public Lista<Objeto> getObjetosUsados() {
-        return objetosUsados;
-    }
-    public Lista<Objeto> getObjetosEquipados() {
-        return objetosEquipados;
-    }
-
-
+    //Equipa un objeto si cumple las condiciones de tipo y compatibilidad con otros objetos equipados
     public boolean equipar(Objeto o) {
 
         if (o == null || o.getSlot() == null) return false;
@@ -92,14 +89,11 @@ public class Inventario {
         return true;
     }
 
-    // =========================
-    // TURNOS DE LOS OBJETOS
-    // =========================
+
+    //Actualiza el estado de los objetos en uso y equipados, eliminando aquellos cuya duración haya expirado
     public void avanzarTurno() {
 
-        // =========================
         // OBJETOS USADOS (2 turnos)
-        // =========================
         for (int i = 0; i < objetosUsados.getSize(); i++) {
 
             Objeto o = objetosUsados.get(i);
@@ -112,9 +106,7 @@ public class Inventario {
             }
         }
 
-        // =========================
         // OBJETOS EQUIPADOS (5 turnos)
-        // =========================
         for (int i = 0; i < objetosEquipados.getSize(); i++) {
 
             Objeto o = objetosEquipados.get(i);
@@ -128,5 +120,24 @@ public class Inventario {
 
             }
         }
+    }
+
+
+    //GETTERS Y SETTERS
+
+    public Lista<Objeto> getObjetosUsados() {
+        return objetosUsados;
+    }
+
+    public Lista<Objeto> getObjetosEquipados() {
+        return objetosEquipados;
+    }
+
+    public Lista<Objeto> getObjetos() {
+        return objetos;
+    }
+
+    public Objeto getObjeto(int index) {
+        return objetos.get(index);
     }
 }

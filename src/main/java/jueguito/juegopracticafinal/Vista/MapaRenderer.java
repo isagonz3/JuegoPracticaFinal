@@ -165,11 +165,12 @@ public class MapaRenderer {
         return null;
     }
 
+
+    //Obtiene el tile correspondiente de la zona y lo almacena en caché para evitar recortar la misma imagen repetidamente en cada renderizado
     private Image getTile(Image imagenZona, int idZona, int row, int col) {
         while(cacheCeldas.getSize() <= idZona) {
             cacheCeldas.add(null);
         }
-
         Matrix<Image> zonaCache = cacheCeldas.get(idZona);
         if(zonaCache == null){
             int rows = (int)(imagenZona.getHeight() / TILE_SIZE);
@@ -179,7 +180,13 @@ public class MapaRenderer {
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < cols; c++) {
                     zonaCache.set(r, c,
-                            new WritableImage(pr, c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                            new WritableImage(
+                                    pr,
+                                    c * TILE_SIZE,
+                                    r * TILE_SIZE,
+                                    TILE_SIZE,
+                                    TILE_SIZE
+                            )
                     );
                 }
             }
@@ -188,4 +195,3 @@ public class MapaRenderer {
         return zonaCache.get(row, col);
     }
 }
-
