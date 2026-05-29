@@ -4,6 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ListView;
+import jueguito.juegopracticafinal.Modelo.Core.Configuracion;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
@@ -54,9 +55,8 @@ public class UIRenderer {
         if (j == null) return;
 
         zonaLabel.setText("Zona: " + partida.getZonaActual().getNombreZona());
-        turnoLabel.setText("Turno: " + partida.getTurnoActual());
-
-        vidaLabel.setText(
+        turnoLabel.setText("TURNO: " + partida.getTurnoActual() + "/" + Configuracion.get().turno.maxTurnos);
+        vidaLabel.setText("VIDA: " +
                 j.getEstadisticas().getVidaActual() + "/" +
                         j.getEstadisticas().getVidaMax()
         );

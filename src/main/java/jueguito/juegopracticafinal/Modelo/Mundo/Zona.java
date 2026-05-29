@@ -81,6 +81,10 @@ public class Zona {
       return idZona;
    }
 
+   public void setIdZona(int idZona) {
+      this.idZona = idZona;
+   }
+
    public String getNombreZona() {
       return nombreZona;
    }
@@ -180,5 +184,81 @@ public class Zona {
          }
       }
       return accesibles;
+   }
+
+   public Lista<Celda> getCaminoMinimo(int startRow, int startCol, int endRow, int endCol) {
+      Lista<Celda> camino = new Lista<>();
+      if (!esValida(startRow, startCol) || !esValida(endRow, endCol)) {
+         return camino;
+      }
+
+      int rows = matrix.getNumRows();
+      int cols = matrix.getNumCols();
+      boolean[][] visitadas = new boolean[rows][cols];
+      int[][][] padre = new int[rows][cols][2];
+
+      for (int i = 0; i < rows; i++) {
+         for (int j = 0; j < cols; j++) {
+            padre[i][j][0] = -1;
+            padre[i][j][1] = -1;
+         }
+      }
+
+      Cola<int[]> cola = new Cola<>();
+      cola.enqueue(new int[]{startRow, startCol});
+      visitadas[startRow][startCol] = true;
+
+      int[][] direcciones = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+      boolean encontrado = false;
+
+      while (!cola.isEmpty() && !encontrado) {
+         int[] actual = cola.dequeue();
+         int r = actual[0];
+         int c = actual[1];
+
+         for (int[] dir : direcciones) {
+            int nr = r + dir[0];
+            int nc = c + dir[1];
+
+            if (matrix.esValida(nr, nc) && !visitadas[nr][nc]) {
+               Celda celda = matrix.get(nr, nc);
+               if (celda != null && celda.isTransitable()) {
+                  visitadas[nr][nc] = true;
+                  padre[nr][nc][0] = r;
+                  padre[nr][nc][1] = c;
+                  cola.enqueue(new int[]{nr, nc});
+
+                  if (nr == endRow && nc == endCol) {
+                     encontrado = true;
+                     break;
+                  }
+               }
+            }
+         }
+      }
+
+      if (encontrado) {
+         Cola<Celda> pila = new Cola<>();
+         int r = endRow, c = endCol;
+         while (r != startRow || c != startCol) {
+            pila.enqueue(matrix.get(r, c));
+            int pr = padre[r][c][0];
+            int pc = padre[r][c][1];
+            r = pr;
+            c = pc;
+         }
+         pila.enqueue(matrix.get(startRow, startCol));
+
+         Cola<Celda> inversa = new Cola<>();
+         while (!pila.isEmpty()) {
+            Celda celda = pila.dequeue();
+            inversa.enqueue(celda);
+         }
+         while (!inversa.isEmpty()) {
+            camino.add(inversa.dequeue());
+         }
+      }
+
+      return camino;
    }
 }

@@ -91,4 +91,8 @@ public abstract class  Entidad {
         }
         return 0;
     }
+
+    public String getTipoEntidad() {
+        return "ENTIDAD";
+    }
 }

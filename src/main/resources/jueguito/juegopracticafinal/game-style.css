@@ -6,6 +6,10 @@
 
 .menu-root {
     -fx-background-color: #f0eeef;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-border-color: #34355a, #ee1764, #34355a;
+    -fx-border-width: 4, 2, 4;
+    -fx-border-insets: 0, 4, 6;
 }
 
 .game-title {
@@ -53,7 +57,21 @@
     -fx-background-color: #483e5a;
 }
 .game-button:pressed {
-    -fx-background-color: #ee1764;
+    -fx-background-color: #1b1020;
+}
+
+.menu-button {
+    -fx-background-color: #34355a;
+    -fx-text-fill: #f0eeef;
+    -fx-font-size: 16px;
+    -fx-padding: 14 40;
+    -fx-border-width: 3px;
+}
+.menu-button:hover {
+    -fx-background-color: #4a3e6a;
+}
+.menu-button:pressed {
+    -fx-background-color: #1b1020;
 }
 
 .game-text-area {
@@ -114,22 +132,28 @@
 
 .tienda-root {
     -fx-background-color: #fde5a7;
+    -fx-font-family: "Consolas", "Courier New", monospace;
     -fx-border-color: #ee1764;
     -fx-border-width: 3px;
     -fx-padding: 30;
 }
 
 .end-root {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
     -fx-background-color: #f0eeef;
+    -fx-font-family: "Consolas", "Courier New", monospace;
     -fx-spacing: 25;
     -fx-alignment: center;
     -fx-padding: 40;
 }
 
-.victoria {
+.end-root .victoria {
+    -fx-font-size: 15px;
     -fx-text-fill: #95de40;
 }
-.derrota {
+.end-root .derrota {
+    -fx-font-size: 15px;
     -fx-text-fill: #ed0d0f;
 }
 

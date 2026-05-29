@@ -11,12 +11,12 @@
             <Label styleClass="game-title" text="TIENDA DEL COMERCIANTE" />
 
             <VBox alignment="CENTER" spacing="10">
-                <Label styleClass="game-label" text="Barca - 5 gemas" />
+                <Label styleClass="game-label" text="BARCA - 5 gemas" />
                 <Button fx:id="comprarBarcaBtn" styleClass="game-button" text="Comprar" />
             </VBox>
 
             <VBox alignment="CENTER" spacing="10">
-                <Label styleClass="game-label" text="Mapa - 3 gemas" />
+                <Label styleClass="game-label" text="MAPA - 3 gemas" />
                 <Button fx:id="comprarMapaBtn" styleClass="game-button" text="Comprar" />
             </VBox>
 

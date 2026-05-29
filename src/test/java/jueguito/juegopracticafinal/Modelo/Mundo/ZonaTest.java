@@ -47,7 +47,7 @@ class ZonaTest {
 
         Zona zona2=new Zona(1,"Test",celdas);
 
-        assertEquals(3,zona2.numCeldasAccesibles());
+        assertEquals(3,zona2.getCeldasAccesibles(2,2,3).getSize());
     }
 
     @Test
