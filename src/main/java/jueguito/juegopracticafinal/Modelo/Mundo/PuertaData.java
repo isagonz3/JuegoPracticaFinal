@@ -1,6 +1,9 @@
 package jueguito.juegopracticafinal.Modelo.Mundo;
 
 public class PuertaData {
+
+    //ATRIBUTOS
+
     public int zonaOrigen;
     public int zonaDestino;
 

@@ -5,6 +5,9 @@ import jueguito.juegopracticafinal.TADs.Lista;
 import jueguito.juegopracticafinal.TADs.Matrix;
 
 public class Zona {
+
+   //ATRIBUTOS
+
    private Matrix<Celda> matrix;
    private String nombreZona;
    private int idZona;
@@ -57,6 +60,22 @@ public class Zona {
    }
 
 
+   //MÉTODOS
+
+   public boolean esValida(int row, int col){
+      return matrix.esValida(row,col);
+   }
+
+   public void addPuerta(Celda celda){
+      puertas.add(celda);
+   }
+
+   public Lista<Celda> getPuertas(){
+      return puertas;
+   }
+
+
+   //GETTERS Y SETTERS
 
    public int getIdZona() {
       return idZona;
@@ -65,6 +84,7 @@ public class Zona {
    public String getNombreZona() {
       return nombreZona;
    }
+
    public void setNombreZona(String nombreZona) {
       this.nombreZona = nombreZona;
    }
@@ -80,6 +100,7 @@ public class Zona {
    public int getCountTurnos(){
       return countTurnos;
    }
+
    public void setCountTurnos(int countTurnos){
       this.countTurnos = countTurnos;
    }
@@ -87,6 +108,7 @@ public class Zona {
    public boolean isVisitada() {
       return visitada;
    }
+
    public void setVisitada(boolean visitada) {
       this.visitada = visitada;
    }
@@ -94,10 +116,10 @@ public class Zona {
    public void setSpawnJugador(Posicion posicion) {
       this.spawnJugador = posicion;
    }
+
    public Posicion getSpawnJugador() {
       return spawnJugador;
    }
-
 
    public Lista<Posicion> getSpawnEnemigos() {
       return spawnEnemigos;
@@ -111,56 +133,52 @@ public class Zona {
       return matrix.get(row, col);
    }
 
-   public boolean esValida(int row, int col){
-      return matrix.esValida(row,col);
-   }
-
+   //Obtiene las celdas accesibles desde una posición concreta dentro de un rango utilizando un recorrido en anchura
    public Lista<Celda> getCeldasAccesibles(int row, int col, int rango) {
       Lista<Celda> accesibles = new Lista<>();
       if(rango <= 0 || !esValida(row,col)){
          return accesibles;
       }
-
       boolean[][] visitadas = new boolean[matrix.getNumRows()][matrix.getNumCols()];
       Cola<int[]> cola = new Cola<>();
-
       cola.enqueue(new int[] {row,col,0});
       visitadas[row][col] = true;
-
       while(!cola.isEmpty()){
          int[] actual = cola.dequeue();
          int colaRow = actual[0];
          int colaCol = actual[1];
          int colaDist = actual[2];
-
          if(colaDist > 0 && colaDist <= rango){
             accesibles.add(matrix.get(colaRow,colaCol));
          }
          if(colaDist < rango){
-            int[][] coordenadas = {{-1,0}, {1,0}, {0,-1}, {0,1}}; //Norte, Sur, Oeste, Este
+            int[][] coordenadas = {
+                    {-1,0},
+                    {1,0},
+                    {0,-1},
+                    {0,1}
+            }; //Norte, Sur, Oeste, Este
             for (int[] coordenada : coordenadas) {
                int newrow = colaRow + coordenada[0];
                int newcol = colaCol + coordenada[1];
-
                if (matrix.esValida(newrow, newcol) && !visitadas[newrow][newcol]) {
                   Celda celda = matrix.get(newrow, newcol);
-
-                  if (celda != null && celda.isTransitable() && (!celda.isOcupada() || celda.tieneObjeto())) {
+                  if (celda != null &&
+                          celda.isTransitable() &&
+                          (!celda.isOcupada() || celda.tieneObjeto())) {
                      visitadas[newrow][newcol] = true;
-                     cola.enqueue(new int[]{newrow, newcol, colaDist + 1});
+                     cola.enqueue(
+                             new int[]{
+                                     newrow,
+                                     newcol,
+                                     colaDist + 1
+                             }
+                     );
                   }
                }
             }
          }
       }
       return accesibles;
-   }
-
-   public void addPuerta(Celda celda){
-      puertas.add(celda);
-   }
-
-   public Lista<Celda> getPuertas(){
-      return puertas;
    }
 }
