@@ -3,34 +3,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="jueguito.juegopracticafinal.Controladores.TiendaController"
-            prefWidth="400" prefHeight="300">
+<BorderPane styleClass="tienda-root" prefHeight="350" prefWidth="550" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="jueguito.juegopracticafinal.Controladores.TiendaController">
 
     <center>
-        <VBox spacing="20" alignment="CENTER">
+        <VBox alignment="CENTER" spacing="20">
 
-            <Label text="TIENDA DEL COMERCIANTE"
-                   style="-fx-font-size: 18; -fx-font-weight: bold;" />
+            <Label styleClass="game-title" text="TIENDA DEL COMERCIANTE" />
 
-            <VBox spacing="10">
-
-                <Label text="Barca - 5 gemas" />
-                <Button text="Comprar"
-                        fx:id="comprarBarcaBtn" />
-
+            <VBox alignment="CENTER" spacing="10">
+                <Label styleClass="game-label" text="Barca - 5 gemas" />
+                <Button fx:id="comprarBarcaBtn" styleClass="game-button" text="Comprar" />
             </VBox>
 
-            <VBox spacing="10">
-
-                <Label text="Mapa - 3 gemas" />
-                <Button text="Comprar"
-                        fx:id="comprarMapaBtn" />
-
+            <VBox alignment="CENTER" spacing="10">
+                <Label styleClass="game-label" text="Mapa - 3 gemas" />
+                <Button fx:id="comprarMapaBtn" styleClass="game-button" text="Comprar" />
             </VBox>
 
-            <Button text="Salir"
-                    fx:id="salirBtn" />
+            <Button fx:id="salirBtn" styleClass="game-button" text="Salir" />
 
         </VBox>
     </center>

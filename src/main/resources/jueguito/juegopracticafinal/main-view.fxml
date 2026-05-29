@@ -1,173 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="jueguito.juegopracticafinal.Controladores.Juego.JuegoController"
-            prefHeight="576" prefWidth="960">
-
-    <padding>
-        <Insets bottom="10" left="10" right="10" top="10"/>
-    </padding>
+<BorderPane prefHeight="700" prefWidth="1100" styleClass="game-root" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jueguito.juegopracticafinal.Controladores.Juego.JuegoController">
 
     <!-- ZONA SUPERIOR -->
     <top>
-        <Label fx:id="zonaLabel" text="Zona: ?"
-               style="-fx-font-size: 18; -fx-font-weight: bold;" />
+        <VBox spacing="10.0">
+            <Label fx:id="zonaLabel" styleClass="zone-label" text="ZONA: ?">
+            <VBox.margin>
+               <Insets left="5.0" />
+            </VBox.margin></Label>
+            <HBox alignment="CENTER_LEFT" spacing="6">
+                <Label fx:id="turnoLabel" styleClass="game-label" text="TURNO: 0">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin></Label>
+                <Label fx:id="vidaLabel" styleClass="game-label" text="VIDA: 20/20" />
+                <ProgressBar fx:id="vidaBar" prefWidth="100.0" styleClass="game-progress-bar" />
+
+                <Button fx:id="terminarTurnoBtn" maxWidth="Infinity" prefHeight="26.0" prefWidth="14.0" styleClass="game-button" text="SKIP" HBox.hgrow="ALWAYS" />
+                <Button fx:id="guardarBtn" maxWidth="Infinity" prefHeight="26.0" prefWidth="0.0" styleClass="game-button" text="GUARDAR" HBox.hgrow="ALWAYS" />
+                <Button fx:id="deshacerMovimientoBtn" maxWidth="Infinity" prefHeight="26.0" prefWidth="0.0" styleClass="game-button" text="DESHACER" HBox.hgrow="ALWAYS" />
+                <Button fx:id="atacarBtn" maxWidth="Infinity" prefHeight="26.0" prefWidth="0.0" styleClass="game-button" text="ATACAR" HBox.hgrow="ALWAYS" />
+                <Button fx:id="interactuarBtn" prefHeight="26.0" prefWidth="154.0" styleClass="game-button" text="INTERACTUAR" HBox.hgrow="NEVER">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin></Button>
+            </HBox>
+        </VBox>
     </top>
 
     <!-- CENTRO: MAPA + TIENDA -->
     <center>
-        <StackPane>
-
-            <ScrollPane fitToWidth="true" fitToHeight="true">
-                <GridPane fx:id="mapaGrid" />
-            </ScrollPane>
-
-            <VBox fx:id="tiendaPanel"
-                  visible="false"
-                  spacing="10"
-                  alignment="CENTER"
-                  style="-fx-background-color: rgba(0,0,0,0.7); -fx-padding: 20;">
-
-                <Label text="TIENDA DEL COMERCIANTE"
-                       style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;" />
-
-                <Label text="Barca - 5 gemas"
-                       style="-fx-text-fill: white;" />
-
-                <Button fx:id="comprarBarcaBtn"
-                        text="Comprar" />
-
-                <Label text="Mapa - 3 gemas"
-                       style="-fx-text-fill: white;" />
-
-                <Button fx:id="comprarMapaBtn"
-                        text="Comprar" />
-
-                <Button fx:id="salirTiendaBtn"
-                        text="Salir" />
-
+        <StackPane fx:id="mapaStackPane">
+            <BorderPane.margin>
+                <Insets bottom="8" left="30" right="30" top="8" />
+            </BorderPane.margin>
+            <GridPane fx:id="mapaGrid" alignment="CENTER" />
+            <VBox fx:id="tiendaPanel" alignment="CENTER" spacing="15" styleClass="shop-overlay" visible="false">
+                <Label text="TIENDA DEL COMERCIANTE" />
+                <Label text="Barca - 5 gemas" />
+                <Button fx:id="comprarBarcaBtn" text="Comprar" />
+                <Label text="Mapa - 3 gemas" />
+                <Button fx:id="comprarMapaBtn" text="Comprar" />
+                <Button fx:id="salirTiendaBtn" text="Salir" />
             </VBox>
-
         </StackPane>
     </center>
 
-    <!-- DERECHA: DOS COLUMNAS -->
+    <!-- DERECHA: LOG + INVENTARIO + ESTADO -->
     <right>
+        <VBox maxWidth="200" minWidth="100" spacing="8" styleClass="right-panel">
+            <Label styleClass="section-label" text="--- LOG ---">
+                <VBox.margin><Insets right="10" top="10" /></VBox.margin>
+            </Label>
+            <TextArea fx:id="logArea" editable="false" maxWidth="Infinity" prefHeight="180" styleClass="game-text-area" wrapText="true" />
 
-        <HBox spacing="20">
+            <Label styleClass="section-label" text="--- INVENTARIO ---" />
+            <ListView fx:id="inventarioList" maxWidth="Infinity" prefHeight="100" styleClass="game-list-view" />
+            <HBox maxWidth="Infinity" spacing="5">
+                <Button fx:id="usarBtn" maxWidth="Infinity" styleClass="game-button" text="USAR" HBox.hgrow="ALWAYS" />
+                <Button fx:id="equiparBtn" maxWidth="Infinity" styleClass="game-button" text="EQUIPAR" HBox.hgrow="ALWAYS" />
+            </HBox>
 
-            <!-- COLUMNA IZQUIERDA: turnos, vida, acciones, log -->
-            <VBox spacing="10" minWidth="200">
-
-                <Label fx:id="turnoLabel" text="Turno: 0"
-                       style="-fx-font-size: 14;" />
-
-                <Label fx:id="vidaLabel" text="Vida: 20/20" />
-                <ProgressBar fx:id="vidaBar" prefWidth="180" />
-
-                <Label text="--- Acciones ---"
-                       style="-fx-font-weight: bold;" />
-
-                <Button fx:id="terminarTurnoBtn"
-                        text="No realizar acción"
-                        maxWidth="Infinity"/>
-
-                <Button fx:id="entregarGatoBtn"
-                        text="Entregar gato"
-                        maxWidth="Infinity"/>
-
-                <Button fx:id="guardarBtn"
-                        text="Guardar Partida"
-                        maxWidth="Infinity"/>
-
-                <Button fx:id="deshacerMovimientoBtn"
-                        text="Deshacer movimiento"
-                        maxWidth="Infinity"/>
-
-                <HBox spacing="5">
-
-                    <Button fx:id="atacarBtn"
-                            text="Atacar"
-                            maxWidth="Infinity"
-                            HBox.hgrow="ALWAYS"/>
-
-                    <Button fx:id="interactuarBtn"
-                            text="Interactuar"
-                            maxWidth="Infinity"
-                            HBox.hgrow="ALWAYS"/>
-                </HBox>
-
-                <Label text="--- Log ---"
-                       style="-fx-font-weight: bold;" />
-
-                <TextArea fx:id="logArea"
-                          editable="false"
-                          wrapText="true"
-                          prefHeight="250"
-                          prefWidth="200" />
-
-            </VBox>
-
-            <!-- COLUMNA DERECHA: inventario, usar/equipar, estado -->
-            <VBox spacing="10" minWidth="200">
-
-                <Label text="--- Inventario ---"
-                       style="-fx-font-weight: bold;" />
-
-                <ListView fx:id="inventarioList"
-                          prefHeight="120"
-                          prefWidth="200" />
-
-                <HBox spacing="5">
-
-                    <Button fx:id="usarBtn"
-                            text="Usar"
-                            maxWidth="Infinity"
-                            HBox.hgrow="ALWAYS"/>
-
-                    <Button fx:id="equiparBtn"
-                            text="Equipar"
-                            maxWidth="Infinity"
-                            HBox.hgrow="ALWAYS"/>
-
-                </HBox>
-
-                <Label text="--- Estado de objetos ---"
-                       style="-fx-font-weight: bold;" />
-
-                <Label text="Objetos usados:" />
-
-                <TextArea fx:id="objetosUsadosArea"
-                          editable="false"
-                          wrapText="true"
-                          prefHeight="80"
-                          prefWidth="200" />
-
-                <Label text="Objetos equipados:" />
-
-                <TextArea fx:id="objetosEquipadosArea"
-                          editable="false"
-                          wrapText="true"
-                          prefHeight="80"
-                          prefWidth="200" />
-
-            </VBox>
-
-        </HBox>
-
+            <Label styleClass="section-label" text="--- ESTADO DE OBJETOS ---" />
+            <Label styleClass="game-label" text="Usados:" />
+            <TextArea fx:id="objetosUsadosArea" editable="false" maxWidth="Infinity" prefHeight="60" styleClass="game-text-area" wrapText="true" />
+            <Label styleClass="game-label" text="Equipados:" />
+            <TextArea fx:id="objetosEquipadosArea" editable="false" maxWidth="Infinity" prefHeight="60" styleClass="game-text-area" wrapText="true" />
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+        </VBox>
     </right>
 
 </BorderPane>

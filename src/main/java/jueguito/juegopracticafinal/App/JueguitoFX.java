@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
 import jueguito.juegopracticafinal.Controladores.EndController;
@@ -28,7 +29,8 @@ public class JueguitoFX extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(
                 JueguitoFX.class.getResource("/jueguito/juegopracticafinal/menu-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 960, 576);
+        Scene scene = new Scene(fxmlLoader.load(), 1100, 700);
+        scene.getStylesheets().add(getClass().getResource("/jueguito/juegopracticafinal/game-style.css").toExternalForm());
 
         MenuController controller = fxmlLoader.getController();
         controller.setApp(this);
@@ -46,6 +48,7 @@ public class JueguitoFX extends Application {
                     getClass().getResource("/jueguito/juegopracticafinal/main-view.fxml"));
 
             Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/jueguito/juegopracticafinal/game-style.css").toExternalForm());
 
             JuegoController ctrl = loader.getController();
             ctrl.inicializar(partida, this);
@@ -67,6 +70,7 @@ public class JueguitoFX extends Application {
                     getClass().getResource("/jueguito/juegopracticafinal/end-view.fxml"));
 
             Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/jueguito/juegopracticafinal/game-style.css").toExternalForm());
 
             EndController ctrl = loader.getController();
             ctrl.inicializar(resultado, log, this);
@@ -86,7 +90,8 @@ public class JueguitoFX extends Application {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/jueguito/juegopracticafinal/menu-view.fxml"));
 
-            Scene scene = new Scene(loader.load(), 960, 576);
+            Scene scene = new Scene(loader.load(), 1100, 700);
+            scene.getStylesheets().add(getClass().getResource("/jueguito/juegopracticafinal/game-style.css").toExternalForm());
 
             MenuController ctrl = loader.getController();
             ctrl.setApp(this);

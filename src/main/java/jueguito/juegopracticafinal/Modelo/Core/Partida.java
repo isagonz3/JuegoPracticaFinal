@@ -593,9 +593,9 @@ public class Partida {
         //NPC princesa
         Zona zonaPrincesa = grafo.getZona(9);
 
-        if (zonaPrincesa != null && zonaPrincesa.esValida(25, 8)) {
+        if (zonaPrincesa != null && zonaPrincesa.esValida(7, 8)) {
 
-            Celda celdaPrincesa = zonaPrincesa.getCelda(25, 8);
+            Celda celdaPrincesa = zonaPrincesa.getCelda(7, 8);
 
             if (celdaPrincesa != null && !celdaPrincesa.isOcupada()) {
 

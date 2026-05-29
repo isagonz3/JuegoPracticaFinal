@@ -204,7 +204,13 @@ public class JuegoControllerAcciones {
         if (npc != null) {
             if (npc.getTipo() == TipoNPC.COMERCIANTE) {
                 abrirTienda(npc);
-            } else {
+            }
+
+            if(npc.getNombre().equals("Princesa") && partida.isGatoEncontrado()){
+                ctrl.getLogArea().appendText(npc.getNombre() + ": Has encontrado a mi gato !!! \n");
+            }
+
+            else {
                 ctrl.getLogArea().appendText(npc.getNombre() + ": " + npc.hablar() + "\n");
             }
             return;
@@ -259,7 +265,6 @@ public class JuegoControllerAcciones {
                 }
             }
         }
-
 
         if ("Mapa".equalsIgnoreCase(item)) {
             inv.addObjeto(new Objeto("Mapa", TipoObjeto.USABLE, 0, 0, 0, 0, 99, "Muestra el camino a la salida"));

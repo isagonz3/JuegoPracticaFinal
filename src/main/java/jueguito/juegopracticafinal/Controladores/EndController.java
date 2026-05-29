@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.paint.Color;
+
 import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
 import jueguito.juegopracticafinal.TADs.Lista;
@@ -30,11 +30,12 @@ public class EndController {
 
         resultadoLabel.setText(resultado);
 
+        resultadoLabel.getStyleClass().add("game-title");
         if (resultado.toLowerCase().contains("victoria")) {
             resultadoLabel.setText("Victoria");
-            resultadoLabel.setTextFill(Color.GREEN);
+            resultadoLabel.getStyleClass().add("victoria");
         } else {
-            resultadoLabel.setTextFill(Color.RED);
+            resultadoLabel.getStyleClass().add("derrota");
         }
 
         StringBuilder sb = new StringBuilder();
