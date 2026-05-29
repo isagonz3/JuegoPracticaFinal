@@ -10,7 +10,7 @@ public class Estadisticas {
     private int defensaBase;
     private int rangoMov;
     private int puntosMovDisponibles;
-    private Estadisticas estadisticas;
+
 
 
     public Estadisticas(int vidaMax, int ataqueBase, int defensaBase, int rangoMov) {
@@ -62,9 +62,6 @@ public class Estadisticas {
 
     //Gestiona la recepción de un ataque aplicando el daño a las estadísticas de la entidad
     public void recibirAtaque(int puntos){
-        if (estadisticas != null){
-            estadisticas.recibirAtaque(puntos);
-        }
 
         aplicarAtaque(puntos, 0);
     }

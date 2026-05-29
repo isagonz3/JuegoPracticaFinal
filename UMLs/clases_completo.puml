@@ -18,9 +18,8 @@ class Inventario
 class Objeto
 enum SlotEquipable
 enum TipoObjeto
-record EntradaLog
+class EntradaLog
 class LogMovimiento
-class LogSistema
 class Celda
 class GrafoZonas
 class Posicion
@@ -31,9 +30,8 @@ class Zona
 class ZonaData
 class NPC
 enum TipoNPC
-class Tradeo
 enum EstadoJuego
-record ResultadoCombate
+class ResultadoCombate
 class MapaRenderer
 class UIRenderer
 class SpriteManager
@@ -108,14 +106,12 @@ rectangle NPC {
   NPC *-- Lista : dialogos
   NPC *-- Lista : tradeos
   NPC o-- TipoNPC
-  Tradeo o-- Objeto : pedido/ofrecido
   NPC : +hablar() / comerciar()\n+tieneInfoGato()
 }
 
 rectangle Log {
   LogMovimiento *-- Lista : entradas
   LogMovimiento ..> EntradaLog : registrar()
-  LogSistema --> LogMovimiento : podría centralizar
   LogMovimiento : +registrar(String)\n+getUltimaEntrada()
   EntradaLog : record(String mensaje)
 }
