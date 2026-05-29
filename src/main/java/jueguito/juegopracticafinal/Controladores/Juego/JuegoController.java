@@ -108,8 +108,6 @@ public class JuegoController {
 
         guardarBtn.setOnAction(e -> guardaPartida());
 
-        entregarGatoBtn.setOnAction(e -> acciones.terminarTurno());
-
         inventarioList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
                 inventarioCtrl.seleccionarObjeto(newVal)
         );

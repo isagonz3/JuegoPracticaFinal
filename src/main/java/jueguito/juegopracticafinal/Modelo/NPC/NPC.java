@@ -1,5 +1,6 @@
 package jueguito.juegopracticafinal.Modelo.NPC;
 
+import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 public class NPC {
@@ -7,6 +8,7 @@ public class NPC {
     private TipoNPC tipo;
     private Lista<String> dialogos;
     private int dialogoActual;
+    private Partida partida;
 
     private String sprite;
 
