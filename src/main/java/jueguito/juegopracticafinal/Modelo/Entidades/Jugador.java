@@ -104,4 +104,9 @@ public class Jugador extends Entidad{
     public LogMovimiento getLog() {
         return log;
     }
+
+    @Override
+    public String getTipoEntidad() {
+        return "JUGADOR";
+    }
 }

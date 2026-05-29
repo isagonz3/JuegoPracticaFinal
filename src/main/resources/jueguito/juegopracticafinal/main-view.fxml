@@ -8,27 +8,30 @@
 
     <!-- ZONA SUPERIOR -->
     <top>
-        <VBox spacing="10.0">
-            <Label fx:id="zonaLabel" styleClass="zone-label" text="ZONA: ?">
-            <VBox.margin>
-               <Insets left="5.0" />
-            </VBox.margin></Label>
+        <VBox spacing="8.0">
+            <padding>
+                <Insets left="15.0" />
+            </padding>
+
+            <Label fx:id="zonaLabel" styleClass="zone-label" text="ZONA: ?" />
+
             <HBox alignment="CENTER_LEFT" spacing="6">
-                <Label fx:id="turnoLabel" styleClass="game-label" text="TURNO: 0">
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin></Label>
+                <Label fx:id="turnoLabel" styleClass="game-label" text="TURNO: 0/0" />
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="6">
                 <Label fx:id="vidaLabel" styleClass="game-label" text="VIDA: 20/20" />
                 <ProgressBar fx:id="vidaBar" prefWidth="100.0" styleClass="game-progress-bar" />
+            </HBox>
 
-                <Button fx:id="terminarTurnoBtn" maxWidth="Infinity" prefHeight="26.0" prefWidth="14.0" styleClass="game-button" text="SKIP" HBox.hgrow="ALWAYS" />
-                <Button fx:id="guardarBtn" maxWidth="Infinity" prefHeight="26.0" prefWidth="0.0" styleClass="game-button" text="GUARDAR" HBox.hgrow="ALWAYS" />
-                <Button fx:id="deshacerMovimientoBtn" maxWidth="Infinity" prefHeight="26.0" prefWidth="0.0" styleClass="game-button" text="DESHACER" HBox.hgrow="ALWAYS" />
-                <Button fx:id="atacarBtn" maxWidth="Infinity" prefHeight="26.0" prefWidth="0.0" styleClass="game-button" text="ATACAR" HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER_LEFT" spacing="6">
+                <Button fx:id="terminarTurnoBtn" maxWidth="Infinity" prefHeight="26.0" styleClass="game-button" text="SKIP" HBox.hgrow="ALWAYS" />
+                <Button fx:id="guardarBtn" maxWidth="Infinity" prefHeight="26.0" styleClass="game-button" text="GUARDAR" HBox.hgrow="ALWAYS" />
+                <Button fx:id="deshacerMovimientoBtn" maxWidth="Infinity" prefHeight="26.0" styleClass="game-button" text="DESHACER" HBox.hgrow="ALWAYS" />
+                <Button fx:id="atacarBtn" maxWidth="Infinity" prefHeight="26.0" styleClass="game-button" text="ATACAR" HBox.hgrow="ALWAYS" />
                 <Button fx:id="interactuarBtn" prefHeight="26.0" prefWidth="154.0" styleClass="game-button" text="INTERACTUAR" HBox.hgrow="NEVER">
-               <HBox.margin>
-                  <Insets right="5.0" />
-               </HBox.margin></Button>
+                    <HBox.margin><Insets right="5.0" /></HBox.margin>
+                </Button>
             </HBox>
         </VBox>
     </top>

@@ -1,6 +1,7 @@
-package jueguito.juegopracticafinal.Modelo.Vista;
+package jueguito.juegopracticafinal.Vista;
 
-import javafx.scene.layout.GridPane;    //GridPane es fácil de testear para meter algún test más
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.GrafoZonas;
@@ -38,7 +39,7 @@ class MapaRendererTest {
 
         SpriteManager sprites=new SpriteManager();
 
-        MapaRenderer renderer=new MapaRenderer(grid,sprites);
+        MapaRenderer renderer=new MapaRenderer(grid,new StackPane(),sprites);
 
         assertNotNull(renderer);
     }
@@ -50,7 +51,7 @@ class MapaRendererTest {
 
         SpriteManager sprites=new SpriteManager();
 
-        MapaRenderer renderer=new MapaRenderer(grid,sprites);
+        MapaRenderer renderer=new MapaRenderer(grid,new StackPane(),sprites);
 
         Partida partida=partidaPrueba();
 
@@ -81,7 +82,7 @@ class MapaRendererTest {
 
         SpriteManager sprites=new SpriteManager();
 
-        MapaRenderer renderer=new MapaRenderer(grid,sprites);
+        MapaRenderer renderer=new MapaRenderer(grid,new StackPane(),sprites);
 
         Partida partida=partidaPrueba();
 

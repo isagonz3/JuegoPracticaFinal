@@ -236,6 +236,7 @@ public class JuegoControllerAcciones {
 
     public void cerrarTienda() {
         ctrl.getTiendaPanel().setVisible(false);
+        ctrl.getMapaGrid().requestFocus();
     }
 
     //Gestiona la compra de objetos en la tienda verificando si el jugador tiene suficientes gemas y añade el objeto al inventario en caso de que sí
@@ -274,6 +275,7 @@ public class JuegoControllerAcciones {
 
         ctrl.getLogArea().appendText("Coste: " + coste + " gemas\n");
         ctrl.getLogArea().appendText(item + " comprado\n");
+        partida.terminarTurno();
 
         ctrl.getUiRenderer().actualizarUI(partida);
     }

@@ -190,4 +190,5 @@ public class JuegoController {
     public JuegoControllerAcciones getAcciones() { return acciones; }
     public UIRenderer getUiRenderer() { return uiRenderer; }
     public MapaRenderer getMapaRenderer() { return mapaRenderer; }
+    public GridPane getMapaGrid() { return mapaGrid; }
 }

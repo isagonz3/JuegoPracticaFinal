@@ -1,6 +1,7 @@
-package jueguito.juegopracticafinal.Modelo.Vista;
+package jueguito.juegopracticafinal.Vista;
 
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.GrafoZonas;
@@ -39,7 +40,7 @@ class SpriteManagerTest {
 
         SpriteManager sprites=new SpriteManager();
 
-        MapaRenderer renderer=new MapaRenderer(grid,sprites);
+        MapaRenderer renderer=new MapaRenderer(grid,new StackPane(),sprites);
 
         Partida partida=partidaPrueba();
 

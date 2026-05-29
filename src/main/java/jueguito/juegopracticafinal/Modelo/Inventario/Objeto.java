@@ -131,4 +131,8 @@ public class Objeto {
     public int getDuracionTurnos() {
         return duracionTurnos;
     }
+
+    public int getUsosMax() { return usosMax; }
+    public String getDescripcion() { return descripcion; }
+    public boolean isConsumible() { return tipo == TipoObjeto.USABLE || tipo == TipoObjeto.LLAVE; }
 }
