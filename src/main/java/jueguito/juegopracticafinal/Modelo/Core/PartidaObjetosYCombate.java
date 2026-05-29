@@ -140,6 +140,7 @@ public class PartidaObjetosYCombate {
     // OBJETOS PARA EL INVENTARIO
 
     public boolean usarObjeto(Objeto o) {
+        if (o == null) return false;
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return false;
         if (!partida.isFaseJugadorActiva()) return false;
 
@@ -151,7 +152,7 @@ public class PartidaObjetosYCombate {
         }
 
         //Validaciones de seguridad (Si falla, NO pasa el turno, el jugador conserva su acción)
-        if (o == null || o.getTipo() != TipoObjeto.USABLE || !inv.contiene(o)) {
+        if (o.getTipo() != TipoObjeto.USABLE || !inv.contiene(o)) {
             partida.getLog().registrar("No puedes usar este objeto o no lo tienes.");
             return false;
         }
