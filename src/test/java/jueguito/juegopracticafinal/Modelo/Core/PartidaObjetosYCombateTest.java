@@ -3,6 +3,7 @@ package jueguito.juegopracticafinal.Modelo.Core;
 import jueguito.juegopracticafinal.Modelo.Entidades.Enemigo;
 import jueguito.juegopracticafinal.Modelo.Entidades.Estadisticas;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
+import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Inventario.TipoObjeto;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
@@ -168,5 +169,36 @@ class PartidaObjetosYCombateTest{
         PartidaObjetosYCombate poc=new PartidaObjetosYCombate(p);
 
         assertFalse(poc.interactuarGato());
+    }
+
+    @Test
+    void usarObjetoEnInventarioDevuelveTrueYConsume() {
+        Partida p = partidaPrueba();
+        PartidaObjetosYCombate poc = new PartidaObjetosYCombate(p);
+
+        Objeto pocion = new Objeto("Pocion", TipoObjeto.USABLE, 0, 0, 5, 0, 1, "cura");
+        p.getJugador().getInventario().addObjeto(pocion);
+
+        boolean resultado = poc.usarObjeto(pocion);
+
+        assertTrue(resultado);
+        assertFalse(p.getJugador().getInventario().contiene(pocion));
+        assertTrue(p.getJugador().getInventario().getObjetosUsados().contains(pocion));
+    }
+
+    @Test
+    void equiparObjetoValidoDevuelveTrueYLoEquipa() {
+        Partida p = partidaPrueba();
+        PartidaObjetosYCombate poc = new PartidaObjetosYCombate(p);
+
+        Objeto espada = new Objeto("Espada", TipoObjeto.EQUIPABLE, 5, 2, 0, 0, 3, null);
+        espada.setSlot(SlotEquipable.ARMA);
+        p.getJugador().getInventario().addObjeto(espada);
+
+        boolean resultado = poc.equiparObjeto(espada, SlotEquipable.ARMA);
+
+        assertTrue(resultado);
+        assertFalse(p.getJugador().getInventario().contiene(espada));
+        assertTrue(p.getJugador().getInventario().getObjetosEquipados().contains(espada));
     }
 }

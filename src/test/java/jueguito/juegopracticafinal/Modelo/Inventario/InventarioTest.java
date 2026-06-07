@@ -1,5 +1,6 @@
 package jueguito.juegopracticafinal.Modelo.Inventario;
 
+import jueguito.juegopracticafinal.TADs.Lista;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -174,5 +175,31 @@ class InventarioTest {
 
         assertTrue(usado.getTurnosActivos()>=1);
         assertTrue(equipado.getTurnosActivos()>=1);
+    }
+
+    @Test
+    void inOrdenDevuelveObjetosOrdenados() {
+        Inventario inv=new Inventario();
+
+        Objeto espada=new Objeto("Zweihander",TipoObjeto.EQUIPABLE);
+        Objeto arco=new Objeto("Arco",TipoObjeto.EQUIPABLE);
+        Objeto escudo=new Objeto("Escudo",TipoObjeto.EQUIPABLE);
+
+        inv.addObjeto(espada);
+        inv.addObjeto(arco);
+        inv.addObjeto(escudo);
+
+        Lista<Objeto> ordenados=inv.inOrden();
+
+        assertEquals(3,ordenados.getSize());
+        assertEquals("Arco",ordenados.get(0).getNombre());
+        assertEquals("Escudo",ordenados.get(1).getNombre());
+        assertEquals("Zweihander",ordenados.get(2).getNombre());
+    }
+
+    @Test
+    void inOrdenVacioDevuelveListaVacia() {
+        Inventario inv=new Inventario();
+        assertTrue(inv.inOrden().isEmpty());
     }
 }

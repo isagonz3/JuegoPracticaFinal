@@ -97,4 +97,18 @@ class ObjetoTest {
         Objeto o=new Objeto("Espada",TipoObjeto.EQUIPABLE);
         assertEquals("Espada",o.toString());
     }
+
+    @Test
+    void compareToMismoNombreDevuelveCero(){
+        Objeto a=new Objeto("Espada",TipoObjeto.EQUIPABLE);
+        Objeto b=new Objeto("Espada",TipoObjeto.USABLE);
+        assertEquals(0,a.compareTo(b));
+    }
+
+    @Test
+    void compareToDistintoNombreNoDevuelveCero(){
+        Objeto a=new Objeto("Espada",TipoObjeto.EQUIPABLE);
+        Objeto b=new Objeto("Arco",TipoObjeto.EQUIPABLE);
+        assertNotEquals(0,a.compareTo(b));
+    }
 }

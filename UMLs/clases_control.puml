@@ -3,7 +3,6 @@
 left to right direction
 hide empty members
 
-
 class MenuController
 class EndController
 class TiendaController
@@ -31,7 +30,7 @@ JuegoController *-- JuegoControllerInventario
 JuegoController *-- MapaRenderer
 JuegoController *-- UIRenderer
 JuegoController *-- SpriteManager
-JuegoController : @FXML\n-GridPane mapaGrid\n-Label zonaLabel, turnoLabel, vidaLabel\n-ProgressBar vidaBar\n-TextArea logArea\n-ListView<Objeto> inventarioList\n-Button terminarTurnoBtn, guardarBtn\n-Button usarBtn, equiparBtn, atacarBtn\n-Button interactuarBtn\n-VBox tiendaPanel\n+inicializar(partida, app)\n+manejarTecla(event)
+JuegoController : @FXML\n-GridPane mapaGrid\n-StackPane mapaStackPane\n-Label zonaLabel, turnoLabel, vidaLabel\n-ProgressBar vidaBar\n-TextArea logArea\n-ListView<Objeto> inventarioList\n-Button terminarTurnoBtn, guardarBtn, entregarGatoBtn\n-Button usarBtn, equiparBtn, atacarBtn\n-Button interactuarBtn, deshacerMovimientoBtn\n-VBox tiendaPanel\n-TextArea objetosUsadosArea, objetosEquipadosArea\n+inicializar(partida, app)\n+manejarTecla(event)\n-onDeshacerMovimiento()
 
 JuegoControllerAcciones --> Partida
 JuegoControllerAcciones --> JuegoController

@@ -2,20 +2,19 @@
 'https://plantuml.com/class-diagram
 hide empty members
 
-
 class MapaRenderer
 class UIRenderer
 class SpriteManager
 
 MapaRenderer *-- GridPane : mapaGrid
+MapaRenderer *-- StackPane : mapaStackPane
 MapaRenderer *-- SpriteManager : sprites
 MapaRenderer ..> Partida : render(partida)
 MapaRenderer ..> Zona : zonaActual para dibujar
 MapaRenderer ..> ImageView : crea por celda
 MapaRenderer ..> WritableImage : recorta tiles
 MapaRenderer ..> PixelReader : lee fondo.png
-MapaRenderer : +render(Partida)\n+getEntidadSprite(Celda): ImageView
-MapaRenderer : -Lista<Matrix<Image>> cacheCeldas
+MapaRenderer : +render(Partida)\n+getEntidadSprite(Celda): ImageView\n-Lista<Matrix<Image>> cacheCeldas
 
 UIRenderer *-- Label : zonaLabel, turnoLabel, vidaLabel
 UIRenderer *-- ProgressBar : vidaBar
