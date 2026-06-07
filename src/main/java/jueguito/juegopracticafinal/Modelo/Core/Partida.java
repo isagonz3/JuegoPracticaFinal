@@ -459,11 +459,11 @@ public class Partida {
             );
         }
 
-        Posicion pos = new Posicion(24, 30);
+        Posicion pos = new Posicion(18, 17);
 
-        if (!zonaGato.esValida(24, 30)) return;
+        if (!zonaGato.esValida(18, 17)) return;
 
-        Celda celda = zonaGato.getCelda(24, 30);
+        Celda celda = zonaGato.getCelda(18, 17);
         if (celda == null || celda.isOcupada()) return;
 
         gato.setPosicion(pos);

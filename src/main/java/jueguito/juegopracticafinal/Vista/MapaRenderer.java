@@ -1,5 +1,8 @@
 package jueguito.juegopracticafinal.Vista;
 
+import javafx.application.Platform;
+import javafx.geometry.Bounds;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -24,16 +27,19 @@ public class MapaRenderer {
 
     private final GridPane mapaGrid;
     private final StackPane mapaStackPane;
+    private final ScrollPane mapaScrollPane;
     private final SpriteManager sprites;
-    private final Lista<Matrix<Image>> cacheCeldas =  new Lista<>();
 
+    private static final double TILE_SIZE = 36;
     private static final int TILE_SIZE_SOURCE = 16;
+    private final Lista<Matrix<Image>> cacheCeldas = new Lista<>();
 
 
     //Es el constructor del renderizador del mapa que inicializa el GridPane donde se dibujará el mapa y los sprites utilizados para cargar las imágenes
-    public MapaRenderer(GridPane mapaGrid, StackPane mapaStackPane, SpriteManager sprites) {
+    public MapaRenderer(GridPane mapaGrid, StackPane mapaStackPane, ScrollPane mapaScrollPane, SpriteManager sprites) {
         this.mapaGrid = mapaGrid;
         this.mapaStackPane = mapaStackPane;
+        this.mapaScrollPane = mapaScrollPane;
         this.sprites = sprites;
     }
 
@@ -54,14 +60,6 @@ public class MapaRenderer {
 
         int rows = zona.getRows();
         int cols = zona.getCols();
-
-        double viewportW = mapaStackPane.getWidth();
-        double viewportH = mapaStackPane.getHeight();
-        if (viewportW <= 0 || viewportH <= 0) {
-            viewportW = 850;
-            viewportH = 610;
-        }
-        double tileSize = Math.min(viewportW / cols, viewportH / rows);
 
         Lista<Celda> accesibles = partida.getCeldasAccesibles();
         boolean[][] checkCelda = null;
@@ -94,8 +92,8 @@ public class MapaRenderer {
                 Image tile = getTile(zonaImg,idZona,i,j);
 
                 ImageView tileView = new ImageView(tile);
-                tileView.setFitWidth(tileSize);
-                tileView.setFitHeight(tileSize);
+                tileView.setFitWidth(TILE_SIZE);
+                tileView.setFitHeight(TILE_SIZE);
 
                 StackPane celdaPane = new StackPane(tileView);
 
@@ -105,8 +103,8 @@ public class MapaRenderer {
                     ImageView entView = getEntidadSprite(celda);
 
                     if (entView != null) {
-                        entView.setFitWidth(tileSize);
-                        entView.setFitHeight(tileSize);
+                        entView.setFitWidth(TILE_SIZE);
+                        entView.setFitHeight(TILE_SIZE);
                         celdaPane.getChildren().add(entView);
                     }
                 }
@@ -116,8 +114,8 @@ public class MapaRenderer {
                             sprites.getNPCSprite(celda.getNpc().getNombre())
                     );
 
-                    npcView.setFitWidth(tileSize);
-                    npcView.setFitHeight(tileSize);
+                    npcView.setFitWidth(TILE_SIZE);
+                    npcView.setFitHeight(TILE_SIZE);
                     celdaPane.getChildren().add(npcView);
                 }
 
@@ -126,15 +124,15 @@ public class MapaRenderer {
                             sprites.getObjetoSprite(celda.getObjeto().getNombre())
                     );
 
-                    objView.setFitWidth(tileSize);
-                    objView.setFitHeight(tileSize);
+                    objView.setFitWidth(TILE_SIZE);
+                    objView.setFitHeight(TILE_SIZE);
                     celdaPane.getChildren().add(objView);
                 }
 
                 if (checkCelda != null && checkCelda[i][j]) {
                     Rectangle ilum = new Rectangle(
-                            tileSize,
-                            tileSize,
+                            TILE_SIZE,
+                            TILE_SIZE,
                             Color.rgb(206, 0, 100, 0.25)
                     );
 
@@ -143,8 +141,8 @@ public class MapaRenderer {
 
                 if (caminoCelda != null && caminoCelda[i][j]) {
                     Rectangle caminoMapa = new Rectangle(
-                            tileSize / 2,
-                            tileSize / 2,
+                            TILE_SIZE / 2,
+                            TILE_SIZE / 2,
                             Color.rgb(250, 0, 60, 0.4)
                     );
                     celdaPane.getChildren().add(caminoMapa);
@@ -153,6 +151,46 @@ public class MapaRenderer {
                 mapaGrid.add(celdaPane, j, i);
             }
         }
+
+        centrarYDesplazar(partida);
+    }
+
+
+    private void centrarYDesplazar(Partida partida) {
+        if (partida.getJugador() == null) return;
+        Platform.runLater(() -> {
+            Bounds vb = mapaScrollPane.getViewportBounds();
+            double viewW = vb.getWidth();
+            double viewH = vb.getHeight();
+            double gridW = mapaGrid.getWidth();
+            double gridH = mapaGrid.getHeight();
+
+            int fila = partida.getJugador().getPosicion().getRow();
+            int col = partida.getJugador().getPosicion().getCol();
+
+            mapaGrid.setTranslateX(0);
+            mapaGrid.setTranslateY(0);
+
+            if (gridW <= viewW) {
+                mapaGrid.setTranslateX((viewW - gridW) / 2);
+            } else {
+                double scrollW = gridW - viewW;
+                if (scrollW > 0) {
+                    double targetH = (col * TILE_SIZE + TILE_SIZE / 2.0 - viewW / 2.0) / scrollW;
+                    mapaScrollPane.setHvalue(Math.max(0, Math.min(1, targetH)));
+                }
+            }
+
+            if (gridH <= viewH) {
+                mapaGrid.setTranslateY((viewH - gridH) / 2);
+            } else {
+                double scrollH = gridH - viewH;
+                if (scrollH > 0) {
+                    double targetV = (fila * TILE_SIZE + TILE_SIZE / 2.0 - viewH / 2.0) / scrollH;
+                    mapaScrollPane.setVvalue(Math.max(0, Math.min(1, targetV)));
+                }
+            }
+        });
     }
 
 

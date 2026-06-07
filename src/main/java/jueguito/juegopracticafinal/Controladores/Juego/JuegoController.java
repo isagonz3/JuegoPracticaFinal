@@ -31,6 +31,7 @@ public class JuegoController {
     @FXML private TextArea logArea;
     @FXML private GridPane mapaGrid;
     @FXML private StackPane mapaStackPane;
+    @FXML private ScrollPane mapaScrollPane;
 
     @FXML private Button terminarTurnoBtn;
     @FXML private Button guardarBtn;
@@ -84,7 +85,7 @@ public class JuegoController {
         this.inventarioCtrl = new JuegoControllerInventario(this, partida);
 
         this.spriteManager = new SpriteManager();
-        this.mapaRenderer = new MapaRenderer(mapaGrid, mapaStackPane,spriteManager);
+        this.mapaRenderer = new MapaRenderer(mapaGrid, mapaStackPane, mapaScrollPane,spriteManager);
 
         this.uiRenderer = new UIRenderer(
                 zonaLabel, turnoLabel, vidaLabel, vidaBar,
@@ -101,7 +102,7 @@ public class JuegoController {
         configEventos();
     }
 
-    //Configura todos los eventos de la interfaz  gráfica asociando los botones con acciones del juego
+    //Configura todos los eventos de la interfaz gráfica asociando los botones con acciones del juego
     private void configEventos() {
 
         terminarTurnoBtn.setOnAction(e -> acciones.terminarTurno());
@@ -172,6 +173,7 @@ public class JuegoController {
 
         mapaRenderer.render(partida);
     }
+
 
     // GETTERS Y SETTERS
 
