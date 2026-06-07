@@ -107,7 +107,7 @@ public class PartidaMovimiento {
             );
         }
 
-        //Validad que queden puntos de vida
+        //Validad que queden puntos de movimiento del jugador
         if (coste >
                 jugador.getEstadisticas()
                         .getPuntosMovDisponibles()) {
@@ -117,7 +117,12 @@ public class PartidaMovimiento {
             );
         }
 
-        //Gastar movimientos
+        //Validar PM de la partida
+        if (partida.getPmActual() <= 0) {
+            throw new ErrorMovimientoInvalido("No te quedan PM");
+        }
+
+        //Gastar movimientos del jugador
         if (!jugador.getEstadisticas()
                 .usarMovimiento(coste)) {
 
@@ -125,6 +130,9 @@ public class PartidaMovimiento {
                     "No se pudo consumir movimiento"
             );
         }
+
+        //Gastar 1 PM por movimiento
+        partida.gastarPM(1);
 
         //Mover objetos
         partida.getLog().registrarMovimiento(

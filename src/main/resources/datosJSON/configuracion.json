@@ -25,7 +25,7 @@
     "max": 3
   },
   "turno": {
-    "maxTurnos": 100
+    "maxTurnos": 250
   },
   "inventario": {
     "maxItems": 10,

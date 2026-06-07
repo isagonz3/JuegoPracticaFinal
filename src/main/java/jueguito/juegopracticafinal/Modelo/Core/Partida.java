@@ -39,6 +39,21 @@ public class Partida {
     private PartidaObjetosYCombate objetosYCombate;
     private UIRenderer ui;
 
+    private int pmActual = 10;
+    private final int pmMax = 10;
+    public int getPmActual() { return pmActual; }
+    public int getPmMax() { return pmMax; }
+
+    public void gastarPM(int cantidad) {
+        pmActual -= cantidad;
+        if (pmActual < 0) pmActual = 0;
+    }
+
+    public void resetPM() {
+        pmActual = pmMax;
+    }
+
+
 
     public Partida(GrafoZonas grafo) {
         this.grafo = grafo;
@@ -112,6 +127,8 @@ public class Partida {
         log.registrar("--- Turno " + turnoActual + " ---");
         movimientoRealizado = false;
         accionRealizada = false;
+
+        resetPM();
     }
 
     public void terminarTurno() {
@@ -126,6 +143,8 @@ public class Partida {
 
         zonaActual.setCountTurnos(zonaActual.getCountTurnos() + 1);
         turnoActual++;
+        resetPM();
+
 
         if (checkDerrota() || checkVictoria()) return;
 
@@ -298,6 +317,7 @@ public class Partida {
         }
 
         accionCambioZona();
+        resetPM();
         checkVictoria();
     }
 
