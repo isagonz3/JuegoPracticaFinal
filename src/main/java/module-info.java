@@ -23,5 +23,12 @@ module jueguito.juegopracticafinal {
     exports jueguito.juegopracticafinal.Controladores.Juego;
     opens jueguito.juegopracticafinal.Controladores.Juego to javafx.fxml;
 
+    opens jueguito.juegopracticafinal.TADs;
+    opens jueguito.juegopracticafinal.Modelo.Mundo;
+    opens jueguito.juegopracticafinal.Modelo.Entidades;
+    opens jueguito.juegopracticafinal.Modelo.Inventario;
+    opens jueguito.juegopracticafinal.Modelo.NPC;
+    opens jueguito.juegopracticafinal.Vista;
+
 
 }

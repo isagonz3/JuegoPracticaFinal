@@ -72,6 +72,6 @@ public class Configuracion {
 
     //Configuración de la interfaz de usuario
     public static class UiCfg {
-        public int tileSize = 16, anchoVentana = 960, altoVentana = 576;
+        public int tileSize = 16, anchoVentana = 1100, altoVentana = 700;
     }
 }
