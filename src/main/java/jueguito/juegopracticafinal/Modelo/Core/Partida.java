@@ -265,12 +265,6 @@ public class Partida {
             );
         }
 
-        //Poblar la zona
-        if (nz.getCountTurnos() == 0) {
-            objetosYCombate.poblarZona(nz);
-            objetosYCombate.ponerObjetos(nz);
-        }
-
         log.registrar("Llevas al gato contigo. Ve a hablar con la princesa.");
 
 

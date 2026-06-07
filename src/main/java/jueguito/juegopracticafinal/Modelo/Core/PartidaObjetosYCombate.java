@@ -560,12 +560,17 @@ public class PartidaObjetosYCombate {
         if (partida.getEstadoActual() != jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego.EN_CURSO)
             return false;
 
+        //Si ya lo tienes, no hace falta recogerlo otra vez
+        if (partida.isGatoEncontrado()) {
+            partida.getLog().registrar("Ya llevas al gato contigo.");
+            return true;
+        }
+
         Jugador jugador = partida.getJugador();
         Zona zonaActual = partida.getZonaActual();
         Posicion pj = jugador.getPosicion();
-        Celda celdaJugador = zonaActual.getCelda(pj.getRow(), pj.getCol());
 
-        //Buscamos al Gato en las celdas adyacentes
+        //Buscar al gato en las celdas adyacentes
         for (int i = pj.getRow() - 1; i <= pj.getRow() + 1; i++) {
             for (int j = pj.getCol() - 1; j <= pj.getCol() + 1; j++) {
 
@@ -573,32 +578,25 @@ public class PartidaObjetosYCombate {
                 Celda c = zonaActual.getCelda(i, j);
 
                 if (c.getEntidad() instanceof Gato) {
-                    // 1. Creamos el objeto para el inventario basado en la entidad Gato
-                    Objeto objetoGato = new Objeto(
-                            "Gato",
-                            TipoObjeto.USABLE,
-                            0, 0, 0, 0, 1,
-                            "El gato rescatado"
-                    );
 
-                    // 2. Intentar añadir al inventario
-                    if (jugador.getInventario().addObjeto(objetoGato)) {
-                        // 3. Eliminamos la entidad Gato del mapa (esto hará que desaparezca el PNG)
-                        c.setEntidad(null);
+                    c.setEntidad(null);
+                    partida.setGatoEncontrado(true);
 
-                        // 4. Marcamos en partida que el gato fue encontrado
-                        partida.setGatoEncontrado(true);
+                    partida.getLog().registrar("¡Has rescatado al gato!");
 
-                        if(partida.getUi() != null) partida.getUi().actualizarUI(partida);
-                        return true;
-                    } else {
-                        partida.getLog().registrar("¡Inventario lleno!");
-                        return false;
-                    }
+                    //Actualizar
+                    if (partida.getUi() != null)
+                        partida.getUi().actualizarUI(partida);
+
+                    //Fin de turno automático
+                    partida.terminarTurnoPublic();
+
+                    return true;
                 }
             }
         }
         partida.getLog().registrar("No hay ningún gato cerca.");
         return false;
     }
+
 }
