@@ -44,23 +44,27 @@ public class Lista<T> {
     }
 
     public T get(int index) {
-        if (index < 0 || index >= size){
-            return null;
-        }
-        ElementoDobleEnlazada<T> aux = first;
-        for (int i = 0; i < index; i++){
-            aux = aux.next;
+        if (index < 0 || index >= size) return null;
+        ElementoDobleEnlazada<T> aux;
+        if (index < size / 2) {
+            aux = first;
+            for (int i = 0; i < index; i++) aux = aux.next;
+        } else {
+            aux = last;
+            for (int i = size - 1; i > index; i--) aux = aux.before;
         }
         return aux.elemento;
     }
 
     public void set(int index, T elemento) {
-        if (index < 0 || index >= size){
-            return;
-        }
-        ElementoDobleEnlazada<T> aux = first;
-        for (int i = 0; i < index; i++){
-            aux = aux.next;
+        if (index < 0 || index >= size) return;
+        ElementoDobleEnlazada<T> aux;
+        if (index < size / 2) {
+            aux = first;
+            for (int i = 0; i < index; i++) aux = aux.next;
+        } else {
+            aux = last;
+            for (int i = size - 1; i > index; i--) aux = aux.before;
         }
         aux.elemento = elemento;
     }
@@ -76,7 +80,6 @@ public class Lista<T> {
                 else{
                     actual.before.next = actual.next;
                 }
-
                 if(actual.next == null){
                     last = actual.before;
                 }
@@ -134,6 +137,10 @@ public class Lista<T> {
         return aux;
     }
 
+    public InterfazIterador<T> iterador(){
+        return new Iterador<>(first);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
@@ -146,7 +153,6 @@ public class Lista<T> {
         sb.append("]");
         return sb.toString();
     }
-
 }
 
 

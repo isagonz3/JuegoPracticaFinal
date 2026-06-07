@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 
 import jueguito.juegopracticafinal.App.JueguitoFX;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 //Controlador de la pantalla final del juego: muestra el resultado de la partida y el log de eventos ocurridos durante la partida
@@ -40,8 +41,9 @@ public class EndController {
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < logs.getSize(); i++) {
-            sb.append(logs.get(i).getMensaje()).append("\n");
+        InterfazIterador<EntradaLog> it = logs.iterador();
+        while (it.hasNext()) {
+            sb.append(it.next().getMensaje()).append("\n");
         }
 
         logFinal.setText(sb.toString());

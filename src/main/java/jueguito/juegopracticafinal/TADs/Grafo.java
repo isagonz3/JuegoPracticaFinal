@@ -6,10 +6,12 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
 
     private final Lista<N> nodos;
     private final Lista<Lista<A>> adyacentes;
+    private final Lista<Lista<Integer>> adyacentesIndex;
 
     public Grafo() {
         this.nodos = new Lista<>();
         this.adyacentes = new Lista<>();
+        this.adyacentesIndex = new Lista<>();
     }
 
 
@@ -18,12 +20,12 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
         if(nodo == null){
             throw new ExcepcionTADs("El nodo no puede tener valor nulo");
         }
-
         if(getIndex(nodo) >= 0){
             return;
         }
         nodos.add(nodo);
         adyacentes.add(new Lista<>());
+        adyacentesIndex.add(new Lista<>());
     }
 
     @Override
@@ -39,14 +41,15 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
             throw new ExcepcionTADs("Nodo origen y nodo destino deben estar en el grafo");
         }
 
-        Lista<A> adyacentesO = adyacentes.get(iOrigen);
-        for(int i = 0; i < adyacentesO.getSize(); i++){
-            if(adyacentesO.get(i).getDestino().equals(arista.getDestino())){
+        Lista<A> adyO = adyacentes.get(iOrigen);
+        InterfazIterador<A> it = adyO.iterador();
+        while (it.hasNext()) {
+            if (it.next().getDestino().equals(arista.getDestino()))
                 return false;
-            }
         }
 
-        adyacentesO.add(arista);
+        adyO.add(arista);
+        adyacentesIndex.get(iOrigen).add(iDestino);
         return true;
     }
 
@@ -67,8 +70,9 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
         Lista<A> lista = new Lista<>();
         for(int i = 0; i < adyacentes.getSize(); i++){
             Lista<A> ady = adyacentes.get(i);
-            for(int j = 0; j < ady.getSize(); j++){
-                lista.add(ady.get(j));
+            InterfazIterador<A> it = ady.iterador();
+            while (it.hasNext()) {
+                lista.add(it.next());
             }
         }
         return lista;
@@ -83,8 +87,9 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
 
         Lista<N> vecinos = new Lista<>();
         Lista<A> ady = adyacentes.get(index);
-        for(int i = 0; i < ady.getSize(); i++){
-            vecinos.add(ady.get(i).getDestino());
+        InterfazIterador<A> it = ady.iterador();
+        while (it.hasNext()) {
+            vecinos.add(it.next().getDestino());
         }
         return vecinos;
     }
@@ -96,10 +101,7 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
             return new Lista<>();
         }
         Lista<A> lista = new Lista<>();
-        Lista<A> ady = adyacentes.get(index);
-        for(int i = 0; i < ady.getSize(); i++){
-            lista.add(ady.get(i));
-        }
+        lista.addAll(adyacentes.get(index));
         return lista;
     }
 
@@ -110,21 +112,19 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
             return null;
         }
         Lista<A> ady = adyacentes.get(index);
-        for(int i = 0; i < ady.getSize(); i++){
-            A a = ady.get(i);
-            if(a.getDestino().equals(destino)){
-                return a;
-            }
+        InterfazIterador<A> it = ady.iterador();
+        while (it.hasNext()) {
+            A a = it.next();
+            if (a.getDestino().equals(destino)) return a;
         }
         return null;
     }
 
     @Override
     public int getIndex(N nodo) {
-        for(int i = 0; i < nodos.getSize(); i++){
-            if(nodos.get(i).equals(nodo)){
-                return i;
-            }
+        InterfazIterador<N> it = nodos.iterador();
+        for (int i = 0; it.hasNext(); i++) {
+            if (it.next().equals(nodo)) return i;
         }
         return -1;
     }
@@ -140,23 +140,25 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
     }
 
     public Lista<N> bfs(N origen){
-        if(origen == null || getIndex(origen) < 0){
-            return new Lista<>();
-        }
+        int iOrigen = getIndex(origen);
+        if (iOrigen < 0) return new Lista<>();
 
         Lista<N> visitados = new Lista<>();
-        Cola<N> cola = new Cola<>();
-        visitados.add(origen);
-        cola.enqueue(origen);
+        Cola<Integer> cola = new Cola<>();
+        boolean[] visitado = new boolean[size()];
+        visitado[iOrigen] = true;
+        cola.enqueue(iOrigen);
 
         while(!cola.isEmpty()){
-            N actual = cola.dequeue();
-            Lista<N> ady = getAdyacentes(actual);
-            for(int i = 0; i < ady.getSize(); i++){
-                N vecino = ady.get(i);
-                if(!visitados.contains(vecino)){
-                    visitados.add(vecino);
-                    cola.enqueue(vecino);
+            int idx = cola.dequeue();
+            visitados.add(nodos.get(idx));
+            Lista<Integer> idxVecinos = adyacentesIndex.get(idx);
+            InterfazIterador<Integer> it = idxVecinos.iterador();
+            while (it.hasNext()) {
+                int vec = it.next();
+                if(!visitado[vec]){
+                    visitado[vec] = true;
+                    cola.enqueue(vec);
                 }
             }
         }
@@ -164,22 +166,25 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
     }
 
     public Lista<N> dfs(N origen) {
-        if (origen == null || getIndex(origen) < 0)
-            return new Lista<>();
+        int iOrigen = getIndex(origen);
+        if (iOrigen < 0) return new Lista<>();
 
         Lista<N> visitados = new Lista<>();
-        Pila<N> pila = new Pila<>();
-        visitados.add(origen);
-        pila.push(origen);
+        Pila<Integer> pila = new Pila<>();
+        boolean[] visitado = new boolean[size()];
+        visitado[iOrigen] = true;
+        pila.push(iOrigen);
 
         while (!pila.isEmpty()) {
-            N actual = pila.pop();
-            Lista<N> ady = getAdyacentes(actual);
-            for (int i = 0; i < ady.getSize(); i++) {
-                N v = ady.get(i);
-                if (!visitados.contains(v)) {
-                    visitados.add(v);
-                    pila.push(v);
+            int idx = pila.pop();
+            visitados.add(nodos.get(idx));
+            Lista<Integer> idxVecinos = adyacentesIndex.get(idx);
+            InterfazIterador<Integer> it = idxVecinos.iterador();
+            while (it.hasNext()) {
+                int vec = it.next();
+                if(!visitado[vec]){
+                    visitado[vec] = true;
+                    pila.push(vec);
                 }
             }
         }
@@ -188,7 +193,10 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
 
     public Lista<N> bfsCamino(N origen, N destino) {
         if (origen == null || destino == null) return new Lista<>();
-        if (origen.equals(destino)) {
+        int iOrigen = getIndex(origen);
+        int iDestino = getIndex(destino);
+        if (iOrigen < 0 || iDestino < 0) return new Lista<>();
+        if (iOrigen == iDestino) {
             Lista<N> r = new Lista<>();
             r.add(origen);
             return r;
@@ -198,10 +206,6 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
         int[] prev = new int[n];
         for (int i = 0; i < n; i++) prev[i] = -1;
 
-        int iOrigen = getIndex(origen);
-        int iDestino = getIndex(destino);
-        if (iOrigen < 0 || iDestino < 0) return new Lista<>();
-
         boolean[] visitado = new boolean[n];
         Cola<Integer> cola = new Cola<>();
         visitado[iOrigen] = true;
@@ -209,11 +213,12 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
 
         while (!cola.isEmpty()) {
             int idx = cola.dequeue();
-            if (getNodos().get(idx).equals(destino)) break;
+            if (idx == iDestino) break;
 
-            Lista<N> ady = getAdyacentes(getNodos().get(idx));
-            for (int i = 0; i < ady.getSize(); i++) {
-                int iv = getIndex(ady.get(i));
+            Lista<Integer> idxVecinos = adyacentesIndex.get(idx);
+            InterfazIterador<Integer> it = idxVecinos.iterador();
+            while (it.hasNext()) {
+                int iv = it.next();
                 if (!visitado[iv]) {
                     visitado[iv] = true;
                     prev[iv] = idx;
@@ -227,7 +232,7 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
         Lista<N> camino = new Lista<>();
         int idx = iDestino;
         while (idx != -1) {
-            camino.addFirst(getNodos().get(idx));
+            camino.addFirst(nodos.get(idx));
             idx = prev[idx];
         }
         return camino;
@@ -246,9 +251,10 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
 
     private boolean dfsCiclo(int idx, int[] estado) {
         estado[idx] = 1;
-        Lista<N> ady = getAdyacentes(getNodos().get(idx));
-        for (int i = 0; i < ady.getSize(); i++) {
-            int iv = getIndex(ady.get(i));
+        Lista<Integer> idxVecinos = adyacentesIndex.get(idx);
+        InterfazIterador<Integer> it = idxVecinos.iterador();
+        while (it.hasNext()) {
+            int iv = it.next();
             if (estado[iv] == 1) return true;
             if (estado[iv] == 0 && dfsCiclo(iv, estado)) return true;
         }
@@ -259,18 +265,17 @@ public class Grafo<N,A extends InterfazArista<N>> implements InterfazGrafo<N,A> 
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("Grafo: \n");
+        StringBuilder sb = new StringBuilder("Grafo: \n");
         for(int i = 0; i < nodos.getSize(); i++){
-            builder.append(" ").append(nodos.get(i)).append(" -> ");
-            Lista<A> ady = adyacentes.get(i);
-            for(int j = 0; j < ady.getSize(); j++){
-                builder.append(ady.get(j).getDestino());
-                if(j < ady.getSize() - 1){
-                    builder.append(", ");
-                }
-                builder.append("\n");
+            sb.append(" ").append(nodos.get(i)).append(" -> ");
+            Lista<A> aristas = adyacentes.get(i);
+            InterfazIterador<A> it = aristas.iterador();
+            while (it.hasNext()) {
+                sb.append(it.next().getDestino());
+                if (it.hasNext()) sb.append(", ");
             }
+            sb.append("\n");
         }
-        return builder.toString();
+        return sb.toString();
     }
 }

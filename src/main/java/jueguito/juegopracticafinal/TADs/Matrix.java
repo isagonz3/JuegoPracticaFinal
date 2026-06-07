@@ -3,8 +3,8 @@ package jueguito.juegopracticafinal.TADs;
 public class Matrix<T> {
     private int numRows;
     private int numCols;
+    private final Object[] rows;
 
-    private Lista<Lista<T>> rows;
 
     public Matrix(int numRows, int numCols) {
         if (numRows <= 0 || numCols <= 0) {
@@ -12,14 +12,14 @@ public class Matrix<T> {
         }
         this.numRows = numRows;
         this.numCols = numCols;
-        this.rows = new Lista<>();
+        this.rows = new Object[numRows];
 
         for (int i = 0; i < numRows; i++) {
             Lista<T> row = new Lista<>();
             for (int j = 0; j < numCols; j++) {
                 row.add(null);
             }
-            this.rows.add(row);
+            rows[i] = row;
         }
     }
 
@@ -27,14 +27,19 @@ public class Matrix<T> {
         if(!esValida(r,c)){
             return null;
         }
-        return rows.get(r).get(c);
+        return ((Lista<T>) rows[r]).get(c);
     }
 
     public void set(int r, int c, T dato) {
         if(!esValida(r,c)){
             return;
         }
-        rows.get(r).set(c, dato);
+        ((Lista<T>) rows[r]).set(c, dato);
+    }
+
+    public Lista<T> getRow(int r) {
+        if (r < 0 || r >= numRows) return null;
+        return (Lista<T>) rows[r];
     }
 
     public int getNumRows() {

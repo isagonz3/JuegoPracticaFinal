@@ -9,6 +9,7 @@ import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 //Renderiza y actualiza la interfaz: sincroniza el estado del modelo(partida,jugador,inventario,log...) con los elementos visuales de JavaFX
@@ -96,8 +97,9 @@ public class UIRenderer {
 
         Lista<Objeto> objetos = j.getInventario().getObjetos();
 
-        for (int i = 0; i < objetos.getSize(); i++) {
-            inventarioList.getItems().add(objetos.get(i));
+        InterfazIterador<Objeto> it = objetos.iterador();
+        while (it.hasNext()) {
+            inventarioList.getItems().add(it.next());
         }
     }
 
@@ -107,10 +109,10 @@ public class UIRenderer {
         StringBuilder usados = new StringBuilder();
         Lista<Objeto> listaUsados = j.getInventario().getObjetosUsados();
 
-        for (int i = 0; i < listaUsados.getSize(); i++) {
-            if (listaUsados.get(i) != null) {
-                usados.append("- ").append(listaUsados.get(i).getNombre()).append("\n");
-            }
+        InterfazIterador<Objeto> it = listaUsados.iterador();
+        while (it.hasNext()) {
+            Objeto o = it.next();
+            if (o != null) usados.append("- ").append(o.getNombre()).append("\n");
         }
 
         objetosUsadosArea.setText(usados.toString());
@@ -122,10 +124,10 @@ public class UIRenderer {
         StringBuilder equip = new StringBuilder();
         Lista<Objeto> listaEquipados = j.getInventario().getObjetosEquipados();
 
-        for (int i = 0; i < listaEquipados.getSize(); i++) {
-            if (listaEquipados.get(i) != null) {
-                equip.append("- ").append(listaEquipados.get(i).getNombre()).append("\n");
-            }
+        InterfazIterador<Objeto> it = listaEquipados.iterador();
+        while (it.hasNext()) {
+            Objeto o = it.next();
+            if (o != null) equip.append("- ").append(o.getNombre()).append("\n");
         }
 
         objetosEquipadosArea.setText(equip.toString());

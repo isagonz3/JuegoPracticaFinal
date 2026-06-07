@@ -15,6 +15,7 @@ import jueguito.juegopracticafinal.Modelo.Mundo.GrafoZonas;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -122,8 +123,9 @@ public class LoadJSON {
         Lista<EntradaLog> logs = partida.getLog().getEntradas();
         partidaData.entradasLog = new String[logs.getSize()];
 
-        for (int i = 0; i < logs.getSize(); i++) {
-            partidaData.entradasLog[i] = logs.get(i).getMensaje();
+        InterfazIterador<EntradaLog> it = logs.iterador();
+        for (int i = 0; it.hasNext(); i++) {
+            partidaData.entradasLog[i] = it.next().getMensaje();
         }
 
         //Guardar zonas visitadas
@@ -159,10 +161,9 @@ public class LoadJSON {
             }
         }
 
-        partidaData.enemigosJson = new String[enemigos.getSize()];
-
-        for (int i = 0; i < enemigos.getSize(); i++) {
-            partidaData.enemigosJson[i] = enemigos.get(i);
+        InterfazIterador<String> itEnem = enemigos.iterador();
+        for (int i = 0; itEnem.hasNext(); i++) {
+            partidaData.enemigosJson[i] = itEnem.next();
         }
 
         try (FileWriter w = new FileWriter(ruta)) {

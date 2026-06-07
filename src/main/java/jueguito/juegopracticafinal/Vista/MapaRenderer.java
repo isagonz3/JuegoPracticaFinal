@@ -15,6 +15,7 @@ import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 import jueguito.juegopracticafinal.TADs.Matrix;
 
@@ -68,8 +69,9 @@ public class MapaRenderer {
         if (accesibles != null && accesibles.getSize() > 0) {
             checkCelda = new boolean[rows][cols];
 
-            for (int i = 0; i < accesibles.getSize(); i++) {
-                Celda c = accesibles.get(i);
+            InterfazIterador<Celda> it = accesibles.iterador();
+            while (it.hasNext()) {
+                Celda c = it.next();
                 checkCelda[c.getRow()][c.getCol()] = true;
             }
         }
@@ -77,8 +79,9 @@ public class MapaRenderer {
         boolean[][] caminoCelda = null;
         if (partida.isMapaActivo() && partida.getCaminoMapa() != null) {
             caminoCelda = new boolean[rows][cols];
-            for (int i = 0; i < partida.getCaminoMapa().getSize(); i++) {
-                Celda c = partida.getCaminoMapa().get(i);
+            InterfazIterador<Celda> it = partida.getCaminoMapa().iterador();
+            while (it.hasNext()) {
+                Celda c = it.next();
                 if (c != null) {
                     caminoCelda[c.getRow()][c.getCol()] = true;
                 }
@@ -87,8 +90,6 @@ public class MapaRenderer {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-
-
 
                 Image tile = getTile(zonaImg,idZona,i,j);
 

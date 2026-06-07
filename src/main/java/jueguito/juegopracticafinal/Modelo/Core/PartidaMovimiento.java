@@ -6,11 +6,13 @@ import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorAccesoZonaBloqueada;
 import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorCasillaOcupada;
 import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoInvalido;
 import jueguito.juegopracticafinal.Modelo.Excepciones.ErrorMovimientoSinBarca;
+import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Mundo.Celda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Posicion;
 import jueguito.juegopracticafinal.Modelo.Mundo.TipoCelda;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.TADs.Cola;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 public class PartidaMovimiento {
@@ -90,15 +92,10 @@ public class PartidaMovimiento {
 
                 boolean tieneBarca = false;
 
-                jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv =
-                        jugador.getInventario();
-
-                for (int i = 0; i < inv.size(); i++) {
-
-                    if (inv.getObjeto(i) != null &&
-                            "Barca".equalsIgnoreCase(
-                                    inv.getObjeto(i).getNombre()
-                            )) {
+                InterfazIterador<Objeto> it = jugador.getInventario().getObjetos().iterador();
+                while (it.hasNext()) {
+                    Objeto obj = it.next();
+                    if ("Barca".equalsIgnoreCase(obj.getNombre())){
                         tieneBarca = true;
                         break;
                     }
@@ -343,9 +340,9 @@ public class PartidaMovimiento {
         }
 
         // Procesar enemigos
-        for (int k = 0; k < enemigos.getSize(); k++) {
-
-            Enemigo e = enemigos.get(k);
+        InterfazIterador<Enemigo> itEnem = enemigos.iterador();
+        while (itEnem.hasNext()) {
+            Enemigo e = itEnem.next();
             Posicion p = e.getPosicion();
 
             int i = p.getRow();

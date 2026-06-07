@@ -1,12 +1,12 @@
 package jueguito.juegopracticafinal.TADs;
 
 
-public class IteradorSE<T> implements InterfazIterador<T> {
+public class Iterador<T> implements InterfazIterador<T> {
 
     //Atributos
-    private ElementoSimpleEnlazada<T> actual;
+    private ElementoDobleEnlazada<T> actual;
 
-    public IteradorSE(ElementoSimpleEnlazada<T> first){
+    public Iterador(ElementoDobleEnlazada<T> first){
         this.actual = first;
     }
 
@@ -17,8 +17,9 @@ public class IteradorSE<T> implements InterfazIterador<T> {
 
     @Override
     public T next(){
-        T data = actual.getData();
-        actual = actual.getNext();
+        T data = actual.elemento;
+        actual = actual.next;
         return data;
     }
+
 }

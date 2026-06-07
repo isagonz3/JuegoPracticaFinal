@@ -11,6 +11,7 @@ import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.TADs.Cola;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.Vista.UIRenderer;
 import jueguito.juegopracticafinal.TADs.Lista;
 
@@ -205,12 +206,10 @@ public class Partida {
             jueguito.juegopracticafinal.Modelo.Inventario.Inventario inv =
                     jugador.getInventario();
 
-            for (int i = 0; i < inv.size(); i++) {
-
-                if (inv.getObjeto(i) != null &&
-                        "Llave".equalsIgnoreCase(
-                                inv.getObjeto(i).getNombre()
-                        )) {
+            InterfazIterador<Objeto> it = jugador.getInventario().getObjetos().iterador();
+            while (it.hasNext()) {
+                Objeto obj = it.next();
+                if ("Llave".equalsIgnoreCase(obj.getNombre())){
 
                     tieneLlave = true;
                     break;
