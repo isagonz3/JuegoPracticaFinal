@@ -14,7 +14,7 @@ actor "Jugador" as J
 
 alt Victoria
   P -> P: checkVictoria()
-  note right: gatoEncontrado &&\nidZonaActual == castillo &&\ntipoCelda == SALIDA
+  note right: gatoEncontrado &&\nidZonaActual == castillo
   P -> P: estadoActual = VICTORIA
   P -> P: log "Has logrado recuperar el gato!"
 else Derrota por vida

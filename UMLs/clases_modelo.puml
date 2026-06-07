@@ -104,7 +104,7 @@ rectangle Mundo {
   MapaLoader ..> GrafoZonas : crea e inicializa
   MapaLoader ..> Zona : crea desde JSON (habitaciones.json)
   MapaLoader ..> Puerta : crea desde JSON (puertas.json)
-  MapaLoader ..> GsonUtil : usa para deserializar
+  MapaLoader ..> Gson : usa para deserializar
   MapaLoader : +cargarZonas(): Lista<Zona>\n+cargarPuertas(): Lista<Puerta>\n+conectarPuertas(GZ, Lista<Puerta>)
 }
 
@@ -139,7 +139,7 @@ rectangle Inventario {
 rectangle NPC {
   NPC *-- Lista : dialogos
   NPC o-- TipoNPC
-  NPC : +hablar() / comerciar()\n+tieneInfoGato()\n-int dialogoActual\n-String sprite\n-Partida partida
+  NPC : +hablar()\n-int dialogoActual\n-String sprite\n-Partida partida
 }
 
 rectangle Log {

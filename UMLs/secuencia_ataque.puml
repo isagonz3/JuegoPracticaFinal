@@ -43,7 +43,7 @@ PO -> J: getAtaqueTotal()
 PO -> E: getDefensaTotal()
 PO -> PO: calcularHit(ataque, defensa)
 note right: HIT = max(0, ATQ*(random*2) - DEF)
-PO -> E: recibirAtaque(hit)
+PO -> E: getEstadisticas().restarVidaDirecta(hit)
 PO -> E: setAtacado(true)
 alt enemigo muerto
   PO -> Z: celdaEnemigo.setEntidad(null)
