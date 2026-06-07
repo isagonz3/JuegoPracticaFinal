@@ -240,19 +240,20 @@ public class Partida {
         }
 
         // Validar que el jugador haya rescatado al gato
-        if (idZonaActual == 8 && nid == 9) {
-
-            if (!gatoEncontrado) {
-
-                throw new ErrorAccesoZonaBloqueada(
-                        "Necesitas rescatar al gato antes de entrar al castillo"
-                );
-            }
-
-            log.registrar(
-                    "Llevas al gato contigo. Ve a hablar con la princesa."
+        if (idZonaActual == 8 && nid == 9 && !gatoEncontrado) {
+            throw new ErrorAccesoZonaBloqueada(
+                    "Necesitas rescatar al gato antes de entrar al castillo"
             );
         }
+
+        //Poblar la zona
+        if (nz.getCountTurnos() == 0) {
+            objetosYCombate.poblarZona(nz);
+            objetosYCombate.ponerObjetos(nz);
+        }
+
+        log.registrar("Llevas al gato contigo. Ve a hablar con la princesa.");
+
 
         //Limpiar la posición en la que se encuentra el jugador
         zonaActual.getCelda(

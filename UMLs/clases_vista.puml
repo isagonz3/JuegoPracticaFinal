@@ -8,6 +8,7 @@ class SpriteManager
 
 MapaRenderer *-- GridPane : mapaGrid
 MapaRenderer *-- StackPane : mapaStackPane
+MapaRenderer *-- ScrollPane : mapaScrollPane
 MapaRenderer *-- SpriteManager : sprites
 MapaRenderer ..> Partida : render(partida)
 MapaRenderer ..> Zona : zonaActual para dibujar

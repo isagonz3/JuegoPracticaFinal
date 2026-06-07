@@ -10,7 +10,7 @@ state DERROTA : Vida <= 0\n o turnos >= maxTurnos
 
 [*] --> MENU : inicio app
 MENU --> EN_CURSO : nuevaPartida() / cargarPartida()
-EN_CURSO --> VICTORIA : checkVictoria()\ngatoEncontrado &&\nzonaCastillo && tipo=SALIDA
+EN_CURSO --> VICTORIA : checkVictoria()\ngatoEncontrado &&\nidZonaActual == zonaCastillo
 EN_CURSO --> DERROTA : checkDerrota()\nvida <= 0 || turnos >= maxTurnos
 VICTORIA --> MENU : volverAlMenu()
 DERROTA --> MENU : volverAlMenu()

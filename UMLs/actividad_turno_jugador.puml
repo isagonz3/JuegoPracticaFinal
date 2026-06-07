@@ -40,7 +40,7 @@ if (vida<=0 || turnos>=maxTurnos) then (si)
 else (no)
 endif
 :checkVictoria();
-if (gatoEncontrado && SALIDA) then (si)
+if (gatoEncontrado && idZonaActual == castillo) then (si)
   :estado = VICTORIA;
   stop
 else (no)
