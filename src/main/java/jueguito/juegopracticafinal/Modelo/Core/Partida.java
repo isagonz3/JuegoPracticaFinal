@@ -301,6 +301,7 @@ public class Partida {
         }
 
         accionCambioZona();
+        checkVictoria();
     }
 
     public void accionCambioZona() {

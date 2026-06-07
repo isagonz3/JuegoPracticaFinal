@@ -54,7 +54,7 @@ public class PartidaObjetosYCombate {
 
         int hit = calcularHit(ataque, defensa);
 
-        e.recibirAtaque(hit);
+        e.getEstadisticas().restarVidaDirecta(hit);
         e.setAtacado(true);
 
         Zona zonaActual = partida.getZonaActual();
@@ -433,8 +433,9 @@ public class PartidaObjetosYCombate {
         //Primero GEMAS
         int colocadasGemas = 0;
 
-        while (colocadasGemas < GEMAS) {
-
+        int intentosGemas = 0;
+        while (colocadasGemas < GEMAS && intentosGemas < 200) {
+            intentosGemas++;
             int fila = (int)(Math.random() * zona.getRows());
             int col = (int)(Math.random() * zona.getCols());
 
@@ -455,8 +456,9 @@ public class PartidaObjetosYCombate {
         //Luego objetos aleatorios
         int colocadosAleatorios = 0;
 
-        while (colocadosAleatorios < ALEATORIOS) {
-
+        int intentosAleatorios = 0;
+        while (colocadosAleatorios < ALEATORIOS && intentosAleatorios < 200) {
+            intentosAleatorios++;
             int fila = (int)(Math.random() * zona.getRows());
             int col = (int)(Math.random() * zona.getCols());
 
@@ -496,8 +498,9 @@ public class PartidaObjetosYCombate {
         }
 
         //Añadir gemas hasta llegar al mínimo
-        while (contador < minimo) {
-
+        int intentosRelleno = 0;
+        while (contador < minimo && intentosRelleno < 200) {
+            intentosRelleno++;
             int fila = (int)(Math.random() * zona.getRows());
             int col = (int)(Math.random() * zona.getCols());
 

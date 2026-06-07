@@ -75,38 +75,22 @@ public class PartidaMovimiento {
         }
 
         //Validación de que la barca esté en el inventario
-        if (zonaActual.getIdZona() == 6) {
-
-            if ((row == 6 && col == 0) ||
-                    (row == 6 && col == 1) ||
-                    (row == 6 && col == 2) ||
-                    (row == 7 && col == 3) ||
-                    (row == 8 && col == 4) ||
-                    (row == 9 && col == 5) ||
-                    (row == 10 && col == 6) ||
-                    (row == 10 && col == 7) ||
-                    (row == 11 && col == 8) ||
-                    (row == 12 && col == 8) ||
-                    (row == 13 && col == 9) ||
-                    (row == 14 && col == 10)) {
-
-                boolean tieneBarca = false;
-
-                InterfazIterador<Objeto> it = jugador.getInventario().getObjetos().iterador();
-                while (it.hasNext()) {
-                    Objeto obj = it.next();
-                    if ("Barca".equalsIgnoreCase(obj.getNombre())){
-                        tieneBarca = true;
-                        break;
-                    }
-                }
-                if (!tieneBarca) {
-                    throw new ErrorMovimientoSinBarca(
-                            "Necesitas la Barca para cruzar"
-                    );
+        // Validación de barca para celdas de agua en zona 6
+        if (zonaActual.getIdZona() == 6 && destino.getTipoCelda() == TipoCelda.AGUA) {
+            boolean tieneBarca = false;
+            InterfazIterador<Objeto> it = jugador.getInventario().getObjetos().iterador();
+            while (it.hasNext()) {
+                Objeto obj = it.next();
+                if ("Barca".equalsIgnoreCase(obj.getNombre())) {
+                    tieneBarca = true;
+                    break;
                 }
             }
+            if (!tieneBarca) {
+                throw new ErrorMovimientoSinBarca("Necesitas la Barca para cruzar el agua");
+            }
         }
+
 
         //Validad camino
         Posicion actual = jugador.getPosicion();
@@ -225,6 +209,12 @@ public class PartidaMovimiento {
         boolean[][] visitada = new boolean[z.getRows()][z.getCols()];
         int[][] prevRow = new int[z.getRows()][z.getCols()];
         int[][] prevCol = new int[z.getRows()][z.getCols()];
+
+        if (rO == rD && cO == cD) {
+            Lista<Celda> camino = new Lista<>();
+            camino.add(z.getCelda(rO, cO));
+            return camino;
+        }
 
         for (int i = 0; i < z.getRows(); i++) {
             for (int j = 0; j < z.getCols(); j++) {
@@ -424,7 +414,7 @@ public class PartidaMovimiento {
 
                         int hit = PartidaObjetosYCombate.calcularHit(e.getAtaqueTotal(),jugador.getDefensaTotal());
 
-                        jugador.recibirAtaque(hit);
+                        jugador.getEstadisticas().restarVidaDirecta(hit);
 
                         partida.getLog().registrar(
                                 e.getNombre() +

@@ -151,16 +151,17 @@ public class LoadJSON {
                 if (celda != null && celda.getEntidad() instanceof Enemigo e && e.estarVivo()) {
 
                     enemigos.add(
-                            e.getNombre() + "-" +
-                                    e.getEstadisticas().getVidaActual() + "-" +
-                                    e.getEstadisticas().getAtaqueBase() + "-" +
-                                    e.getEstadisticas().getDefensaBase() + "-" +
-                                    r + c
+                            e.getNombre() + "::" +
+                                    e.getEstadisticas().getVidaActual() + "::" +
+                                    e.getEstadisticas().getAtaqueBase() + "::" +
+                                    e.getEstadisticas().getDefensaBase() + "::" +
+                                    r + "::" + c
                     );
                 }
             }
         }
 
+        partidaData.enemigosJson = new String[enemigos.getSize()];
         InterfazIterador<String> itEnem = enemigos.iterador();
         for (int i = 0; itEnem.hasNext(); i++) {
             partidaData.enemigosJson[i] = itEnem.next();
@@ -169,7 +170,7 @@ public class LoadJSON {
         try (FileWriter w = new FileWriter(ruta)) {
             GSON_PRETTY.toJson(partidaData, w);
         } catch (IOException e) {
-            throw new RuntimeException("Error al guardar partida: " + e.getMessage());
+            throw new RuntimeException("Error al guardar partida: " + e.getMessage(), e);
         }
     }
 
@@ -338,7 +339,7 @@ public class LoadJSON {
 
                 if (eData == null) continue;
 
-                String[] parts = eData.split("\\|");
+                String[] parts = eData.split("::");
 
                 if (parts.length == 6) {
 
@@ -350,11 +351,13 @@ public class LoadJSON {
                     int col = Integer.parseInt(parts[5]);
 
                     if (za.esValida(row, col)) {
-                        Enemigo e =
-                                new Enemigo(nom, new Estadisticas(vida, atq, def, 4));
-                        e.getEstadisticas().setVidaActual(vida);
-                        e.setPosicion(new Posicion(row, col));
-                        za.getCelda(row, col).setEntidad(e);
+                        Celda celdaEnemigo = za.getCelda(row, col);
+                        if (celdaEnemigo != null) {
+                            Enemigo e = new Enemigo(nom, new Estadisticas(vida, atq, def, 4));
+                            e.getEstadisticas().setVidaActual(vida);
+                            e.setPosicion(new Posicion(row, col));
+                            celdaEnemigo.setEntidad(e);
+                        }
                     }
                 }
             }

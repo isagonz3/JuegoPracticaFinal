@@ -2,6 +2,7 @@ package jueguito.juegopracticafinal.Modelo.Core;
 
 import com.google.gson.Gson;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 
 //Gestiona la configuración global del juego cargando parámetros desde un archivo JSON o usando valores por defecto
 public class Configuracion {
@@ -23,9 +24,15 @@ public class Configuracion {
     //Obtiene la instancia de LA configuración cargándola desde JSON si es necesario
     public static Configuracion get() {
         if (INSTANCE == null) {
-            try (FileReader r = new FileReader("src/main/resources/datosJSON/configuracion.json")) {
-                INSTANCE = new Gson().fromJson(r, Configuracion.class);
+            try (var is = Configuracion.class.getResourceAsStream("/datosJSON/configuracion.json")) {
+                if (is != null) {
+                    INSTANCE = new Gson().fromJson(new InputStreamReader(is), Configuracion.class);
+                } else {
+                    INSTANCE = new Configuracion();
+                }
             } catch (Exception e) {
+                System.err.println("[Configuracion] Error: " + e.getMessage());
+                e.printStackTrace();
                 INSTANCE = new Configuracion();
             }
         }

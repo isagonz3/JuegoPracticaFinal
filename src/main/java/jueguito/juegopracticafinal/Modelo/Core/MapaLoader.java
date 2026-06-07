@@ -1,25 +1,35 @@
 package jueguito.juegopracticafinal.Modelo.Core;
 
+import com.google.gson.Gson;
 import jueguito.juegopracticafinal.Modelo.Mundo.PuertaData;
 import jueguito.juegopracticafinal.Modelo.Mundo.ZonaData;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
-import jueguito.juegopracticafinal.TADs.GsonUtil;
 import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 //Gestiona la carga del mapa del juego, incluyendo zonas, puertas y sus conexiones
 public class MapaLoader {
+    private MapaLoader() {
+        /* This utility class should not be instantiated */
+    }
+
 
     //MÉTODOS
 
     //Carga todas las zonas del juego desde archivos JSON y las convierte en objetos Zona
     public static Lista<Zona> cargarZonas(){
 
-        ZonaData[] datos =
-                GsonUtil.cargarArray(
-                        "src/main/resources/datosJSON/habitaciones.json",
-                        ZonaData[].class
-                );
+        ZonaData[] datos = null;
+        try (var is = MapaLoader.class.getResourceAsStream("/datosJSON/habitaciones.json")) {
+            if (is != null) {
+                datos = new Gson().fromJson(new InputStreamReader(is), ZonaData[].class);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar habitaciones.json", e);
+        }
 
         Lista<Zona> zonas = new Lista<>();
 
@@ -37,11 +47,14 @@ public class MapaLoader {
     //Carga todas las puertas del juego desde JSON y las convierte en objetos Puerta
     public static Lista<Puerta> cargarPuertas(){
 
-        PuertaData[] datos =
-                GsonUtil.cargarArray(
-                        "src/main/resources/datosJSON/puertas.json",
-                        PuertaData[].class
-                );
+        PuertaData[] datos = null;
+        try (var is = MapaLoader.class.getResourceAsStream("/datosJSON/puertas.json")) {
+            if (is != null) {
+                datos = new Gson().fromJson(new InputStreamReader(is), PuertaData[].class);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar puertas.json", e);
+        }
 
         Lista<Puerta> puertas = new Lista<>();
 
