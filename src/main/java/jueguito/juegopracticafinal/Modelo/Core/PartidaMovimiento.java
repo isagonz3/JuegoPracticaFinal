@@ -75,7 +75,6 @@ public class PartidaMovimiento {
         }
 
         //Validación de que la barca esté en el inventario
-        // Validación de barca para celdas de agua en zona 6
         if (zonaActual.getIdZona() == 6 && destino.getTipoCelda() == TipoCelda.AGUA) {
             boolean tieneBarca = false;
             InterfazIterador<Objeto> it = jugador.getInventario().getObjetos().iterador();
@@ -90,7 +89,6 @@ public class PartidaMovimiento {
                 throw new ErrorMovimientoSinBarca("Necesitas la Barca para cruzar el agua");
             }
         }
-
 
         //Validad camino
         Posicion actual = jugador.getPosicion();

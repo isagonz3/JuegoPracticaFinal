@@ -10,7 +10,6 @@ import jueguito.juegopracticafinal.Modelo.Log.LogMovimiento;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.Modelo.NPC.*;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
-import jueguito.juegopracticafinal.TADs.Cola;
 import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.Vista.UIRenderer;
 import jueguito.juegopracticafinal.TADs.Lista;
@@ -240,21 +239,19 @@ public class Partida {
             objetosYCombate.ponerObjetos(nz);
         }
 
-        //Validar que el jugador haya rescatado al gato
+        // Validar que el jugador haya rescatado al gato
         if (idZonaActual == 8 && nid == 9) {
 
-            if (gatoEncontrado) {
+            if (!gatoEncontrado) {
 
-                log.registrar(
-                        "Solo falta entregarle el gato a la princesa, acércate a ella"
-                );
-
-            } else {
-
-                log.registrar(
-                        "Has estrado sin el gato, vuelve a por él"
+                throw new ErrorAccesoZonaBloqueada(
+                        "Necesitas rescatar al gato antes de entrar al castillo"
                 );
             }
+
+            log.registrar(
+                    "Llevas al gato contigo. Ve a hablar con la princesa."
+            );
         }
 
         //Limpiar la posición en la que se encuentra el jugador
