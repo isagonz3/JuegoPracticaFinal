@@ -37,6 +37,11 @@ public class Posicion {
                 col == posicion.col;
     }
 
+    @Override
+    public int hashCode() {
+        return 31 * (31 * idZona + row) + col;
+    }
+
     //Devuelve una representación en texto de la posición con el formato zona-fila-columna
     public String toString(){
         return idZona + "-" + row + "-" + col;

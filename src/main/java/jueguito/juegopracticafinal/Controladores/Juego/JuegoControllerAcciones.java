@@ -205,6 +205,7 @@ public class JuegoControllerAcciones {
         if (npc != null) {
             if (npc.getTipo() == TipoNPC.COMERCIANTE) {
                 abrirTienda(npc);
+                return;
             }
 
             if(npc.getNombre().equals("Princesa") && partida.isGatoEncontrado()){

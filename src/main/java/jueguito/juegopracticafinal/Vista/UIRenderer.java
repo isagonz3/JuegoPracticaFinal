@@ -54,6 +54,7 @@ public class UIRenderer {
 
         Jugador j = partida.getJugador();
         if (j == null) return;
+        if (partida.getZonaActual() == null) return;
 
         zonaLabel.setText("Zona: " + partida.getZonaActual().getNombreZona());
         turnoLabel.setText("TURNO: " + partida.getTurnoActual() + "/" + Configuracion.get().turno.maxTurnos);

@@ -12,7 +12,7 @@ public class GsonUtil {
         try (FileWriter writer = new FileWriter(rutaArchivo)) {
             GSON.toJson(objeto, writer);
         } catch (IOException e) {
-            throw new RuntimeException("Error al guardar el archivo." + e.getMessage());
+            throw new RuntimeException("Error al guardar el archivo." + e.getMessage(), e);
         }
     }
 
@@ -24,7 +24,7 @@ public class GsonUtil {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Archivo no encontrado: " + rutaArchivo);
         } catch (IOException e) {
-            throw new RuntimeException("Error al leer el archivo.");
+            throw new RuntimeException("Error al leer el archivo.", e);
         }
         return objeto;
     }
@@ -34,7 +34,7 @@ public class GsonUtil {
         try (FileWriter writer = new FileWriter(rutaArchivo)) {
             GSON.toJson(datos, writer);
         } catch (IOException e) {
-            throw new RuntimeException("Error al guardar el archivo.");
+            throw new RuntimeException("Error al guardar el archivo.", e);
         }
     }
 
@@ -46,7 +46,7 @@ public class GsonUtil {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Archivo no encontrado: "+rutaArchivo);
         } catch (IOException e) {
-            throw new RuntimeException("Error al leer el archivo.");
+            throw new RuntimeException("Error al leer el archivo.", e);
         }
         return datos;
     }

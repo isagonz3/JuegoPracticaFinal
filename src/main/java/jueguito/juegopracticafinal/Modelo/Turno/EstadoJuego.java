@@ -1,7 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Turno;
 
 public enum EstadoJuego {
-    EN_CURSO, VICTORIA, DERROTA, MENU, SETTINGS;
+    EN_CURSO, VICTORIA, DERROTA, MENU;
 
 
     private static EstadoJuego estadoGlobal = MENU;

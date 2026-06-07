@@ -38,6 +38,9 @@ public class Zona {
    public Zona(int idZona, String nombreZona, Celda[][] celdas) {
       this.idZona = idZona;
       this.nombreZona = nombreZona;
+      if (celdas == null || celdas.length == 0) {
+         throw new IllegalArgumentException("Array de celdas vacío o nulo");
+      }
       int rows = celdas.length;
       int cols = celdas[0].length;
       this.matrix = new Matrix<>(rows, cols);
