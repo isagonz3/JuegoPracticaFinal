@@ -286,18 +286,48 @@ public class PartidaMovimiento {
 
     // MOVIMIENTO DE ENEMIGOS
 
-    private boolean estaCercaDePuerta(Zona zona, int filaDestino, int colDestino) {
+    //Valida si la casilla a la que se va a mover el enemigo es accesible o no
+    private boolean casillaValidaEnemigo(Zona zona, int r, int c, Jugador jugador) {
+
+        if (!zona.esValida(r, c)) return false;
+
+        Celda celda = zona.getCelda(r, c);
+        if (celda == null) return false;
+
+        if (!celda.isTransitable()) return false;
+        if (celda.isOcupada()) return false;
+
+        Posicion pj = jugador.getPosicion();
+        if (pj.getRow() == r && pj.getCol() == c) return false;
+
+        if (celda.tieneObjeto()) return false;
+
+        if (celda.getEntidad() != null &&
+                !(celda.getEntidad() instanceof Enemigo)) {
+            return false;
+        }
+
+        if (estaCercaDePuerta(zona, r, c)) return false;
+
+        return true;
+    }
+
+    //Detecta si la casilla es adyacente a una puerta para no bloquearla
+    private boolean estaCercaDePuerta(Zona zona, int fila, int col) {
+
         for (int i = 0; i < zona.getRows(); i++) {
             for (int j = 0; j < zona.getCols(); j++) {
+
                 Celda celda = zona.getCelda(i, j);
 
-                // Filtramos por las celdas de tipo puerta o salida
-                if (celda != null && (celda.getTipoCelda() == TipoCelda.PUERTA || celda.getTipoCelda() == TipoCelda.SALIDA)) {
+                if (celda != null &&
+                        (celda.getTipoCelda() == TipoCelda.PUERTA ||
+                                celda.getTipoCelda() == TipoCelda.SALIDA)) {
 
-                    int distFila = Math.abs(filaDestino - i);
-                    int distCol = Math.abs(colDestino - j);
+                    int dr = Math.abs(fila - i);
+                    int dc = Math.abs(col - j);
 
-                    if (distFila <= 1 && distCol <= 1) {
+                    if (dr <= 1 && dc <= 1) {
                         return true;
                     }
                 }
@@ -306,6 +336,7 @@ public class PartidaMovimiento {
         return false;
     }
 
+    //Algoritmo de movimiento del enemigo
     public void moverEnemigos() {
 
         Zona zonaActual = partida.getZonaActual();
@@ -314,7 +345,7 @@ public class PartidaMovimiento {
 
         Lista<Enemigo> enemigos = new Lista<>();
 
-        // Copiar enemigos vivos
+        // recopilar enemigos
         for (int i = 0; i < zonaActual.getRows(); i++) {
             for (int j = 0; j < zonaActual.getCols(); j++) {
 
@@ -323,48 +354,41 @@ public class PartidaMovimiento {
                 if (c != null &&
                         c.getEntidad() instanceof Enemigo e &&
                         e.estarVivo()) {
-
                     enemigos.add(e);
                 }
             }
         }
 
-        // Procesar enemigos
-        InterfazIterador<Enemigo> itEnem = enemigos.iterador();
-        while (itEnem.hasNext()) {
-            Enemigo e = itEnem.next();
+        InterfazIterador<Enemigo> it = enemigos.iterador();
+
+        while (it.hasNext()) {
+
+            Enemigo e = it.next();
             Posicion p = e.getPosicion();
 
             int i = p.getRow();
             int j = p.getCol();
 
-            if (!e.estarVivo())
-                continue;
-
-            int distJugador =
-                    Math.abs(i - pj.getRow()) +
-                            Math.abs(j - pj.getCol());
-
-            if (distJugador > 10)
-                continue;
-
             int[][] dirs = {
-                    {-1,0},
-                    {1,0},
-                    {0,-1},
-                    {0,1}
+                    {-1,0},{1,0},{0,-1},{0,1}
             };
 
             int bestDir = -1;
 
-            // Si el enemigo ha sido atacado
+            // distancia jugador
+            int distJugador =
+                    Math.abs(i - pj.getRow()) +
+                            Math.abs(j - pj.getCol());
+
+            if (distJugador > 10) continue;
+
+            // ======================
+            // SI HA SIDO ATACADO
+            // ======================
             if (e.isAtacado()) {
 
-                int decision = (int)(Math.random() * 2);
-
-                // HUIR
-                if (decision == 0) {
-
+                if (Math.random() < 0.5) {
+                    // huida
                     int bestDist = -1;
 
                     for (int d = 0; d < 4; d++) {
@@ -372,16 +396,12 @@ public class PartidaMovimiento {
                         int nr = i + dirs[d][0];
                         int nc = j + dirs[d][1];
 
-                        if (!zonaActual.esValida(nr, nc)) continue;
+                        if (!casillaValidaEnemigo(zonaActual, nr, nc, jugador))
+                            continue;
 
-                        Celda ady = zonaActual.getCelda(nr, nc);
-
-                        if (!ady.isTransitable() || ady.isOcupada()) continue;
-
-                        if (estaCercaDePuerta(zonaActual, nr, nc)) continue;
-
-                        int dist = Math.abs(nr - pj.getRow()) +
-                                Math.abs(nc - pj.getCol());
+                        int dist =
+                                Math.abs(nr - pj.getRow()) +
+                                        Math.abs(nc - pj.getCol());
 
                         if (dist > bestDist) {
                             bestDist = dist;
@@ -395,32 +415,23 @@ public class PartidaMovimiento {
                         int nc = j + dirs[bestDir][1];
 
                         zonaActual.getCelda(i, j).setEntidad(null);
-
                         e.moverA(new Posicion(nr, nc));
-
                         zonaActual.getCelda(nr, nc).setEntidad(e);
-
-                        partida.getLog().registrar(e.getNombre() + " ha huido.");
                     }
-                }
 
-                // El enemigo te ataca
-                else {
+                } else {
 
+                    // ataque
                     Celda pjCelda = zonaActual.getCelda(pj.getRow(), pj.getCol());
 
-                    if (pjCelda != null &&
-                            zonaActual.getCelda(i, j).esAdyacente(pjCelda)) {
+                    if (zonaActual.getCelda(i, j).esAdyacente(pjCelda)) {
 
-                        int hit = PartidaObjetosYCombate.calcularHit(e.getAtaqueTotal(),jugador.getDefensaTotal());
+                        int hit = PartidaObjetosYCombate.calcularHit(
+                                e.getAtaqueTotal(),
+                                jugador.getDefensaTotal()
+                        );
 
                         jugador.getEstadisticas().restarVidaDirecta(hit);
-
-                        partida.getLog().registrar(
-                                e.getNombre() +
-                                        " te ha atacado y te ha quitado " +
-                                        hit + " de vida."
-                        );
                     }
                 }
 
@@ -428,46 +439,34 @@ public class PartidaMovimiento {
                 continue;
             }
 
-            // El enemigo te persigue
-            Celda pjCelda = zonaActual.getCelda(pj.getRow(), pj.getCol());
-
-            if (zonaActual.getCelda(i, j).esAdyacente(pjCelda))
-                continue;
-
-            int bestDist = Integer.MAX_VALUE;
-
+            // ======================
+            // PERSECUCIÓN
+            // ======================
             for (int d = 0; d < 4; d++) {
 
                 int nr = i + dirs[d][0];
                 int nc = j + dirs[d][1];
 
-                if (!zonaActual.esValida(nr, nc)) continue;
+                if (!casillaValidaEnemigo(zonaActual, nr, nc, jugador))
+                    continue;
 
-                Celda ady = zonaActual.getCelda(nr, nc);
+                int dist =
+                        Math.abs(nr - pj.getRow()) +
+                                Math.abs(nc - pj.getCol());
 
-                if (!ady.isTransitable() || ady.isOcupada()) continue;
-
-                if (estaCercaDePuerta(zonaActual, nr, nc)) continue;
-
-                int dist = Math.abs(nr - pj.getRow()) +
-                        Math.abs(nc - pj.getCol());
-
-                if (dist < bestDist) {
-                    bestDist = dist;
+                if (dist < distJugador) {
+                    distJugador = dist;
                     bestDir = d;
                 }
             }
 
-            if (bestDir < 0)
-                continue;
+            if (bestDir < 0) continue;
 
             int nr = i + dirs[bestDir][0];
             int nc = j + dirs[bestDir][1];
 
             zonaActual.getCelda(i, j).setEntidad(null);
-
             e.moverA(new Posicion(nr, nc));
-
             zonaActual.getCelda(nr, nc).setEntidad(e);
         }
     }
