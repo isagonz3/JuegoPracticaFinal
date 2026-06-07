@@ -1,7 +1,7 @@
 package jueguito.juegopracticafinal.TADs;
 
 
-public interface Iterador<T> {
+public interface InterfazIterador<T> {
     boolean hasNext();
     T next();
 }

@@ -391,38 +391,10 @@ public class Partida {
                 return;
             }
         }
-        Lista<Integer> visitZonas = new Lista<>();
-        Lista<Integer> prevZonas = new Lista<>();
-        Cola<Integer> colaZonas = new Cola<>();
 
-        for(int i = 0; i < grafo.getNumZonas();i++){
-            visitZonas.add(-1);
-            prevZonas.add(-1);
-        }
-
-        visitZonas.set(idZonaActual,idZonaActual);
-        colaZonas.enqueue(idZonaActual);
-
-        while(!colaZonas.isEmpty()){
-            int actual = colaZonas.dequeue();
-            if(actual == 9) break;
-
-            Lista<Integer> ady = grafo.getAdyacentes(actual);
-            for(int i = 0; i < ady.getSize();i++){
-                int next = ady.get(i);
-                if(visitZonas.get(next) == -1){
-                    visitZonas.set(next,next);
-                    prevZonas.set(next,actual);
-                    colaZonas.enqueue(next);
-                }
-            }
-        }
-
-        if(visitZonas.get(9) != -1){
-            int nextZona = 9;
-            while(prevZonas.get(nextZona) != idZonaActual && prevZonas.get(nextZona) != -1){
-                nextZona = prevZonas.get(nextZona);
-            }
+        Lista<Integer> camino = grafo.bfsCamino(idZonaActual, 9);
+        if (camino.getSize() >= 2) {
+            int nextZona = camino.get(1);
 
             Celda puerta = null;
             for(int i = 0; i < zona.getRows() && puerta == null; i++) {

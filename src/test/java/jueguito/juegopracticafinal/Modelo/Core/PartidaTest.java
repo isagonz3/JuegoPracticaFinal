@@ -152,4 +152,143 @@ class PartidaTest {
 
         assertEquals(EstadoJuego.DERROTA, p.getEstadoActual());
     }
+
+    // --- NUEVOS TESTS: usarMapa ---
+
+    @Test
+    void usarMapaConSalidaEnZonaActualCalculaCamino() {
+        GrafoZonas grafo = new GrafoZonas();
+        Celda[][] celdas = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas[i][j] = new Celda(TipoCelda.SUELO);
+        celdas[2][2] = new Celda(TipoCelda.SALIDA);
+        Zona z = new Zona(0, "Z0", celdas);
+        grafo.addZona(z);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.usarMapa();
+
+        assertNotNull(p.getCaminoMapa());
+        assertFalse(p.getCaminoMapa().isEmpty());
+        assertTrue(p.isMapaActivo());
+    }
+
+    @Test
+    void usarMapaSinSalidaNiRutaAlCastilloNoRompe() {
+        GrafoZonas grafo = new GrafoZonas();
+        Celda[][] celdas = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z = new Zona(0, "Z0", celdas);
+        grafo.addZona(z);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.usarMapa();
+
+        assertNull(p.getCaminoMapa());
+        assertFalse(p.isMapaActivo());
+    }
+
+    @Test
+    void usarMapaConRutaAlCastilloEncuentraPuerta() {
+        GrafoZonas grafo = new GrafoZonas();
+
+        Celda[][] celdas0 = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas0[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z0 = new Zona(0, "Z0", celdas0);
+
+        Puerta p01 = new Puerta(0, 1, 0, 1, 0, 0);
+        celdas0[1][0].setTipoCelda(TipoCelda.PUERTA);
+        celdas0[1][0].setPuerta(p01);
+
+        Celda[][] celdas1 = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas1[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z1 = new Zona(1, "Z1", celdas1);
+
+        Puerta p19 = new Puerta(1, 9, 0, 0, 0, 0);
+        celdas1[0][0].setTipoCelda(TipoCelda.PUERTA);
+        celdas1[0][0].setPuerta(p19);
+
+        Celda[][] celdas9 = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas9[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z9 = new Zona(9, "Castle", celdas9);
+
+        grafo.addZona(z0);
+        grafo.addZona(z1);
+        grafo.addZona(z9);
+        grafo.conectar(0, 1);
+        grafo.conectar(1, 9);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.usarMapa();
+
+        assertNotNull(p.getCaminoMapa());
+        assertFalse(p.getCaminoMapa().isEmpty());
+        assertTrue(p.isMapaActivo());
+    }
+
+    // --- NUEVOS TESTS: cambiarZona ---
+
+    @Test
+    void cambiarZonaPuertaNullNoCambiaEstado() {
+        GrafoZonas grafo = new GrafoZonas();
+        Celda[][] celdas = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z0 = new Zona(0, "Z0", celdas);
+        grafo.addZona(z0);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.iniciarTurno();
+
+        int idAntes = p.getIdZonaActual();
+        assertDoesNotThrow(() -> p.cambiarZona(null));
+        assertEquals(idAntes, p.getIdZonaActual());
+    }
+
+    @Test
+    void cambiarZonaPuertaValidaCambiaZonaActual() {
+        GrafoZonas grafo = new GrafoZonas();
+
+        Celda[][] celdas0 = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas0[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z0 = new Zona(0, "Z0", celdas0);
+
+        Celda[][] celdas1 = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas1[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z1 = new Zona(1, "Z1", celdas1);
+
+        grafo.addZona(z0);
+        grafo.addZona(z1);
+        grafo.conectar(0, 1);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.iniciarTurno();
+
+        Puerta puerta = new Puerta(0, 1, 0, 1, 0, 0);
+        celdas0[1][0].setTipoCelda(TipoCelda.PUERTA);
+        celdas0[1][0].setPuerta(puerta);
+
+        assertDoesNotThrow(() -> p.cambiarZona(puerta));
+        assertEquals(1, p.getIdZonaActual());
+        assertSame(z1, p.getZonaActual());
+    }
 }

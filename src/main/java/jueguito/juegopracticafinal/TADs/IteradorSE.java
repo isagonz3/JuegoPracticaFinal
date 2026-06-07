@@ -1,7 +1,7 @@
 package jueguito.juegopracticafinal.TADs;
 
 
-public class IteradorSE<T> implements Iterador<T> {
+public class IteradorSE<T> implements InterfazIterador<T> {
 
     //Atributos
     private ElementoSimpleEnlazada<T> actual;
