@@ -68,6 +68,16 @@ class LoadJSONTest {
     }
 
     @Test
+    void cargarPartidaRutaInvalidaDevuelveNull() {
+        GrafoZonas grafo = new GrafoZonas();
+        Zona z = zonaPrueba(0);
+        grafo.addZona(z);
+
+        Partida resultado = LoadJSON.cargarPartida("/ruta/inexistente/partida.json", grafo);
+        assertNull(resultado);
+    }
+
+    @Test
     void guardarYCargarMantieneInventario() {
         try {
             File temp=File.createTempFile("partida_inv", ".json");

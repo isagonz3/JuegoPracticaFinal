@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+title Estados del Juego
+
+state MENU : Pantalla de inicio\nseleccionar Nueva Partida\n o Cargar Partida
+state EN_CURSO : Jugador se mueve,\nrealiza acciones,\nenemigos actuan
+state VICTORIA : Gato encontrado +\nen SALIDA del castillo
+state DERROTA : Vida <= 0\n o turnos >= maxTurnos
+
+[*] --> MENU : inicio app
+MENU --> EN_CURSO : nuevaPartida() / cargarPartida()
+EN_CURSO --> VICTORIA : checkVictoria()\ngatoEncontrado &&\nzonaCastillo && tipo=SALIDA
+EN_CURSO --> DERROTA : checkDerrota()\nvida <= 0 || turnos >= maxTurnos
+VICTORIA --> MENU : volverAlMenu()
+DERROTA --> MENU : volverAlMenu()
+@enduml

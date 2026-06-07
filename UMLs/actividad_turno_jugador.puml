@@ -1,0 +1,50 @@
+@startuml
+'https://plantuml.com/activity-diagram
+
+title Actividad - Turno del Jugador
+
+start
+:iniciarTurno()\nestadisticas.puntosMov = rango;
+:jugador puede moverse\n(1 mov + 1 acc por turno);
+
+repeat
+  :moverJugador(row, col)\ncalcularDist BFS\ncoste <= puntosMovDisponibles;
+  :registrarMovimiento(origen, zona);
+  :usarMovimiento(coste);
+repeat while (quiere moverse mas?) is (si) not (no)
+->no;
+
+if (elige accion?) then (si)
+  fork
+    :atacarDireccion(DR, DC)\ncalcularHit(atq, def)\nrecibirAtaque(hit);
+  fork again
+    :usarObjeto(o)\ntipo=USABLE\ncurarVida/aumentarAtq/Def/Rango;
+  fork again
+    :equiparObjeto(o, slot)\ntipo=EQUIPABLE\nremoveObjeto(inventario)\naddBonusEquipamiento();
+  fork again
+    :interactuarNPC()\nhablar()/comerciar();
+  end fork
+  :terminarTurnoPublic()\nopcional - accion consume turno;
+else (no accion)
+endif
+
+:terminarTurno();
+:PartidaMovimiento.moverEnemigos()\nBFS hacia jugador / huir / atacar;
+:PartidaObjetosYCombate.atacarJugador()\ncalcularHit por cada enemigo\nadyacente;
+:avanzarTurno() - inventario\n(descontar duracion objetos);
+:Zona.countTurnos++;
+:checkDerrota();
+if (vida<=0 || turnos>=maxTurnos) then (si)
+  :estado = DERROTA;
+  stop
+else (no)
+endif
+:checkVictoria();
+if (gatoEncontrado && SALIDA) then (si)
+  :estado = VICTORIA;
+  stop
+else (no)
+endif
+:iniciarTurno()\n(proximo turno);
+:actualizarUI() + render();
+@enduml

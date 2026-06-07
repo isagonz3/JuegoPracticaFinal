@@ -26,11 +26,9 @@ public class PartidaObjetosYCombate {
 
     private final Partida partida;
 
-
     public PartidaObjetosYCombate(Partida partida) {
         this.partida = partida;
     }
-
 
     // COMBATE
 
@@ -243,8 +241,6 @@ public class PartidaObjetosYCombate {
         //Configurar la duración del objeto
         o.setDuracionTurnos(4);
         o.resetTurnos();
-
-        inv.removeObjeto(o);
 
         partida.getLog().registrar("Equipaste " + o.getNombre());
 

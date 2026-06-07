@@ -142,4 +142,14 @@ class JugadorTest {
 
         assertEquals(log,jugador.getLog());
     }
+
+    @Test
+    void moverADebeCambiarPosicion() {
+        Jugador jugador=new Jugador("heroe",new Estadisticas(10,5,3,2),new Posicion(1,1));
+
+        jugador.moverA(new Posicion(3,4));
+
+        assertEquals(3,jugador.getPosicion().getRow());
+        assertEquals(4,jugador.getPosicion().getCol());
+    }
 }

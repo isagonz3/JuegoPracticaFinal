@@ -94,6 +94,17 @@ public class JuegoControllerAcciones {
                 ctrl.getMapaRenderer().render(partida);
             }
 
+            if (partida.getEstadoActual() == EstadoJuego.VICTORIA) {
+                app.irAEnd("VICTORIA: Has encontrado al gato y llegado al castillo.",
+                        partida.getLog().getEntradas());
+            }
+
+            else if (partida.getEstadoActual() == EstadoJuego.DERROTA) {
+                app.irAEnd("DERROTA: " + partida.getLog().getUltimaEntrada(),
+                        partida.getLog().getEntradas());
+
+            }
+
         } catch (ErrorCasillaOcupada e) {
 
             partida.getLog().registrar("Hay algo bloqueando el paso");

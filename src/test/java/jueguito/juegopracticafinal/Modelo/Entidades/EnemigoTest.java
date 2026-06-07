@@ -47,4 +47,24 @@ class EnemigoTest {
 
         assertFalse(enemigo.isAtacado());
     }
+
+    @Test
+    void recibirAtaqueDebeReducirVida() {
+        Enemigo enemigo=new Enemigo("Orco",new Estadisticas(50,20,10,5));
+        int vidaAntes=enemigo.getEstadisticas().getVidaActual();
+
+        enemigo.recibirAtaque(15);
+
+        assertTrue(enemigo.getEstadisticas().getVidaActual()<vidaAntes);
+    }
+
+    @Test
+    void recibirAtaqueLetalPoneVidaACero() {
+        Enemigo enemigo=new Enemigo("Slime",new Estadisticas(10,5,2,1));
+
+        enemigo.recibirAtaque(100);
+
+        assertEquals(0,enemigo.getEstadisticas().getVidaActual());
+        assertFalse(enemigo.estarVivo());
+    }
 }

@@ -291,4 +291,214 @@ class PartidaTest {
         assertEquals(1, p.getIdZonaActual());
         assertSame(z1, p.getZonaActual());
     }
+
+    @Test
+    void checkVictoriaConGatoEnCastilloCambiaEstado() {
+        GrafoZonas grafo = new GrafoZonas();
+        Celda[][] celdasInicial = new Celda[][]{
+                {new Celda(TipoCelda.SUELO), new Celda(TipoCelda.SUELO)},
+                {new Celda(TipoCelda.SUELO), new Celda(TipoCelda.SUELO)}
+        };
+        grafo.addZona(new Zona(0, "Casa", celdasInicial));
+        Celda[][] celdas = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z = new Zona(9, "Castillo", celdas);
+        grafo.addZona(z);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.setGatoEncontrado(true);
+        p.setZonaActual(z);
+        p.setIdZonaActual(9);
+        p.setEstadoActual(EstadoJuego.EN_CURSO);
+
+        p.terminarTurnoPublic();
+
+        assertEquals(EstadoJuego.VICTORIA, p.getEstadoActual());
+    }
+
+    @Test
+    void checkVictoriaSinGatoEnCastilloNoCambiaEstado() {
+        GrafoZonas grafo = new GrafoZonas();
+        Celda[][] celdasInicial = new Celda[][]{
+                {new Celda(TipoCelda.SUELO), new Celda(TipoCelda.SUELO)},
+                {new Celda(TipoCelda.SUELO), new Celda(TipoCelda.SUELO)}
+        };
+        grafo.addZona(new Zona(0, "Casa", celdasInicial));
+        Celda[][] celdas = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z = new Zona(9, "Castillo", celdas);
+        grafo.addZona(z);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.setGatoEncontrado(false);
+        p.setZonaActual(z);
+        p.setIdZonaActual(9);
+        p.setEstadoActual(EstadoJuego.EN_CURSO);
+
+        p.terminarTurnoPublic();
+
+        assertNotEquals(EstadoJuego.VICTORIA, p.getEstadoActual());
+    }
+
+    @Test
+    void cambiarZonaAlCastilloConGatoDisparaVictoria() {
+        GrafoZonas grafo = new GrafoZonas();
+
+        Celda[][] celdas0 = new Celda[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                celdas0[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z0 = new Zona(0, "Casa", celdas0);
+        grafo.addZona(z0);
+
+        Celda[][] celdas9 = new Celda[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                celdas9[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z9 = new Zona(9, "Castillo", celdas9);
+        grafo.addZona(z9);
+
+        grafo.conectar(0, 9);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.iniciarTurno();
+        p.setGatoEncontrado(true);
+
+        Puerta puerta = new Puerta(0, 9, 0, 0, 0, 0);
+        celdas0[0][0].setTipoCelda(TipoCelda.PUERTA);
+        celdas0[0][0].setPuerta(puerta);
+
+        assertDoesNotThrow(() -> p.cambiarZona(puerta));
+        assertEquals(EstadoJuego.VICTORIA, p.getEstadoActual());
+    }
+
+    @Test
+    void cambiarZonaAlCastilloSinGatoNoDisparaVictoria() {
+        GrafoZonas grafo = new GrafoZonas();
+
+        Celda[][] celdas0 = new Celda[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                celdas0[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z0 = new Zona(0, "Casa", celdas0);
+        grafo.addZona(z0);
+
+        Celda[][] celdas9 = new Celda[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                celdas9[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z9 = new Zona(9, "Castillo", celdas9);
+        grafo.addZona(z9);
+
+        grafo.conectar(0, 9);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.iniciarTurno();
+        p.setGatoEncontrado(false);
+
+        Puerta puerta = new Puerta(0, 9, 0, 0, 0, 0);
+        celdas0[0][0].setTipoCelda(TipoCelda.PUERTA);
+        celdas0[0][0].setPuerta(puerta);
+
+        assertDoesNotThrow(() -> p.cambiarZona(puerta));
+        assertNotEquals(EstadoJuego.VICTORIA, p.getEstadoActual());
+    }
+
+    @Test
+    void accionCambioZonaIncrementaTurnoYReseteaFlags() {
+        GrafoZonas grafo = new GrafoZonas();
+        Celda[][] celdas = new Celda[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                celdas[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z = new Zona(0, "Z0", celdas);
+        grafo.addZona(z);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.setEstadoActual(EstadoJuego.EN_CURSO);
+        p.setAccionRealizada(true);
+        int turnoAntes = p.getTurnoActual();
+
+        p.accionCambioZona();
+
+        assertEquals(turnoAntes + 1, p.getTurnoActual());
+        assertFalse(p.isAccionRealizada());
+    }
+
+    @Test
+    void accionCambioZonaNoEjecutaSiNoEstaEnCurso() {
+        GrafoZonas grafo = new GrafoZonas();
+        Celda[][] celdas = new Celda[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                celdas[i][j] = new Celda(TipoCelda.SUELO);
+        grafo.addZona(new Zona(0, "Z0", celdas));
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.setEstadoActual(EstadoJuego.DERROTA);
+        int turnoAntes = p.getTurnoActual();
+
+        p.accionCambioZona();
+
+        assertEquals(turnoAntes, p.getTurnoActual());
+    }
+
+    @Test
+    void colocarNPCsFijosSinZonasNoRompe() {
+        GrafoZonas grafo = new GrafoZonas();
+        Partida p = new Partida(grafo);
+
+        assertDoesNotThrow(() -> p.colocarNPCsFijos());
+    }
+
+    @Test
+    void cambiarZonaSinLlaveDe7a8LanzaExcepcion() {
+        GrafoZonas grafo = new GrafoZonas();
+
+        Celda[][] celdasInit = new Celda[][]{
+                {new Celda(TipoCelda.SUELO), new Celda(TipoCelda.SUELO)},
+                {new Celda(TipoCelda.SUELO), new Celda(TipoCelda.SUELO)}
+        };
+        grafo.addZona(new Zona(0, "Inicio", celdasInit));
+
+        Celda[][] celdas7 = new Celda[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                celdas7[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z7 = new Zona(7, "Z7", celdas7);
+        grafo.addZona(z7);
+
+        Celda[][] celdas8 = new Celda[2][2];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                celdas8[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z8 = new Zona(8, "Z8", celdas8);
+        grafo.addZona(z8);
+
+        grafo.conectar(0, 7);
+        grafo.conectar(7, 8);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.iniciarTurno();
+        p.setIdZonaActual(7);
+        p.setZonaActual(z7);
+
+        Puerta puerta = new Puerta(7, 8, 0, 0, 0, 0);
+        celdas7[0][0].setTipoCelda(TipoCelda.PUERTA);
+        celdas7[0][0].setPuerta(puerta);
+
+        assertThrows(jueguito.juegopracticafinal.Modelo.Excepciones.ErrorAccesoZonaBloqueada.class,
+                () -> p.cambiarZona(puerta));
+    }
 }
