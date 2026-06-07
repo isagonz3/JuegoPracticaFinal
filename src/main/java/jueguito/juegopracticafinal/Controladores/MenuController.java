@@ -11,6 +11,7 @@ import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Mundo.GrafoZonas;
 import jueguito.juegopracticafinal.Modelo.Mundo.Puerta;
 import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 import java.io.File;
@@ -82,14 +83,11 @@ public class MenuController {
         Lista<Zona> zonas = MapaLoader.cargarZonas();
         GrafoZonas grafo = new GrafoZonas();
 
-        for (int i = 0; i < zonas.getSize(); i++) {
-            Zona zona = zonas.get(i);
-
+        InterfazIterador<Zona> it = zonas.iterador();
+        while (it.hasNext()) {
+            Zona zona = it.next();
             int id = zona.getIdZona();
-            if (id >= 0 && id < NOMBRES_ZONAS.length) {
-                zona.setNombreZona(NOMBRES_ZONAS[id]);
-            }
-
+            if (id >= 0 && id < NOMBRES_ZONAS.length) zona.setNombreZona(NOMBRES_ZONAS[id]);
             grafo.addZona(zona);
         }
 

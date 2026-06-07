@@ -1,5 +1,7 @@
 package jueguito.juegopracticafinal.Modelo.Inventario;
 
+import jueguito.juegopracticafinal.TADs.ArbolBinarioDeBusqueda;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 public class Inventario {
@@ -8,6 +10,7 @@ public class Inventario {
 
     private Lista<Objeto> objetos;
     private int sizeInventario;
+    private ArbolBinarioDeBusqueda<Objeto> arbolObjetos;
 
     private Lista<Objeto> objetosUsados;
     private Lista<Objeto> objetosEquipados;
@@ -18,6 +21,7 @@ public class Inventario {
         this.objetosUsados = new Lista<>();
         this.objetosEquipados = new Lista<>();
         this.sizeInventario = 10;
+        this.arbolObjetos = new ArbolBinarioDeBusqueda<>();
     }
 
     public Inventario(int size) {
@@ -25,6 +29,7 @@ public class Inventario {
         this.objetosUsados = new Lista<>();
         this.objetosEquipados = new Lista<>();
         this.sizeInventario = size;
+        this.arbolObjetos = new ArbolBinarioDeBusqueda<>();
     }
 
 
@@ -34,14 +39,18 @@ public class Inventario {
     public boolean addObjeto(Objeto objeto) {
 
         if (objetos.getSize() >= sizeInventario) return false;
-
         objetos.add(objeto);
+        arbolObjetos.add(objeto);
         return true;
     }
 
     //Elimina un objeto del inventario si existe y devuelve si la operación fue exitosa
     public boolean removeObjeto(Objeto objeto) {
-        return objetos.delete(objeto) != null;
+        if (objetos.delete(objeto) != null) {
+            arbolObjetos.delete(objeto);
+            return true;
+        }
+        return false;
     }
 
     //Devuelve la cantidad actual de objetos en el inventario
@@ -56,15 +65,11 @@ public class Inventario {
 
     //Comprueba si el inventario contiene un objeto con el mismo identificador
     public boolean contiene(Objeto objeto) {
+        return arbolObjetos.contains(objeto);
+    }
 
-        for (int i = 0; i < objetos.getSize(); i++) {
-
-            if (objetos.get(i).getId() == objeto.getId()) {
-                return true;
-            }
-        }
-
-        return false;
+    public Lista<Objeto> inOrden() {
+        return arbolObjetos.inOrden();
     }
 
     //Equipa un objeto si cumple las condiciones de tipo y compatibilidad con otros objetos equipados
@@ -76,13 +81,9 @@ public class Inventario {
         if (objetosEquipados.getSize() >= 2) return false;
 
         // solo 1 por tipo (ARMA / ESCUDO)
-        for (int i = 0; i < objetosEquipados.getSize(); i++) {
-
-            Objeto equipado = objetosEquipados.get(i);
-
-            if (equipado.getSlot() == o.getSlot()) {
-                return false;
-            }
+        InterfazIterador<Objeto> it = objetosEquipados.iterador();
+        while (it.hasNext()) {
+            if (it.next().getSlot() == o.getSlot()) return false;
         }
 
         objetosEquipados.add(o);
@@ -94,30 +95,25 @@ public class Inventario {
     public void avanzarTurno() {
 
         // OBJETOS USADOS (2 turnos)
-        for (int i = 0; i < objetosUsados.getSize(); i++) {
-
-            Objeto o = objetosUsados.get(i);
-
+        InterfazIterador<Objeto> itU = objetosUsados.iterador();
+        while (itU.hasNext()) {
+            Objeto o = itU.next();
             o.incrementarTurno();
-
             if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
                 objetosUsados.delete(o);
-                i--;
+                // reinicia iteración tras delete
+                itU = objetosUsados.iterador();
             }
         }
 
         // OBJETOS EQUIPADOS (5 turnos)
-        for (int i = 0; i < objetosEquipados.getSize(); i++) {
-
-            Objeto o = objetosEquipados.get(i);
-
+        InterfazIterador<Objeto> itE = objetosEquipados.iterador();
+        while (itE.hasNext()) {
+            Objeto o = itE.next();
             o.incrementarTurno();
-
             if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
-
                 objetosEquipados.delete(o);
-                i--;
-
+                itE = objetosEquipados.iterador();
             }
         }
     }

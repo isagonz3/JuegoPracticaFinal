@@ -4,6 +4,7 @@ import jueguito.juegopracticafinal.Modelo.Mundo.PuertaData;
 import jueguito.juegopracticafinal.Modelo.Mundo.ZonaData;
 import jueguito.juegopracticafinal.Modelo.Mundo.*;
 import jueguito.juegopracticafinal.TADs.GsonUtil;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 //Gestiona la carga del mapa del juego, incluyendo zonas, puertas y sus conexiones
@@ -100,9 +101,9 @@ public class MapaLoader {
             return;
         }
 
-        for(int i = 0; i < puertas.getSize(); i++) {
-
-            Puerta puerta = puertas.get(i);
+        InterfazIterador<Puerta> it = puertas.iterador();
+        while (it.hasNext()) {
+            Puerta puerta = it.next();
 
             if(puerta == null){
                 continue;

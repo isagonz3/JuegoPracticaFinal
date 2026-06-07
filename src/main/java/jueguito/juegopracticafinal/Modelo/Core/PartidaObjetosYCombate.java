@@ -15,6 +15,7 @@ import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
 import jueguito.juegopracticafinal.Modelo.Turno.ResultadoCombate;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 import static jueguito.juegopracticafinal.Modelo.Core.Configuracion.get;
@@ -237,6 +238,8 @@ public class PartidaObjetosYCombate {
             return false;
         }
 
+        jugador.equipar(o,s);
+
         //Configurar la duración del objeto
         o.setDuracionTurnos(4);
         o.resetTurnos();
@@ -299,9 +302,9 @@ public class PartidaObjetosYCombate {
 
         if (spawns.getSize() > 0) {
 
-            for (int i = 0; i < spawns.getSize(); i++) {
-
-                Posicion s = spawns.get(i);
+            InterfazIterador<Posicion> it = spawns.iterador();
+            while (it.hasNext()) {
+                Posicion s = it.next();
 
                 if (!zona.esValida(s.getRow(), s.getCol()))
                     continue;

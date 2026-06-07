@@ -2,6 +2,7 @@ package jueguito.juegopracticafinal.Modelo.Mundo;
 
 import jueguito.juegopracticafinal.TADs.Arista;
 import jueguito.juegopracticafinal.TADs.Grafo;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 import jueguito.juegopracticafinal.TADs.Lista;
 
 //Representa un grafo de zonas del mundo almacenando las conexiones entre ellas mediante listas de adyacencia
@@ -40,10 +41,10 @@ public class GrafoZonas {
 
     //Obtiene una zona a partir de su identificador
     public Zona getZona(int idZona) {
-        for (int i = 0; i < zonas.getSize(); i++) {
-            if (zonas.get(i).getIdZona() == idZona) {
-                return zonas.get(i);
-            }
+        InterfazIterador<Zona> it = zonas.iterador();
+        while (it.hasNext()) {
+            Zona z = it.next();
+            if (z.getIdZona() == idZona) return z;
         }
         return null;
     }

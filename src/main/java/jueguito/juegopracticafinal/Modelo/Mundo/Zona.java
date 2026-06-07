@@ -3,6 +3,7 @@ package jueguito.juegopracticafinal.Modelo.Mundo;
 import jueguito.juegopracticafinal.TADs.Cola;
 import jueguito.juegopracticafinal.TADs.Lista;
 import jueguito.juegopracticafinal.TADs.Matrix;
+import jueguito.juegopracticafinal.TADs.Pila;
 
 public class Zona {
 
@@ -238,27 +239,20 @@ public class Zona {
       }
 
       if (encontrado) {
-         Cola<Celda> pila = new Cola<>();
+         Pila<Celda> pila = new Pila<>();
          int r = endRow, c = endCol;
          while (r != startRow || c != startCol) {
-            pila.enqueue(matrix.get(r, c));
+            pila.push(matrix.get(r, c));
             int pr = padre[r][c][0];
             int pc = padre[r][c][1];
             r = pr;
             c = pc;
          }
-         pila.enqueue(matrix.get(startRow, startCol));
-
-         Cola<Celda> inversa = new Cola<>();
+         pila.push(matrix.get(startRow, startCol));
          while (!pila.isEmpty()) {
-            Celda celda = pila.dequeue();
-            inversa.enqueue(celda);
-         }
-         while (!inversa.isEmpty()) {
-            camino.add(inversa.dequeue());
+            camino.add(pila.pop());
          }
       }
-
       return camino;
    }
 }

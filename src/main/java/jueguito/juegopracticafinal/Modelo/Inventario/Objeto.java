@@ -1,6 +1,6 @@
 package jueguito.juegopracticafinal.Modelo.Inventario;
 
-public class Objeto {
+public class Objeto implements Comparable<Objeto>{
 
     //ATRIBUTOS
 
@@ -135,4 +135,9 @@ public class Objeto {
     public int getUsosMax() { return usosMax; }
     public String getDescripcion() { return descripcion; }
     public boolean isConsumible() { return tipo == TipoObjeto.USABLE || tipo == TipoObjeto.LLAVE; }
+
+    @Override
+    public int compareTo(Objeto o) {
+        return this.nombre.compareTo(o.nombre);
+    }
 }

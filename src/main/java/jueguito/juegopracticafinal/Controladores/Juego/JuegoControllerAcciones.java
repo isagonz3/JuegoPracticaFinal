@@ -17,6 +17,7 @@ import jueguito.juegopracticafinal.Modelo.Mundo.Zona;
 import jueguito.juegopracticafinal.Modelo.NPC.NPC;
 import jueguito.juegopracticafinal.Modelo.NPC.TipoNPC;
 import jueguito.juegopracticafinal.Modelo.Turno.EstadoJuego;
+import jueguito.juegopracticafinal.TADs.InterfazIterador;
 
 //Controlador de las acciones principales del jugador: gestiona el movimiento, ataque, interacciones, comercio y avance de turnos
 public class JuegoControllerAcciones {
@@ -246,10 +247,9 @@ public class JuegoControllerAcciones {
 
         int gemas = 0;
 
-        for (int i = 0; i < inv.size(); i++) {
-            if (inv.getObjeto(i).getNombre().equalsIgnoreCase("gema")) {
-                gemas++;
-            }
+        InterfazIterador<Objeto> it = inv.getObjetos().iterador();
+        while (it.hasNext()) {
+            if (it.next().getNombre().equalsIgnoreCase("gema")) gemas++;
         }
 
         if (gemas < coste) {
@@ -258,8 +258,9 @@ public class JuegoControllerAcciones {
         }
 
         for (int c = 0; c < coste; c++) {
-            for (int i = 0; i < inv.size(); i++) {
-                Objeto o = inv.getObjeto(i);
+            InterfazIterador<Objeto> itO = inv.getObjetos().iterador();
+            while (itO.hasNext()) {
+                Objeto o = itO.next();
                 if (o.getNombre().equalsIgnoreCase("gema")) {
                     inv.removeObjeto(o);
                     break;
