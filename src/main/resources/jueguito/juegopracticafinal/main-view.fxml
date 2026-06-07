@@ -42,7 +42,9 @@
             <BorderPane.margin>
                 <Insets bottom="8" left="30" right="30" top="8" />
             </BorderPane.margin>
+            <ScrollPane fx:id="mapaScrollPane" pannable="true" hbarPolicy="NEVER" vbarPolicy="NEVER" fitToWidth="false" fitToHeight="false">
             <GridPane fx:id="mapaGrid" alignment="CENTER" />
+            </ScrollPane>
             <VBox fx:id="tiendaPanel" alignment="CENTER" spacing="15" styleClass="shop-overlay" visible="false">
                 <Label text="TIENDA DEL COMERCIANTE" />
                 <Label text="Barca - 5 gemas" />
