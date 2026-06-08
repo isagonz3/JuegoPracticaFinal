@@ -293,6 +293,39 @@ class PartidaTest {
     }
 
     @Test
+    void cambiarZonaReiniciaPilaMovimientos() {
+        GrafoZonas grafo = new GrafoZonas();
+        Celda[][] celdas0 = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas0[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z0 = new Zona(0, "Z0", celdas0);
+        Celda[][] celdas1 = new Celda[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                celdas1[i][j] = new Celda(TipoCelda.SUELO);
+        Zona z1 = new Zona(1, "Z1", celdas1);
+        grafo.addZona(z0);
+        grafo.addZona(z1);
+        grafo.conectar(0, 1);
+
+        Partida p = new Partida(grafo);
+        p.iniciar();
+        p.iniciarTurno();
+
+        p.getLog().registrarMovimiento(new Posicion(0, 0), z0);
+
+        Puerta puerta = new Puerta(0, 1, 0, 1, 0, 0);
+        celdas0[1][0].setTipoCelda(TipoCelda.PUERTA);
+        celdas0[1][0].setPuerta(puerta);
+
+        assertDoesNotThrow(() -> p.cambiarZona(puerta));
+        assertEquals(1, p.getIdZonaActual());
+
+        assertNull(p.getLog().deshacerMovimiento(z1));
+    }
+
+    @Test
     void checkVictoriaConGatoEnCastilloCambiaEstado() {
         GrafoZonas grafo = new GrafoZonas();
         Celda[][] celdasInicial = new Celda[][]{

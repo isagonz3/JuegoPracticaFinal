@@ -1,52 +1,57 @@
+@font-face {
+    font-family: 'VT323';
+    src: url('VT323-Regular.ttf');
+}
+
 .root {
-    -fx-background-color: #f0eeef;
-    -fx-font-family: "Consolas", "Courier New", monospace;
-    -fx-text-fill: #1b1020;
+    -fx-background-color: #f6e8e0;
+    -fx-font-family: "VT323", "Consolas", "Courier New", monospace;
+    -fx-text-fill: #1e4044;
 }
 
 .menu-root {
-    -fx-background-color: #f0eeef;
-    -fx-font-family: "Consolas", "Courier New", monospace;
-    -fx-border-color: #34355a, #ee1764, #34355a;
+    -fx-background-color: #f6e8e0;
+    -fx-font-family: "VT323", "Consolas", "Courier New", monospace;
+    -fx-border-color: #006554, #62a477, #006554;
     -fx-border-width: 4, 2, 4;
     -fx-border-insets: 0, 4, 6;
 }
 
 .game-title {
-    -fx-font-size: 50px;
+    -fx-font-size: 38px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ee1764;
+    -fx-text-fill: #26854c;
     -fx-padding: 20 0 30 0;
 }
 
 .zone-label {
-    -fx-font-size: 16px;
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #34355a;
+    -fx-text-fill: #006554;
     -fx-padding: 6 0 2 8;
 }
 
 .section-label {
     -fx-font-weight: bold;
-    -fx-font-size: 11px;
-    -fx-text-fill: #34355a;
-    -fx-border-color: #ed6d8b;
+    -fx-font-size: 15px;
+    -fx-text-fill: #006554;
+    -fx-border-color: #62a477;
     -fx-border-width: 0 0 2 0;
     -fx-padding: 6 0 4 0;
 }
 
 .game-label {
-    -fx-font-size: 10px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #1b1020;
+    -fx-text-fill: #1e4044;
 }
 
 .game-button {
-    -fx-background-color: #34355a;
-    -fx-text-fill: #f0eeef;
+    -fx-background-color: #006554;
+    -fx-text-fill: #f7f3b7;
     -fx-font-weight: bold;
-    -fx-font-size: 9px;
-    -fx-border-color: #1b1020;
+    -fx-font-size: 13px;
+    -fx-border-color: #1e4044;
     -fx-border-width: 2px;
     -fx-padding: 8 14;
     -fx-cursor: hand;
@@ -54,112 +59,112 @@
     -fx-border-radius: 0;
 }
 .game-button:hover {
-    -fx-background-color: #483e5a;
+    -fx-background-color: #26854c;
 }
 .game-button:pressed {
-    -fx-background-color: #1b1020;
+    -fx-background-color: #1e4044;
 }
 
 .menu-button {
-    -fx-background-color: #34355a;
-    -fx-text-fill: #f0eeef;
-    -fx-font-size: 16px;
+    -fx-background-color: #006554;
+    -fx-text-fill: #f7f3b7;
+    -fx-font-size: 24px;
     -fx-padding: 14 40;
     -fx-border-width: 3px;
 }
 .menu-button:hover {
-    -fx-background-color: #4a3e6a;
+    -fx-background-color: #26854c;
 }
 .menu-button:pressed {
-    -fx-background-color: #1b1020;
+    -fx-background-color: #1e4044;
 }
 
 .game-text-area {
-    -fx-background-color: #f0eeef;
-    -fx-text-fill: #1b1020;
-    -fx-control-inner-background: #f0eeef;
-    -fx-border-color: #34355a;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #1e4044;
+    -fx-control-inner-background: #ffffff;
+    -fx-border-color: #62a477;
     -fx-border-width: 2px;
-    -fx-font-family: "Consolas", "Courier New", monospace;
-    -fx-font-size: 11px;
+    -fx-font-family: "VT323", "Consolas", "Courier New", monospace;
+    -fx-font-size: 14px;
 }
 .game-text-area .scroll-pane {
-    -fx-background-color: #f0eeef;
+    -fx-background-color: #ffffff;
 }
 .game-text-area .scroll-bar:vertical {
-    -fx-background-color: #f0eeef;
-    -fx-border-color: #34355a;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #62a477;
     -fx-border-width: 1px;
 }
 
 .game-list-view {
-    -fx-background-color: #f0eeef;
-    -fx-text-fill: #1b1020;
-    -fx-control-inner-background: #f0eeef;
-    -fx-border-color: #34355a;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #1e4044;
+    -fx-control-inner-background: #ffffff;
+    -fx-border-color: #62a477;
     -fx-border-width: 2px;
 }
 
 .game-progress-bar {
-    -fx-accent: #95de40;
+    -fx-accent: #5ab552;
 }
 .game-progress-bar .track {
-    -fx-background-color: #f0eeef;
-    -fx-border-color: #1b1020;
+    -fx-background-color: #f6e8e0;
+    -fx-border-color: #1e4044;
     -fx-border-width: 1px;
     -fx-background-radius: 0;
 }
 
 .shop-overlay {
-    -fx-background-color: rgba(52, 53, 90, 0.9);
-    -fx-border-color: #ee1764;
+    -fx-background-color: rgba(0, 101, 84, 0.9);
+    -fx-border-color: #dab163;
     -fx-border-width: 3px;
     -fx-padding: 30;
     -fx-spacing: 15;
     -fx-alignment: center;
 }
 .shop-overlay .label {
-    -fx-text-fill: #fde5a7;
+    -fx-text-fill: #f7f3b7;
     -fx-font-weight: bold;
 }
 .shop-overlay .button {
-    -fx-background-color: #fde5a7;
-    -fx-text-fill: #34355a;
+    -fx-background-color: #dab163;
+    -fx-text-fill: #1e4044;
     -fx-font-weight: bold;
-    -fx-border-color: #ee1764;
+    -fx-border-color: #f7f3b7;
     -fx-border-width: 2px;
 }
 
 .tienda-root {
-    -fx-background-color: #fde5a7;
-    -fx-font-family: "Consolas", "Courier New", monospace;
-    -fx-border-color: #ee1764;
+    -fx-background-color: #d3eed3;
+    -fx-font-family: "VT323", "Consolas", "Courier New", monospace;
+    -fx-border-color: #62a477;
     -fx-border-width: 3px;
     -fx-padding: 30;
 }
 
 .end-root {
-    -fx-font-size: 30px;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
-    -fx-background-color: #f0eeef;
-    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-background-color: #f6e8e0;
+    -fx-font-family: "VT323", "Consolas", "Courier New", monospace;
     -fx-spacing: 25;
     -fx-alignment: center;
     -fx-padding: 40;
 }
 
 .end-root .victoria {
-    -fx-font-size: 15px;
-    -fx-text-fill: #95de40;
+    -fx-font-size: 16px;
+    -fx-text-fill: #9de64e;
 }
 .end-root .derrota {
-    -fx-font-size: 15px;
-    -fx-text-fill: #ed0d0f;
+    -fx-font-size: 16px;
+    -fx-text-fill: #ec273f;
 }
 
 .right-panel {
-    -fx-background-color: #f2d3c9;
-    -fx-border-color: #ed6d8b;
+    -fx-background-color: #d3eed3;
+    -fx-border-color: #62a477;
     -fx-border-width: 2px;
     -fx-padding: 8 10;
 }

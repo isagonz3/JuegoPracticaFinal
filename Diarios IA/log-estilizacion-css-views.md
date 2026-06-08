@@ -86,3 +86,99 @@ Cambiar de `AnchorPane` (con `layoutX`/`layoutY` absolutos) a `VBox` centrado co
 | `src/main/resources/jueguito/juegopracticafinal/tienda-view.fxml` | Reemplazar inline styles por styleClass |
 | `src/main/java/jueguito/juegopracticafinal/App/JueguitoFX.java` | Agregar stylesheet a las 4 escenas |
 | `src/main/java/jueguito/juegopracticafinal/Controladores/EndController.java` | Cambiar setTextFill por styleClass |
+
+---
+
+## Segunda iteración — Paleta Lospec500 + fuente pixelada (2026-06-08)
+
+### Solicitud
+El usuario pidió mejorar los estilos con fuente pixelada y colores verdes basados en la paleta **Lospec500**.
+
+### Decisiones tomadas
+
+| Pregunta | Respuesta |
+|---|---|
+| ¿Fuente pixelada? | **Press Start 2P** (Google Fonts, OFL) |
+| ¿Fondo general? | **Claro** (`#f6e8e0` — warm white) en lugar de oscuro |
+| ¿Acento tienda? | **Oro** (`#dab163` / `#f7f3b7`) |
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `game-style.css` | Reescritura completa con paleta verde Lospec500 |
+| `PressStart2P-Regular.ttf` | **AGREGADO** (118 KB) a resources |
+| `JueguitoFX.java` | `Font.loadFont()` para Press Start 2P |
+
+### Mapa de colores Lospec500 → CSS
+
+```
+Lospec500   → Uso CSS
+#f6e8e0       Fondo general (warm white)
+#ffffff       Fondos de texto/listas
+#1e4044       Texto body (dark teal)
+#006554       Botones, labels (deep green)
+#26854c       Títulos, hover (green)
+#62a477       Bordes (muted green)
+#d3eed3       Panel lateral (pale green)
+#5ab552       Barra de progreso (medium green)
+#9de64e       Victoria (bright green)
+#ec273f       Derrota (red)
+#dab163       Tienda botones (gold)
+#f7f3b7       Texto sobre fondo oscuro (pale yellow)
+```
+
+### Tamaños para Press Start 2P
+Fuente pixel chunk, tamaños reducidos: título 24px, botones 8px, labels 8-10px.
+
+---
+
+## Tercera iteración — Reemplazo de fuente: Press Start 2P → VT323 (2026-06-08)
+
+### Solicitud
+El usuario preguntó por fuentes más legibles manteniendo estilo pixelado. Se analizaron:
+
+| Fuente | Mono | Acentos español | Legibilidad | JavaFX |
+|---|---|---|---|---|
+| **VT323** | ✅ | ✅ | Muy alta | ✅ TTF estático |
+| Pixelify Sans | ❌ | ✅ | Alta | ✅ TTF estático |
+| Silkscreen | ✅ | ✅ | Media | ✅ TTF estático |
+| DotGothic16 | ✅ | Parcial | Media-alta | ✅ TTF estático |
+
+**Decisión:** Se reemplazó Press Start 2P por **VT323** (terminal font, más legible, monospaced, soporta español).
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `game-style.css` | `@font-face` → VT323, todos los `font-family` actualizados, tamaños aumentados |
+| `PressStart2P-Regular.ttf` | **ELIMINADO** |
+| `VT323-Regular.ttf` | **AGREGADO** (153 KB) |
+| `JueguitoFX.java` | `Font.loadFont()` actualizado a VT323 |
+
+### Tamaños para VT323 (iteración 1)
+Título 32px, zona 14px, sección 12px, label 11px, botón juego 10px, botón menú 18px, text area 11px, fin 20px, victoria/derrota 13px.
+
+---
+
+## Cuarta iteración — Aumento de tamaño de fuente (2026-06-08)
+
+### Solicitud
+El usuario pidió aumentar los tamaños de fuente para mejorar legibilidad.
+
+### Tamaños finales
+
+| Elemento | Tamaño final |
+|---|---|
+| Título (`game-title`) | **38px** |
+| Zona label (`zone-label`) | **18px** |
+| Section label (`section-label`) | **15px** |
+| Game label (`game-label`) | **14px** |
+| Game button (`game-button`) | **13px** |
+| Menu button (`menu-button`) | **24px** |
+| Text area (`game-text-area`) | **14px** |
+| End screen (`end-root`) | **26px** |
+| Victoria / Derrota | **16px** |
+
+### Archivos modificados
+Solo `game-style.css` (6 edits de `-fx-font-size`).

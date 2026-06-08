@@ -286,6 +286,7 @@ public class Partida {
         //Actualizar la zona actual
         idZonaActual = nid;
         zonaActual = nz;
+        log.reiniciarMovimientos();
 
         //Ajustar la posición
         dr = Math.min(

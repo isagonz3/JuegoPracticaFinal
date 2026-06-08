@@ -564,7 +564,7 @@ public class PartidaObjetosYCombate {
     private Objeto crearPocionRandom() {
         return switch ((int)(Math.random() * 3)) {
             case 0 -> new Objeto("Pocion de vida", TipoObjeto.USABLE, 0, 0, 5, 0, 1, "Cura 5");
-            case 1 -> new Objeto("Pocion de ataque", TipoObjeto.USABLE, 2, 0, 0, 5, 1, "+2 atk +5 rango");
+            case 1 -> new Objeto("Pocion de ataque", TipoObjeto.USABLE, 2, 0, 0, 0, 1, "+2 atk");
             default -> new Objeto("Pocion de defensa", TipoObjeto.USABLE, 0, 1, 0, 0, 1, "+1 def");
         };
     }
@@ -584,7 +584,7 @@ public class PartidaObjetosYCombate {
         }
 
         if (r < 0.80) {
-            Objeto o = new Objeto("Escudo", TipoObjeto.EQUIPABLE, 0, 2, 0, 0, 99, "Escudo");
+            Objeto o = new Objeto("Escudo", TipoObjeto.EQUIPABLE, 0, 3, 0, 0, 99, "Escudo");
             o.setSlot(SlotEquipable.ESCUDO);
             return o;
         }

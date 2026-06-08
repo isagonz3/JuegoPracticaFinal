@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.text.Font;
 import javafx.scene.image.Image;
 import jueguito.juegopracticafinal.Modelo.Core.Partida;
 import jueguito.juegopracticafinal.Modelo.Log.EntradaLog;
@@ -25,6 +26,8 @@ public class JueguitoFX extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
+
+        Font.loadFont(getClass().getResourceAsStream("/jueguito/juegopracticafinal/VT323-Regular.ttf"), 10);
 
         FXMLLoader fxmlLoader = new FXMLLoader(
                 JueguitoFX.class.getResource("/jueguito/juegopracticafinal/menu-view.fxml"));

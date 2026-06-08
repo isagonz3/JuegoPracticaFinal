@@ -111,4 +111,34 @@ class LogMovimientoTest {
         log.deshacerMovimiento(zona);
         assertNull(log.deshacerMovimiento(zona));
     }
+
+    @Test
+    void reiniciarMovimientosLimpiaPilaYDespuesNoSePuedeDeshacer() {
+        LogMovimiento log = new LogMovimiento();
+        Zona zona = new Zona(1, "Zona", 3, 3);
+        log.registrarMovimiento(new Posicion(0, 0), zona);
+
+        log.reiniciarMovimientos();
+
+        assertNull(log.deshacerMovimiento(zona));
+    }
+
+    @Test
+    void reiniciarMovimientosPilaVaciaNoRompe() {
+        LogMovimiento log = new LogMovimiento();
+        assertDoesNotThrow(log::reiniciarMovimientos);
+    }
+
+    @Test
+    void reiniciarMovimientosNoAfectaEntradasLog() {
+        LogMovimiento log = new LogMovimiento();
+        log.registrar("mensaje antes");
+        Zona zona = new Zona(1, "Zona", 3, 3);
+        log.registrarMovimiento(new Posicion(0, 0), zona);
+
+        log.reiniciarMovimientos();
+
+        assertEquals(1, log.getEntradas().getSize());
+        assertEquals("mensaje antes", log.getUltimaEntrada());
+    }
 }

@@ -57,6 +57,13 @@ public class LogMovimiento {
         return anterior;
     }
 
+    public void reiniciarMovimientos() {
+        while (!pilaMovimientos.isEmpty()) {
+            pilaMovimientos.pop();
+        }
+        ultimaZonaMovimiento = null;
+    }
+
 
     //GETTERS Y SETTERS
 
