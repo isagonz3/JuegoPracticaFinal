@@ -3,6 +3,7 @@ package jueguito.juegopracticafinal.Modelo.Core;
 import jueguito.juegopracticafinal.Modelo.Entidades.Estadisticas;
 import jueguito.juegopracticafinal.Modelo.Entidades.Gato;
 import jueguito.juegopracticafinal.Modelo.Entidades.Jugador;
+import jueguito.juegopracticafinal.Modelo.Inventario.Inventario;
 import jueguito.juegopracticafinal.Modelo.Inventario.Objeto;
 import jueguito.juegopracticafinal.Modelo.Inventario.SlotEquipable;
 import jueguito.juegopracticafinal.Modelo.Inventario.TipoObjeto;
@@ -125,6 +126,83 @@ class LoadJSONTest {
 
         }
         catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void guardarYCargarMantieneEquipamiento() {
+        try {
+            File temp = File.createTempFile("partida_equip", ".json");
+
+            GrafoZonas grafo = new GrafoZonas();
+            Zona z = new Zona(0, "Z0", new Celda[][]{
+                    {new Celda(TipoCelda.SUELO), new Celda(TipoCelda.SUELO)},
+                    {new Celda(TipoCelda.SUELO), new Celda(TipoCelda.SUELO)}
+            });
+            grafo.addZona(z);
+
+            Partida p = new Partida(grafo);
+            Jugador j = new Jugador("Test", new Estadisticas(10, 5, 2, 4), new Posicion(0, 0));
+            p.setJugador(j);
+            z.getCelda(0, 0).setEntidad(j);
+
+            // Crear y equipar ARMA (ataque +3)
+            Objeto espada = new Objeto("Espada", TipoObjeto.EQUIPABLE, 3, 0, 0, 0, 99, "Espada");
+            espada.setSlot(SlotEquipable.ARMA);
+            j.getInventario().addObjeto(espada);
+
+            // Crear y equipar ESCUDO (defensa +3)
+            Objeto escudo = new Objeto("Escudo", TipoObjeto.EQUIPABLE, 0, 3, 0, 0, 99, "Escudo");
+            escudo.setSlot(SlotEquipable.ESCUDO);
+            j.getInventario().addObjeto(escudo);
+
+            // Equipar ambos
+            j.equipar(espada, SlotEquipable.ARMA);
+            j.equipar(escudo, SlotEquipable.ESCUDO);
+
+            // Stats del jugador antes de guardar
+            int atqAntes = j.getAtaqueTotal();
+            int defAntes = j.getDefensaTotal();
+
+            Gato g = new Gato("Gatiko", new Estadisticas(10, 0, 0, 4));
+            p.setGato(g);
+            p.setZonaActual(z);
+            p.setIdZonaActual(0);
+            p.setEstadoActual(EstadoJuego.EN_CURSO);
+
+            LoadJSON.guardarPartida(p, temp.getAbsolutePath());
+
+            Partida cargada = LoadJSON.cargarPartida(temp.getAbsolutePath(), grafo);
+            assertNotNull(cargada);
+
+            Jugador jc = cargada.getJugador();
+            Inventario inv = jc.getInventario();
+
+            // Verificar que los objetos equipados existen
+            Objeto equipArma = jc.getEquipamiento()[SlotEquipable.ARMA.ordinal()];
+            Objeto equipEscudo = jc.getEquipamiento()[SlotEquipable.ESCUDO.ordinal()];
+
+            assertNotNull(equipArma, "Slot ARMA debe tener objeto");
+            assertNotNull(equipEscudo, "Slot ESCUDO debe tener objeto");
+
+            assertEquals("Espada", equipArma.getNombre());
+            assertEquals(SlotEquipable.ARMA, equipArma.getSlot());
+            assertEquals(3, equipArma.getAtaqueBonus());
+
+            assertEquals("Escudo", equipEscudo.getNombre());
+            assertEquals(SlotEquipable.ESCUDO, equipEscudo.getSlot());
+            assertEquals(3, equipEscudo.getDefensaBonus());
+
+            // Verificar que los objetos equipados están en objetosEquipados
+            assertTrue(inv.getObjetosEquipados().contains(equipArma));
+            assertTrue(inv.getObjetosEquipados().contains(equipEscudo));
+
+            // Verificar que los bonuses se aplicaron correctamente (ini 5atk/2def + 3atk/3def = 8/5)
+            assertEquals(atqAntes, jc.getAtaqueTotal());
+            assertEquals(defAntes, jc.getDefensaTotal());
+
+        } catch (Exception e) {
             fail(e.getMessage());
         }
     }

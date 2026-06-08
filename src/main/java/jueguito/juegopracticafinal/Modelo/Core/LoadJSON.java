@@ -54,6 +54,12 @@ public class LoadJSON {
         int[] objetosRangoBonus;
         int[] objetosUsos;
         String[] objetosSlot;
+        int[] equipAtqBonus;
+        int[] equipDefBonus;
+        int[] equipVidaBonus;
+        int[] equipRangoBonus;
+        int[] equipUsos;
+        String[] equipSlot;
     }
 
     //Guarda el estado actual de la partida en un archivo JSON
@@ -104,11 +110,23 @@ public class LoadJSON {
 
         //Guardar objetos en equipamiento
         partidaData.objetosEquipamiento = new String[2];
+        partidaData.equipAtqBonus = new int[2];
+        partidaData.equipDefBonus = new int[2];
+        partidaData.equipVidaBonus = new int[2];
+        partidaData.equipRangoBonus = new int[2];
+        partidaData.equipUsos = new int[2];
+        partidaData.equipSlot = new String[2];
 
         for (int i = 0; i < 2; i++) {
-            if (jugador.getEquipamiento()[i] != null) {
-                partidaData.objetosEquipamiento[i] =
-                        jugador.getEquipamiento()[i].getNombre();
+            Objeto o = jugador.getEquipamiento()[i];
+            if (o != null) {
+                partidaData.objetosEquipamiento[i] = o.getNombre();
+                partidaData.equipAtqBonus[i] = o.getAtaqueBonus();
+                partidaData.equipDefBonus[i] = o.getDefensaBonus();
+                partidaData.equipVidaBonus[i] = o.getVidaBonus();
+                partidaData.equipRangoBonus[i] = o.getRangoBonus();
+                partidaData.equipUsos[i] = o.getUsosRestantes();
+                partidaData.equipSlot[i] = o.getSlot() != null ? o.getSlot().name() : "";
             }
         }
 
@@ -278,14 +296,25 @@ public class LoadJSON {
 
             for (int i = 0; i < partidaData.objetosEquipamiento.length; i++) {
 
-                if (partidaData.objetosEquipamiento[i] != null) {
+                if (partidaData.objetosEquipamiento[i] == null) continue;
 
-                    Objeto equip =
-                            new Objeto(partidaData.objetosEquipamiento[i], TipoObjeto.EQUIPABLE);
+                String nombre = partidaData.objetosEquipamiento[i];
+                int atq = partidaData.equipAtqBonus != null ? partidaData.equipAtqBonus[i] : 0;
+                int def = partidaData.equipDefBonus != null ? partidaData.equipDefBonus[i] : 0;
+                int vida = partidaData.equipVidaBonus != null ? partidaData.equipVidaBonus[i] : 0;
+                int rango = partidaData.equipRangoBonus != null ? partidaData.equipRangoBonus[i] : 0;
+                int usos = partidaData.equipUsos != null ? partidaData.equipUsos[i] : 99;
 
-                    jugador.equipar(equip, SlotEquipable.values()[i]);
+                Objeto equip = new Objeto(nombre, TipoObjeto.EQUIPABLE, atq, def, vida, rango, usos, "");
+                String slotName = partidaData.equipSlot != null ? partidaData.equipSlot[i] : "";
+                if (!slotName.isEmpty()) {
+                    equip.setSlot(SlotEquipable.valueOf(slotName));
                 }
+
+                jugador.getEquipamiento()[i] = equip;
+                jugador.getInventario().getObjetosEquipados().add(equip);
             }
+            jugador.addBonusEquipamiento();
         }
 
         //Cargar gato

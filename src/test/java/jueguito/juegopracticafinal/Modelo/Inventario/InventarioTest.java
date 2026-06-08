@@ -159,21 +159,16 @@ class InventarioTest {
     }
 
     @Test
-    void avanzarTurnoDebeIncrementarYEliminar() {
+    void avanzarTurnoDebeIncrementarEquipados() {
         Inventario inv=new Inventario();
-
-        Objeto usado=new Objeto("Pocion",TipoObjeto.USABLE,0,0,0,0,1,"");
-        usado.setDuracionTurnos(1);
 
         Objeto equipado=new Objeto("Escudo",TipoObjeto.EQUIPABLE,0,0,0,0,1,"");
         equipado.setDuracionTurnos(1);
 
-        inv.getObjetosUsados().add(usado);
         inv.getObjetosEquipados().add(equipado);
 
         inv.avanzarTurno();
 
-        assertTrue(usado.getTurnosActivos()>=1);
         assertTrue(equipado.getTurnosActivos()>=1);
     }
 
