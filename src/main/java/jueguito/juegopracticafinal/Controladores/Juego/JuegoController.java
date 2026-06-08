@@ -28,6 +28,8 @@ public class JuegoController {
     @FXML private Label turnoLabel;
     @FXML private Label vidaLabel;
     @FXML private ProgressBar vidaBar;
+    @FXML private Label ataqueLabel;
+    @FXML private Label defensaLabel;
     @FXML private TextArea logArea;
     @FXML private GridPane mapaGrid;
     @FXML private StackPane mapaStackPane;
@@ -89,6 +91,7 @@ public class JuegoController {
 
         this.uiRenderer = new UIRenderer(
                 zonaLabel, turnoLabel, vidaLabel, vidaBar,
+                ataqueLabel, defensaLabel,
                 logArea, inventarioList,
                 objetosUsadosArea, objetosEquipadosArea
         );

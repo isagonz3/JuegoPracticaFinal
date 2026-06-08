@@ -24,6 +24,11 @@
                 <ProgressBar fx:id="vidaBar" prefWidth="100.0" styleClass="game-progress-bar" />
             </HBox>
 
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label fx:id="ataqueLabel" styleClass="game-label" text="ATAQUE: 0" />
+                <Label fx:id="defensaLabel" styleClass="game-label" text="DEFENSA: 0" />
+            </HBox>
+
             <HBox alignment="CENTER_LEFT" spacing="6">
                 <Button fx:id="terminarTurnoBtn" maxWidth="Infinity" prefHeight="26.0" styleClass="game-button" text="SKIP" HBox.hgrow="ALWAYS" />
                 <Button fx:id="guardarBtn" maxWidth="Infinity" prefHeight="26.0" styleClass="game-button" text="GUARDAR" HBox.hgrow="ALWAYS" />
@@ -33,6 +38,7 @@
                     <HBox.margin><Insets right="5.0" /></HBox.margin>
                 </Button>
             </HBox>
+
         </VBox>
     </top>
 

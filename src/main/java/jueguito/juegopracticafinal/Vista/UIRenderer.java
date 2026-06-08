@@ -19,6 +19,8 @@ public class UIRenderer {
     private final Label turnoLabel;
     private final Label vidaLabel;
     private final ProgressBar vidaBar;
+    private final Label ataqueLabel;
+    private final Label defensaLabel;
     private final TextArea logArea;
     private final ListView<Objeto> inventarioList;
     private final TextArea objetosUsadosArea;
@@ -33,6 +35,8 @@ public class UIRenderer {
             Label turnoLabel,
             Label vidaLabel,
             ProgressBar vidaBar,
+            Label ataqueLabel,
+            Label defensaLabel,
             TextArea logArea,
             ListView<Objeto> inventarioList,
             TextArea objetosUsadosArea,
@@ -42,6 +46,8 @@ public class UIRenderer {
         this.turnoLabel = turnoLabel;
         this.vidaLabel = vidaLabel;
         this.vidaBar = vidaBar;
+        this.ataqueLabel = ataqueLabel;
+        this.defensaLabel = defensaLabel;
         this.logArea = logArea;
         this.inventarioList = inventarioList;
         this.objetosUsadosArea = objetosUsadosArea;
@@ -59,7 +65,7 @@ public class UIRenderer {
         zonaLabel.setText("Zona: " + partida.getZonaActual().getNombreZona());
         turnoLabel.setText(
                 "TURNO: " + partida.getTurnoActual() + "/" + Configuracion.get().turno.maxTurnos +
-                        "   |   PM: " + partida.getPmActual() + "/" + partida.getPmMax()
+                        "   |   PUNTOS MOVIMIENTO: " + partida.getPmActual() + "/" + partida.getPmMax()
         );
         vidaLabel.setText("VIDA: " +
                 j.getEstadisticas().getVidaActual() + "/" +
@@ -70,6 +76,9 @@ public class UIRenderer {
                 (double) j.getEstadisticas().getVidaActual() /
                         j.getEstadisticas().getVidaMax()
         );
+
+        ataqueLabel.setText("ATAQUE: " + j.getAtaqueTotal());
+        defensaLabel.setText("DEFENSA: " + j.getDefensaTotal());
 
         actualizarLog(partida);
 
