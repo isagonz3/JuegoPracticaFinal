@@ -215,6 +215,8 @@ public class JuegoControllerAcciones {
 
             if(npc.getNombre().equals("Princesa") && partida.isGatoEncontrado()){
                 ctrl.getLogArea().appendText(npc.getNombre() + ": Has encontrado a mi gato !!! \n");
+                terminarTurno();
+                return;
             }
 
             else {
