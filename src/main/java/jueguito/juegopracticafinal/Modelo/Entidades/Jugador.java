@@ -56,7 +56,7 @@ public class Jugador extends Entidad{
     }
 
     //Recalcula los bonus de ataque, defensa y rango aportados por el equipamiento actual
-    private void addBonusEquipamiento(){
+    public void addBonusEquipamiento(){
 
         bonusAtaqueEq = 0;
         bonusDefensaEq = 0;

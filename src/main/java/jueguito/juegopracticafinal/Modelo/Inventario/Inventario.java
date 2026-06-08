@@ -92,30 +92,20 @@ public class Inventario {
 
 
     //Actualiza el estado de los objetos en uso y equipados, eliminando aquellos cuya duración haya expirado
-    public void avanzarTurno() {
+    public Lista<Objeto> avanzarTurno() {
+        Lista<Objeto> expirados = new Lista<>();
 
-        // OBJETOS USADOS (2 turnos)
-        InterfazIterador<Objeto> itU = objetosUsados.iterador();
-        while (itU.hasNext()) {
-            Objeto o = itU.next();
-            o.incrementarTurno();
-            if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
-                objetosUsados.delete(o);
-                // reinicia iteración tras delete
-                itU = objetosUsados.iterador();
-            }
-        }
-
-        // OBJETOS EQUIPADOS (5 turnos)
         InterfazIterador<Objeto> itE = objetosEquipados.iterador();
         while (itE.hasNext()) {
             Objeto o = itE.next();
             o.incrementarTurno();
             if (o.getTurnosActivos() >= o.getDuracionTurnos()) {
                 objetosEquipados.delete(o);
+                expirados.add(o);
                 itE = objetosEquipados.iterador();
             }
         }
+        return expirados;
     }
 
 

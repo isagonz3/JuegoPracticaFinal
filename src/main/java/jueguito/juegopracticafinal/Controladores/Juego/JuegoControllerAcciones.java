@@ -28,7 +28,6 @@ public class JuegoControllerAcciones {
     private final Partida partida;
     private final JueguitoFX app;
 
-    private boolean ataqueRealizado = false;
 
 
     // CONSTRUCTOR
@@ -128,8 +127,8 @@ public class JuegoControllerAcciones {
 
         if (partida.getEstadoActual() != EstadoJuego.EN_CURSO) return;
 
-        if (ataqueRealizado) {
-            partida.getLog().registrar("Ya has realizado un ataque en este turno.");
+        if (partida.isAccionRealizada()) {
+            partida.getLog().registrar("Ya has realizado una acción en este turno.");
             ctrl.getUiRenderer().actualizarUI(partida);
             return;
         }
@@ -174,8 +173,6 @@ public class JuegoControllerAcciones {
                         Math.max(vidaDespues, 0)
         );
 
-        ataqueRealizado = true;
-
         ctrl.getUiRenderer().actualizarUI(partida);
         ctrl.getMapaRenderer().render(partida);
 
@@ -193,8 +190,6 @@ public class JuegoControllerAcciones {
         } else {
             partida.getLog().registrar("El enemigo ha huido o no ha conseguido atacarte.");
         }
-
-        ataqueRealizado = false;
 
         ctrl.getUiRenderer().actualizarUI(partida);
         ctrl.getMapaRenderer().render(partida);

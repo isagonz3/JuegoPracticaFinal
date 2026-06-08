@@ -139,11 +139,21 @@ public class Partida {
         movimiento.moverEnemigos();
         objetosYCombate.atacarJugador();
 
-        jugador.getInventario().avanzarTurno();
+        Lista<Objeto> expirados = jugador.getInventario().avanzarTurno();
+        InterfazIterador<Objeto> itExp = expirados.iterador();
+        while (itExp.hasNext()) {
+            Objeto exp = itExp.next();
+            for (int i = 0; i < jugador.getEquipamiento().length; i++) {
+                if (jugador.getEquipamiento()[i] == exp) {
+                    jugador.getEquipamiento()[i] = null;
+                    break;
+                }
+            }
+        }
+        jugador.addBonusEquipamiento();
 
         zonaActual.setCountTurnos(zonaActual.getCountTurnos() + 1);
         turnoActual++;
-        resetPM();
 
 
         if (checkDerrota() || checkVictoria()) return;

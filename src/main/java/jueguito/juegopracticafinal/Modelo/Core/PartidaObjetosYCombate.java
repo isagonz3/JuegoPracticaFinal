@@ -146,6 +146,10 @@ public class PartidaObjetosYCombate {
         Jugador jugador = partida.getJugador();
         Inventario inv = jugador.getInventario();
         if ("Mapa".equalsIgnoreCase(o.getNombre())) {
+            if (!inv.contiene(o)) {
+                partida.getLog().registrar("No puedes usar este objeto o no lo tienes.");
+                return false;
+            }
             partida.usarMapa();
             return true;
         }
@@ -169,9 +173,6 @@ public class PartidaObjetosYCombate {
         if (o.getRangoBonus() > 0) jugador.getEstadisticas().aumentarRangoMov(o.getRangoBonus());
 
         partida.getLog().registrar("Usaste " + o.getNombre());
-
-        o.setDuracionTurnos(2);
-        o.resetTurnos();
 
         inv.getObjetosUsados().add(o);
         inv.removeObjeto(o);
@@ -235,8 +236,11 @@ public class PartidaObjetosYCombate {
             partida.getLog().registrar("No se puede equipar este objeto.");
             return false;
         }
-
-        jugador.equipar(o,s);
+        if (!jugador.equipar(o, s)) {
+            inv.getObjetosEquipados().delete(o);
+            partida.getLog().registrar("No se puede equipar este objeto.");
+            return false;
+        }
 
         //Configurar la duración del objeto
         o.setDuracionTurnos(4);
