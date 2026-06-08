@@ -265,8 +265,9 @@ public class Partida {
             );
         }
 
-        log.registrar("Llevas al gato contigo. Ve a hablar con la princesa.");
-
+        if(gatoEncontrado) {
+            log.registrar("Llevas al gato contigo. Ve a hablar con la princesa.");
+        }
 
         //Limpiar la posición en la que se encuentra el jugador
         zonaActual.getCelda(

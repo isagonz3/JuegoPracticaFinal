@@ -144,31 +144,32 @@ public class JuegoControllerAcciones {
         Zona zona = partida.getZonaActual();
         Posicion posJugador = partida.getJugador().getPosicion();
 
-        int filaObjetivo = posJugador.getRow() + ctrl.getBaseRow();
-        int colObjetivo = posJugador.getCol() + ctrl.getBaseCol();
+        int[][] direcciones = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+        Enemigo enemigo = null;
+        int dirIdx = -1;
 
-        if (!zona.esValida(filaObjetivo, colObjetivo)) {
-            partida.getLog().registrar("No hay ningún objetivo en esa dirección.");
+        for (int d = 0; d < direcciones.length; d++) {
+            int fila = posJugador.getRow() + direcciones[d][0];
+            int col = posJugador.getCol() + direcciones[d][1];
+            if (!zona.esValida(fila, col)) continue;
+            Celda celda = zona.getCelda(fila, col);
+            if (celda != null && celda.tieneEntidad()
+                    && celda.getEntidad() instanceof Enemigo e && e.estarVivo()) {
+                enemigo = (Enemigo) celda.getEntidad();
+                dirIdx = d;
+                break;
+            }
+        }
+
+        if (enemigo == null) {
+            partida.getLog().registrar("No hay enemigos adyacentes para atacar.");
             ctrl.getUiRenderer().actualizarUI(partida);
             return;
         }
-
-        Celda celdaObjetivo = zona.getCelda(filaObjetivo, colObjetivo);
-
-        if (celdaObjetivo == null ||
-                !celdaObjetivo.tieneEntidad() ||
-                !(celdaObjetivo.getEntidad() instanceof Enemigo)) {
-
-            partida.getLog().registrar("No hay enemigos para atacar.");
-            ctrl.getUiRenderer().actualizarUI(partida);
-            return;
-        }
-
-        Enemigo enemigo = (Enemigo) celdaObjetivo.getEntidad();
 
         int vidaAntes = enemigo.getEstadisticas().getVidaActual();
 
-        partida.atacarDireccion(ctrl.getBaseRow(), ctrl.getBaseCol());
+        partida.atacarDireccion(direcciones[dirIdx][0], direcciones[dirIdx][1]);
         enemigo.setAtacado(true);
 
         int vidaDespues = enemigo.getEstadisticas().getVidaActual();
@@ -231,9 +232,30 @@ public class JuegoControllerAcciones {
 
         if (partida.interactuarGato()) {
             ctrl.getLogArea().appendText("¡Has rescatado al gato!\n");
-        } else {
-            ctrl.getLogArea().appendText("No hay nadie ni nada con lo que interactuar...\n");
+            ctrl.getUiRenderer().actualizarUI(partida);
+            ctrl.getMapaRenderer().render(partida);
+            return;
         }
+
+        //Buscar objetos en celdas adyacentes
+        Zona zona = partida.getZonaActual();
+        Posicion pj = partida.getJugador().getPosicion();
+        int[][] direcciones = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+
+        for (int[] dir : direcciones) {
+            int fila = pj.getRow() + dir[0];
+            int col = pj.getCol() + dir[1];
+            if (!zona.esValida(fila, col)) continue;
+            Celda celda = zona.getCelda(fila, col);
+            if (celda != null && celda.tieneObjeto()) {
+                partida.recogerObjeto(celda);
+                ctrl.getUiRenderer().actualizarUI(partida);
+                ctrl.getMapaRenderer().render(partida);
+                return;
+            }
+        }
+
+        ctrl.getLogArea().appendText("No hay nadie ni nada con lo que interactuar...\n");
 
         ctrl.getUiRenderer().actualizarUI(partida);
         ctrl.getMapaRenderer().render(partida);
