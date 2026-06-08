@@ -7,7 +7,7 @@ module jueguito.juegopracticafinal {
     opens jueguito.juegopracticafinal.Controladores to javafx.fxml;
     exports jueguito.juegopracticafinal.Modelo.Mundo to com.google.gson;
     exports jueguito.juegopracticafinal.Modelo.Core to com.google.gson;
-    opens jueguito.juegopracticafinal.Modelo.Core to com.google.gson;
+    opens jueguito.juegopracticafinal.Modelo.Core;
     opens jueguito.juegopracticafinal.App to javafx.fxml;
     exports jueguito.juegopracticafinal.App;
     exports jueguito.juegopracticafinal.Controladores.Juego;
@@ -19,4 +19,5 @@ module jueguito.juegopracticafinal {
     opens jueguito.juegopracticafinal.Modelo.Inventario;
     opens jueguito.juegopracticafinal.Modelo.NPC;
     opens jueguito.juegopracticafinal.Vista;
+
 }

@@ -337,6 +337,7 @@ class PartidaTest {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
                 celdas[i][j] = new Celda(TipoCelda.SUELO);
+        celdas[0][0] = new Celda(TipoCelda.SALIDA);
         Zona z = new Zona(9, "Castillo", celdas);
         grafo.addZona(z);
 
@@ -394,6 +395,7 @@ class PartidaTest {
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
                 celdas9[i][j] = new Celda(TipoCelda.SUELO);
+        celdas9[0][0] = new Celda(TipoCelda.SALIDA);
         Zona z9 = new Zona(9, "Castillo", celdas9);
         grafo.addZona(z9);
 
