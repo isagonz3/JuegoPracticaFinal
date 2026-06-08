@@ -145,7 +145,7 @@ class PartidaTest {
         Partida p=new Partida(grafo);
         p.iniciar();
 
-        int maxTurnosSimulado=100;
+        int maxTurnosSimulado = Configuracion.get().turno.maxTurnos;
         p.setTurnoActual(maxTurnosSimulado);
 
         p.terminarTurnoPublic();
