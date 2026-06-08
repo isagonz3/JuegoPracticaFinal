@@ -89,4 +89,13 @@ class MatrixTest {
         assertNull(m.getRow(-1));
         assertNull(m.getRow(5));
     }
+
+    @Test
+    void implementacionUsaListaNoArray() {
+        Matrix<String> m = new Matrix<>(1, 1);
+        Lista<String> row = m.getRow(0);
+        assertInstanceOf(Lista.class, row);
+        m.set(0, 0, "test");
+        assertEquals("test", m.get(0, 0));
+    }
 }
