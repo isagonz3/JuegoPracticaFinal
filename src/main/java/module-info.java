@@ -1,17 +1,7 @@
 module jueguito.juegopracticafinal {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.web;
-
-    requires org.controlsfx.controls;
-    requires com.dlsc.formsfx;
-    requires net.synedra.validatorfx;
-    requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
-    requires com.almasb.fxgl.all;
-    requires annotations;
     requires com.google.gson;
-    requires ch.qos.logback.classic;
 
     exports jueguito.juegopracticafinal.Controladores;
     opens jueguito.juegopracticafinal.Controladores to javafx.fxml;
@@ -29,6 +19,4 @@ module jueguito.juegopracticafinal {
     opens jueguito.juegopracticafinal.Modelo.Inventario;
     opens jueguito.juegopracticafinal.Modelo.NPC;
     opens jueguito.juegopracticafinal.Vista;
-
-
 }
