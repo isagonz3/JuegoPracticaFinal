@@ -201,4 +201,41 @@ class PartidaObjetosYCombateTest{
         assertFalse(p.getJugador().getInventario().contiene(espada));
         assertTrue(p.getJugador().getInventario().getObjetosEquipados().contains(espada));
     }
+
+    @Test
+    void ponerObjetosEnZonaValidaColocaAlMenosUnaPocion() {
+        Partida p = partidaPrueba();
+        PartidaObjetosYCombate poc = new PartidaObjetosYCombate(p);
+
+        Zona z = zonaPrueba(1);  // zona 1 NO está en la skip list
+        poc.ponerObjetos(z);
+
+        boolean hayPocion = false;
+        for (int i = 0; i < z.getRows() && !hayPocion; i++) {
+            for (int j = 0; j < z.getCols() && !hayPocion; j++) {
+                Celda c = z.getCelda(i, j);
+                if (c != null && c.tieneObjeto()
+                        && c.getObjeto().getNombre().toLowerCase().startsWith("pocion")) {
+                    hayPocion = true;
+                }
+            }
+        }
+        assertTrue(hayPocion, "Debería haber al menos 1 poción en zona permitida");
+    }
+
+    @Test
+    void ponerObjetosEnZonaExcluidaNoColocaPociones() {
+        Partida p = partidaPrueba();
+        PartidaObjetosYCombate poc = new PartidaObjetosYCombate(p);
+
+        Zona z = zonaPrueba(0);
+        poc.ponerObjetos(z);
+
+        for (int i = 0; i < z.getRows(); i++) {
+            for (int j = 0; j < z.getCols(); j++) {
+                Celda c = z.getCelda(i, j);
+                assertNull(c.getObjeto(), "Zona 0 no debería tener objetos");
+            }
+        }
+    }
 }

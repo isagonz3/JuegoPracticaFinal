@@ -378,6 +378,7 @@ public class PartidaObjetosYCombate {
 
         int GEMAS = 2;
         int ALEATORIOS = 3;
+        int POCIONES_MIN = 1;
 
         //SPAWNS FIJOS (Vienen del archivo .txt)
         if (spawns.getSize() > 0) {
@@ -422,6 +423,7 @@ public class PartidaObjetosYCombate {
 
             //Asegurar mínimo de gemas
             asegurarMinimoGemas(zona, GEMAS);
+            asegurarMinimoPociones(zona, POCIONES_MIN);
             return;
         }
 
@@ -473,6 +475,7 @@ public class PartidaObjetosYCombate {
         }
 
         asegurarMinimoGemas(zona, GEMAS);
+        asegurarMinimoPociones(zona, POCIONES_MIN);
     }
 
     private void asegurarMinimoGemas(Zona zona, int minimo) {
@@ -524,6 +527,48 @@ public class PartidaObjetosYCombate {
         );
     }
 
+    private void asegurarMinimoPociones(Zona zona, int minimo) {
+        int contador = 0;
+        for (int i = 0; i < zona.getRows(); i++) {
+            for (int j = 0; j < zona.getCols(); j++) {
+                Celda celda = zona.getCelda(i, j);
+                if (celda != null && celda.tieneObjeto() && esPocion(celda.getObjeto())) {
+                    contador++;
+                }
+            }
+        }
+
+        int intentos = 0;
+        while (contador < minimo && intentos < 200) {
+            intentos++;
+            int fila = (int)(Math.random() * zona.getRows());
+            int col = (int)(Math.random() * zona.getCols());
+            Celda celda = zona.getCelda(fila, col);
+            if (celda == null) continue;
+            if (!celda.isTransitable()) continue;
+            if (celda.isOcupada()) continue;
+            if (celda.tieneObjeto()) continue;
+            if (celda.getTipoCelda() == TipoCelda.PUERTA) continue;
+
+            celda.setObjeto(crearPocionRandom());
+            contador++;
+        }
+    }
+
+    private boolean esPocion(Objeto o) {
+        if (o == null) return false;
+        String n = o.getNombre().toLowerCase();
+        return n.equals("pocion de vida") || n.equals("pocion de ataque") || n.equals("pocion de defensa");
+    }
+
+    private Objeto crearPocionRandom() {
+        return switch ((int)(Math.random() * 3)) {
+            case 0 -> new Objeto("Pocion de vida", TipoObjeto.USABLE, 0, 0, 5, 0, 1, "Cura 5");
+            case 1 -> new Objeto("Pocion de ataque", TipoObjeto.USABLE, 2, 0, 0, 5, 1, "+2 atk +5 rango");
+            default -> new Objeto("Pocion de defensa", TipoObjeto.USABLE, 0, 1, 0, 0, 1, "+1 def");
+        };
+    }
+
     private Objeto crearObjetoRandom() {
 
         double r = Math.random(); // 0.0 a 1.0
@@ -544,13 +589,7 @@ public class PartidaObjetosYCombate {
             return o;
         }
 
-        int tipo = (int)(Math.random() * 3);
-
-        return switch (tipo) {
-            case 0 -> new Objeto("Pocion de vida", TipoObjeto.USABLE, 0, 0, 5, 0, 1, "Cura 5");
-            case 1 -> new Objeto("Pocion de ataque", TipoObjeto.USABLE, 2, 0, 0, 5, 1, "+2 atk +5 rango");
-            default -> new Objeto("Pocion de defensa", TipoObjeto.USABLE, 0, 1, 0, 0, 1, "+1 def");
-        };
+        return crearPocionRandom();
     }
 
 

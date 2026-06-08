@@ -96,6 +96,8 @@ public class JuegoController {
                 objetosUsadosArea, objetosEquipadosArea
         );
 
+        partida.setUi(this.uiRenderer);
+
         partida.iniciarTurno();
 
         uiRenderer.actualizarUI(partida);

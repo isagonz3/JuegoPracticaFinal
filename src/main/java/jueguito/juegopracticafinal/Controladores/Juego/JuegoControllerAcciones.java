@@ -109,21 +109,14 @@ public class JuegoControllerAcciones {
 
             partida.getLog().registrar("Hay algo bloqueando el paso");
             ctrl.getUiRenderer().actualizarUI(partida);
+            ctrl.getMapaRenderer().render(partida);
 
-        } catch (ErrorMovimientoSinBarca e) {
-
-            partida.getLog().registrar(e.getMessage());
-            ctrl.getUiRenderer().actualizarUI(partida);
-
-        } catch (ErrorAccesoZonaBloqueada e) {
+        } catch (ErrorMovimientoSinBarca | ErrorAccesoZonaBloqueada | ErrorMovimientoInvalido e) {
 
             partida.getLog().registrar(e.getMessage());
             ctrl.getUiRenderer().actualizarUI(partida);
+            ctrl.getMapaRenderer().render(partida);
 
-        } catch (ErrorMovimientoInvalido e) {
-
-            partida.getLog().registrar(e.getMessage());
-            ctrl.getUiRenderer().actualizarUI(partida);
         }
     }
 
@@ -271,6 +264,8 @@ public class JuegoControllerAcciones {
 
     public void cerrarTienda() {
         ctrl.getTiendaPanel().setVisible(false);
+        ctrl.getUiRenderer().actualizarUI(partida);
+        ctrl.getMapaRenderer().render(partida);
         ctrl.getMapaGrid().requestFocus();
     }
 
