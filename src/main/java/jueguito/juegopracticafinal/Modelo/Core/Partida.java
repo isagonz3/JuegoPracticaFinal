@@ -157,12 +157,14 @@ public class Partida {
     private boolean checkVictoria() {
 
         if (gatoEncontrado && idZonaActual == 9) {
-
-            estadoActual = EstadoJuego.VICTORIA;
-            log.registrar("Has logrado recuperar el gato de la princesa!");
-            return true;
+            Posicion pos = jugador.getPosicion();
+            Celda celda = zonaActual.getCelda(pos.getRow(), pos.getCol());
+            if (celda != null && celda.getTipoCelda() == TipoCelda.SALIDA) {
+                estadoActual = EstadoJuego.VICTORIA;
+                log.registrar("Has logrado recuperar el gato de la princesa!");
+                return true;
+            }
         }
-
         return false;
     }
 
